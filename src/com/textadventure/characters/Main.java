@@ -1,4 +1,4 @@
-package com.textadventure;
+package com.textadventure.characters;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package com.textadventure;
+package com.textadventure.locations;
 
 public class Main {
 

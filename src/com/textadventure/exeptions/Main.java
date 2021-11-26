@@ -1,4 +1,4 @@
-package com.textadventure;
+package com.textadventure.exeptions;
 
 public class Main {
 
