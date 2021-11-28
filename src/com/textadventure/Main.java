@@ -10,7 +10,10 @@ import com.textadventure.locations.Room;
 public class Main {
 
     public static void main(java.lang.String[] args) {
-        World world = new World();
+
+        /*World world = new World();
+        world.worldEditor("/home/martin/IdeaProjects/textadventure/1_Story");*/
+        /*
         Location village = new Location("Dorf", "Ein Dorf in Lusina","Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten","Ein kleines Haus mit Garten","Dorf");
         Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus","Ein Garten mit hinter dem Haus","Dorf");
@@ -38,6 +41,6 @@ public class Main {
         } catch (NoBackException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println(player.currentRoom.getName());
+        System.out.println(player.currentRoom.getName());*/
     }
 }
