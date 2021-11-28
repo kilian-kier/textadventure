@@ -4,11 +4,11 @@ import com.textadventure.characters.Player;
 import com.textadventure.interfaces.Interactable;
 
 public class Exit implements Interactable {
-    private String name;
+    private java.lang.String name;
     private Room destination;
-    private String description;
+    private java.lang.String description;
 
-    public Exit(String name, Room destination, String description) {
+    public Exit(java.lang.String name, Room destination, java.lang.String description) {
         this.name = name;
         this.destination = destination;
         this.description = description;
@@ -26,7 +26,7 @@ public class Exit implements Interactable {
 
     @Override
     public void use(Player player) {
-        player.changeRoom(this);
+        player.changeRoom(this.name);
     }
 
     @Override
@@ -37,5 +37,9 @@ public class Exit implements Interactable {
     @Override
     public void investigate() {
         System.out.println(this.description);
+    }
+
+    public java.lang.String getName() {
+        return this.name;
     }
 }

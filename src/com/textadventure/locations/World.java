@@ -5,8 +5,13 @@ import com.textadventure.things.Item;
 import java.util.HashMap;
 
 public class World {
-    private HashMap<String, Location> locations;
-    private HashMap<String, Room> rooms;
-    private HashMap<String, Exit> exits;
-    private HashMap<String, Item> items;
+    private final HashMap<java.lang.String, Location> locations;
+
+    public World() {
+        locations = new HashMap<>();
+    }
+
+    public void addLocation(Location location) {
+        locations.put(location.getName(), location);
+    }
 }
