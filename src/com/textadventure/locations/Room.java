@@ -1,4 +1,7 @@
 package com.textadventure.locations;
 
-public class Room {
+import com.textadventure.GameElement;
+
+public class Room extends GameElement {
+
 }

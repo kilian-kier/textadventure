@@ -1,4 +1,7 @@
 package com.textadventure.characters;
 
-public class NPC {
+import com.textadventure.GameElement;
+
+public class NPC extends GameElement {
+
 }

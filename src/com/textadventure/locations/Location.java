@@ -1,4 +1,10 @@
 package com.textadventure.locations;
 
-public class Location {
+import com.textadventure.GameElement;
+
+public class Location extends GameElement {
+    public Location(){
+        this.type="Location";
+    }
+
 }
