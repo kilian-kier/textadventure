@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -14,8 +15,8 @@ public class Input {
      * @param string String of which a List is created
      * @return List of Words
      */
-    public static LinkedList<String> StringToList(String string){
-        LinkedList<String> list = new LinkedList<>();
+    public static ArrayList<String> StringToList(String string){
+        ArrayList<String> list = new ArrayList<>();
         char c;
         int wordStart=0;
         int wordEnd=0;
