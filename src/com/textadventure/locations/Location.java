@@ -6,5 +6,6 @@ public class Location extends GameElement {
     public Location(){
         this.type="Location";
     }
+    private Collection<Room> rooms;
 
 }

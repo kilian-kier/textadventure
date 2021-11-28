@@ -1,4 +1,9 @@
 package com.textadventure.things;
 
-public class Container extends Thing {
+import com.textadventure.interfaces.Containable;
+
+public class Container extends Item {
+    Container(String name, String description, Containable currentIn) {
+        super(name, description, currentIn);
+    }
 }
