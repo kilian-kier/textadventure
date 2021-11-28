@@ -7,6 +7,6 @@ public class ExitNotFoundException extends Exception{
     }
     @Override
     public String getMessage() {
-        return "Welche Karte benutzt du, denn nach" + exit + " gibt es nichts!";
+        return "Welche Karte benutzt du, denn nach " + exit + " gibt es nichts!";
     }
 }

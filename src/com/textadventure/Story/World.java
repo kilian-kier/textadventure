@@ -1,5 +1,9 @@
 package com.textadventure.Story;
 
+import com.textadventure.locations.Location;
+import com.textadventure.locations.Room;
+import com.textadventure.things.Item;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,7 +15,9 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class World {
-    public HashMap<String,Object> objectMap ;
+    public HashMap<String, Room> roomMap ;
+    public HashMap<String,Location> locationMap;
+    public HashMap<String, Item> itemMap;
     public HashMap<String,Event> eventMap;
 
     public void load(String path) throws FileNotFoundException {
@@ -25,7 +31,7 @@ public class World {
                 loadEventMap(f.getAbsolutePath());
             }
             System.out.println(f.getName());
-        }*/
+        }
         Properties properties = new Properties();
         properties.setProperty("Type","Location");
         properties.setProperty("Name","Forestis ad Lusinam");
@@ -42,11 +48,11 @@ public class World {
             properties.storeToXML(out, "Lüsen");
         }catch(Exception e){
 
-        }
+        }*/
     }
 
     private void loadEventMap(String path) {
-        File directory = new File(path);
+        /*File directory = new File(path);
         File[] contents= directory.listFiles();
         String content="";
         for(File f: contents){
@@ -56,6 +62,9 @@ public class World {
                 System.out.println(e.getMessage());
             }
             System.out.println(content);
-        }
+        }*/
+    }
+
+    public void addLocation(Location village) {
     }
 }

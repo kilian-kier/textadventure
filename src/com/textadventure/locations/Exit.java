@@ -1,16 +1,16 @@
 package com.textadventure.locations;
 
+import com.textadventure.GameElement;
 import com.textadventure.characters.Player;
 import com.textadventure.interfaces.Interactable;
 
-public class Exit implements Interactable {
-    private String name;
+public class Exit extends GameElement implements Interactable {
     private Room destination;
-    private String description;
 
-    public Exit(String name, Room destination, String description) {
+    public Exit(String name, String description, String info, Room destination) {
         this.name = name;
         this.destination = destination;
+        this.info = info;
         this.description = description;
     }
 
@@ -26,7 +26,7 @@ public class Exit implements Interactable {
 
     @Override
     public void use(Player player) {
-        player.changeRoom(this);
+        player.changeRoom(this.name);
     }
 
     @Override
@@ -37,5 +37,9 @@ public class Exit implements Interactable {
     @Override
     public void investigate() {
         System.out.println(this.description);
+    }
+
+    public java.lang.String getName() {
+        return this.name;
     }
 }
