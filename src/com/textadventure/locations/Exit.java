@@ -1,16 +1,16 @@
 package com.textadventure.locations;
 
+import com.textadventure.GameElement;
 import com.textadventure.characters.Player;
 import com.textadventure.interfaces.Interactable;
 
-public class Exit implements Interactable {
-    private java.lang.String name;
+public class Exit extends GameElement implements Interactable {
     private Room destination;
-    private java.lang.String description;
 
-    public Exit(java.lang.String name, Room destination, java.lang.String description) {
+    public Exit(String name, String description, String info, Room destination) {
         this.name = name;
         this.destination = destination;
+        this.info = info;
         this.description = description;
     }
 

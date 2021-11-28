@@ -1,18 +1,18 @@
 package com.textadventure.things;
 
+import com.textadventure.GameElement;
 import com.textadventure.exeptions.NoBackException;
 import com.textadventure.interfaces.Containable;
 import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 
-public abstract class Item implements RoomChangeable {
-    private final java.lang.String name;
-    private final java.lang.String description;
+public abstract class Item  extends GameElement implements RoomChangeable{
     private Containable currentIn;
 
-    public Item(java.lang.String name, java.lang.String description, Containable currentIn) {
+    public Item(String name, String description, String info, Containable currentIn) {
         this.name = name;
         this.description = description;
+        this.info = info;
         this.currentIn = currentIn;
     }
 

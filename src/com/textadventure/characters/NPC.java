@@ -1,11 +1,11 @@
 package com.textadventure.characters;
 
-public class NPC {
-    private final String name;
-    private final String description;
+import com.textadventure.GameElement;
 
-    NPC(String name, String description) {
+public class NPC extends GameElement {
+    NPC(String name, String description, String info) {
         this.name = name;
         this.description = description;
+        this.info = info;
     }
 }

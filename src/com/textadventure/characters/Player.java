@@ -1,5 +1,6 @@
 package com.textadventure.characters;
 
+import com.textadventure.GameElement;
 import com.textadventure.exeptions.ExitNotFoundException;
 import com.textadventure.exeptions.NoBackException;
 import com.textadventure.interfaces.Containable;
@@ -7,18 +8,20 @@ import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Item;
+import com.textadventure.things.Tool;
 
 import java.util.Collection;
 
-public class Player implements Containable, RoomChangeable {
-    private final java.lang.String name;
+public class Player extends GameElement implements Containable, RoomChangeable {
     //TODO: welche Collection?
     Collection<Item> inventory;
     public Room currentRoom;
     private Room previousRoom;
 
-    public Player(java.lang.String name, Room currentRoom) {
+    public Player(String name, String description, String info, Room currentRoom) {
         this.name = name;
+        this.info = info;
+        this.description = description;
         this.currentRoom = currentRoom;
         this.previousRoom = null;
     }
@@ -46,4 +49,13 @@ public class Player implements Containable, RoomChangeable {
     }
 
 
+    @Override
+    public void put(Tool tool) {
+
+    }
+
+    @Override
+    public Tool take(String name) {
+        return null;
+    }
 }

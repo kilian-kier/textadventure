@@ -1,28 +1,28 @@
 package com.textadventure;
 
+import com.textadventure.Story.World;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.NoBackException;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
-import com.textadventure.locations.World;
 
 public class Main {
 
     public static void main(java.lang.String[] args) {
         World world = new World();
-        Location village = new Location("Dorf", "Ein Dorf in Lusina");
-        Room house = new Room("Haus", "Ein kleines Haus mit Garten");
-        Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus");
-        Exit houseToYard = new Exit("Gartentür", yard, "Hier geht es zum Garten");
-        Exit YardToHouse = new Exit("Hintereingang", house, "Hier geht es ins Haus");
+        Location village = new Location("Dorf", "Ein Dorf in Lusina","Ein Dorf in Lusina");
+        Room house = new Room("Haus", "Ein kleines Haus mit Garten","Ein kleines Haus mit Garten","Dorf");
+        Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus","Ein Garten mit hinter dem Haus","Dorf");
+        Exit houseToYard = new Exit("Gartentür",  "Hier geht es zum Garten","Hier geht es zum Garten",yard);
+        Exit YardToHouse = new Exit("Hintereingang","Hier geht es ins Haus","Hier geht es ins Haus",house);
         house.addExit(houseToYard);
         yard.addExit(YardToHouse);
         village.addRoom(house);
         village.addRoom(yard);
         world.addLocation(village);
 
-        Player player = new Player("Stefe", house);
+        Player player = new Player("Stefe", "Manchmal frage ich mich, wer bin ich überhaupt?","Ich bin Stefe" ,house);
         try {
             player.goBack();
         } catch (NoBackException e) {

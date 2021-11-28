@@ -1,20 +1,23 @@
 package com.textadventure.locations;
 
+import com.textadventure.GameElement;
 import com.textadventure.exeptions.ExitNotFoundException;
 import com.textadventure.interfaces.Containable;
+import com.textadventure.things.Tool;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Room implements Containable {
-    private final java.lang.String name;
-    private final java.lang.String description;
+public class Room extends GameElement implements Containable{
+
     //TODO: welche Collection?
     private final Map<java.lang.String, Exit> exits = new HashMap<>();
-
-    public Room(java.lang.String name, java.lang.String description) {
+    private String location;
+    public Room(String name, String description, String info,String location) {
         this.name = name;
         this.description = description;
+        this.location = location;
+        this.info = info;
     }
 
     public java.lang.String getName() {
@@ -31,5 +34,15 @@ public class Room implements Containable {
             throw new ExitNotFoundException(name);
         }
         return exits.get(name);
+    }
+
+    @Override
+    public void put(Tool tool) {
+
+    }
+
+    @Override
+    public Tool take(String name) {
+        return null;
     }
 }
