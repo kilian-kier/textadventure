@@ -9,23 +9,20 @@ import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Item;
 
-import javax.swing.text.Element;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class World {
     public HashMap<String, Room> roomMap = new HashMap<>();
     public HashMap<String, Exit> exitMap = new HashMap<>();
-    public HashMap<String,Location> locationMap= new HashMap<>();
+    public HashMap<String, Location> locationMap = new HashMap<>();
     public HashMap<String, Item> itemMap = new HashMap<>();
     public HashMap<String, NPC> npcMap = new HashMap<>();
     //TODO Add Events (in Rooms)
-    public HashMap<String,Event> eventMap= new HashMap<>();
+    public HashMap<String, Event> eventMap = new HashMap<>();
 
 
     private void loadEventMap(String path) {
@@ -41,6 +38,7 @@ public class World {
             System.out.println(content);
         }*/
     }
+
     public void load(String path) throws FileNotFoundException {
         /*File directory = new File(path);
         if(!directory.exists()){
@@ -72,84 +70,88 @@ public class World {
         }*/
     }
 
-    public void worldEditor(String path){
+    public void worldEditor(String path) {
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> commands = new ArrayList();
+        ArrayList<String> commands;
         String input;
         boolean exit = false;
-        while(!exit) {
+        while (!exit) {
 
             System.out.print(">> ");
             input = scanner.nextLine();
-            input=input.toLowerCase();
-            commands = Input.StringToList(input);
-            try {
-                switch (commands.get(0)) {
-                    case "new":
-                        try {
-                            newGameElement(commands);
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Too few arguments");
-                        }
-                        break;
-                    case "edit":
-                        try {
-                            editGameElement(commands);
-                        } catch (IndexOutOfBoundsException e) {
-                            System.out.println("Too few arguments");
-                        }
-                        break;
-                    case "overview":
-                    case "ov":
-                        //TODO Funktion which checks for inconsistencies. e.g. a Location contains a room, but the room does not reference the location
-                        break;
-                    case "exit":
-                        exit = true;
-                        break;
-                    default:
-                        System.out.println("Command not found");
-                        break;
-                }
-        }catch(IndexOutOfBoundsException e){}}
+            input = input.toLowerCase();
+            if (input.equals(""))
+                continue;
+            //TODO: gscheida do frisch an Array hernemm
+            commands = new ArrayList<>(Arrays.asList(input.split(" \n")));
+            switch (commands.get(0)) {
+                case "new":
+                    try {
+                        newGameElement(commands);
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Too few arguments");
+                    }
+                    break;
+                case "edit":
+                    try {
+                        editGameElement(commands);
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Too few arguments");
+                    }
+                    break;
+                case "overview":
+                case "ov":
+                    //TODO Funktion which checks for inconsistencies. e.g. a Location contains a room, but the room does not reference the location
+                    break;
+                case "exit":
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Command not found");
+                    break;
+            }
+        }
     }
 
     private void editGameElement(ArrayList<String> args) {
 
     }
 
-    private void newGameElement(ArrayList<String> args){
+    private void newGameElement(ArrayList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = new GameElement();
-        GameElement temp=null;
+        GameElement temp = null;
         String ret;
 
-        switch(args.get(1)){
+        switch (args.get(1)) {
             case "npc":
             case "exit":
             case "location":
             case "room":
             case "item":
-                if(args.size()>2){ //Check if name parameter exists
+                if (args.size() > 2) { //Check if name parameter exists
                     element.setName(args.get(2));
-                }else {
+                } else {
                     inputName(element);
                 }
-                try{ // If Element already exists somewhere
-                    getElement(element.getName(),args.get(1)); // Throws Exception if Element exists
+                try { // If Element already exists somewhere
+                    getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
                     System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
-                    String[] options = {"o","a","e"};
-                    ret=Input.switchOptions(options);
-                    switch(ret){
-                        case "a": return;
-                        case "o": break;
+                    String[] options = {"o", "a", "e"};
+                    ret = Input.switchOptions(options);
+                    switch (ret) {
+                        case "a":
+                            return;
+                        case "o":
+                            break;
                         case "e":
-                            args.set(0,"edit");
-                            args.set(1,element.getName());
+                            args.set(0, "edit");
+                            args.set(1, element.getName());
                             editGameElement(args);
                             return;
                     }
-                }catch(ElementNotFoundException e){
+                } catch (ElementNotFoundException e) {
                     //Everything's ok
                 }
                 inputInfo(element);
@@ -165,37 +167,37 @@ public class World {
 
         //For Specific features
         //TODO Extra Options
-        switch(args.get(1)){
+        switch (args.get(1)) {
             case "npc":
-                NPC npc = new NPC(element.getName(),element.getDescription(),element.getInfo());
+                NPC npc = new NPC(element.getName(), element.getDescription(), element.getInfo());
                 //Dialogs - Events Dialogs can cause
                 //Location/Room
-                npcMap.put(npc.getName(),npc);
+                npcMap.put(npc.getName(), npc);
                 break;
             case "exit":
-                Exit exit = new Exit(element.getName(),element.getDescription(),element.getInfo(),null);
+                Exit exit = new Exit(element.getName(), element.getDescription(), element.getInfo(), null);
                 //Destination Location/Room
                 //Location/Room
-                exitMap.put(exit.getName(),exit);
+                exitMap.put(exit.getName(), exit);
                 break;
             case "location":
-                Location location = new Location(element.getName(),element.getDescription(),element.getInfo());
+                Location location = new Location(element.getName(), element.getDescription(), element.getInfo());
                 //Rooms
-                locationMap.put(location.getName(),location);
+                locationMap.put(location.getName(), location);
                 break;
             case "room":
-                Room room = new Room(element.getName(),element.getDescription(),element.getInfo(),null);
+                Room room = new Room(element.getName(), element.getDescription(), element.getInfo(), null);
                 //Location
                 //Items
                 //Exits
                 //Npcs
                 //Possibly Image Path for later on
-                roomMap.put(room.getName(),room);
+                roomMap.put(room.getName(), room);
                 break;
             case "item":
-                Item item = new Item(element.getName(),element.getDescription(),element.getInfo(),null);
+                Item item = new Item(element.getName(), element.getDescription(), element.getInfo(), null);
                 //Room
-                itemMap.put(item.getName(),item);
+                itemMap.put(item.getName(), item);
                 break;
             case "event":
                 //TODO Add Event
@@ -207,27 +209,28 @@ public class World {
 
     /**
      * Checks if the name of a given GameElement type does already exist in their respective map
+     *
      * @param name name of an Element
      * @param type type of an Element
      * @return GameElement if it was found
      * @throws ElementNotFoundException if Element is not found this Exception is being thrown
      */
-    private GameElement getElement(String name,String type) throws ElementNotFoundException {
-        switch(type){
+    private GameElement getElement(String name, String type) throws ElementNotFoundException {
+        switch (type) {
             case "room":
-                if(roomMap.containsKey(name))return roomMap.get(name);
+                if (roomMap.containsKey(name)) return roomMap.get(name);
                 break;
             case "location":
-                if(locationMap.containsKey(name))return locationMap.get(name);
+                if (locationMap.containsKey(name)) return locationMap.get(name);
                 break;
             case "item":
-                if(itemMap.containsKey(name))return itemMap.get(name);
+                if (itemMap.containsKey(name)) return itemMap.get(name);
                 break;
             case "npc":
-                if(npcMap.containsKey(name))return npcMap.get(name);
+                if (npcMap.containsKey(name)) return npcMap.get(name);
                 break;
             case "exit":
-                if(exitMap.containsKey(name))return exitMap.get(name);
+                if (exitMap.containsKey(name)) return exitMap.get(name);
                 break;
         }
         throw new ElementNotFoundException(name);
@@ -235,40 +238,45 @@ public class World {
 
 
     private void addLocation(Location location) {
-        locationMap.put(location.getName(),location);
+        locationMap.put(location.getName(), location);
     }
+
     private void addRoom(Room room) {
         roomMap.put(room.getName(), room);
     }
-    private void addNPC(NPC npc){
+
+    private void addNPC(NPC npc) {
         npcMap.put(npc.getName(), npc);
     }
-    private void addItem(Item item){
-        itemMap.put(item.getName(),item);
+
+    private void addItem(Item item) {
+        itemMap.put(item.getName(), item);
     }
 
-    private void inputName(GameElement element){
+    private void inputName(GameElement element) {
         Scanner scanner = new Scanner(System.in);
         String input;
         System.out.print("name: ");
-        while((input= scanner.nextLine()).length()==0);
-        if(input.equals("exit")) return;
+        while ((input = scanner.nextLine()).length() == 0) ;
+        if (input.equals("exit")) return;
         element.setName(input);
     }
-    private void inputInfo(GameElement element){
+
+    private void inputInfo(GameElement element) {
         Scanner scanner = new Scanner(System.in);
         String input;
         System.out.print("info: ");
-        while((input= scanner.nextLine()).length()==0);
-        if(input.equals("exit")) return;
+        while ((input = scanner.nextLine()).length() == 0) ;
+        if (input.equals("exit")) return;
         element.setInfo(input);
     }
-    private void inputDescription(GameElement element){
+
+    private void inputDescription(GameElement element) {
         Scanner scanner = new Scanner(System.in);
         String input;
         System.out.print("description: ");
-        while((input= scanner.nextLine()).length()==0);
-        if(input.equals("exit")) return;
+        while ((input = scanner.nextLine()).length() == 0) ;
+        if (input.equals("exit")) return;
         element.setDescription(input);
     }
 

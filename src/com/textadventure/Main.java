@@ -12,7 +12,7 @@ public class Main {
     public static void main(java.lang.String[] args) {
 
         World world = new World();
-        world.worldEditor("/home/martin/IdeaProjects/textadventure/1_Story");
+        world.worldEditor("/home/kilian/IdeaProjects/textadventure/1_Story");
         /*
         Location village = new Location("Dorf", "Ein Dorf in Lusina","Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten","Ein kleines Haus mit Garten","Dorf");
