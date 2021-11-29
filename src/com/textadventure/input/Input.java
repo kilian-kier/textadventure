@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Input {
     private static String editor = "gnome-text-editor";
@@ -87,6 +88,26 @@ public class Input {
      */
     public static void setEditor(String editor){
         Input.editor=editor;
+    }
+
+
+    public static String switchOptions(String[] options){
+        Scanner scanner = new Scanner(System.in);
+        String input="";
+        boolean exit = false;
+        while(!exit) {
+            System.out.print("sw> ");
+
+            input = scanner.nextLine();
+            input = input.toLowerCase();
+            for (String s:options) {
+                if(s.equals(input)) exit=true;
+            }
+            if(!exit){
+                System.out.println("Input not Valid");
+            }
+        }
+        return input;
     }
 
 }

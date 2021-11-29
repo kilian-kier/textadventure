@@ -1,6 +1,6 @@
 package com.textadventure;
 
-abstract public class GameElement {
+ public class GameElement {
     protected String description;
     protected String info;
     protected String name;
