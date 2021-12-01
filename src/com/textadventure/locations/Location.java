@@ -2,24 +2,31 @@ package com.textadventure.locations;
 
 import com.textadventure.GameElement;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class Location extends GameElement {
-    //TODO: welche Collection?
-    private Collection<Room> rooms = new HashSet<>();
+public class Location extends GameElement implements Serializable {
+    private ArrayList<String> rooms=new ArrayList<>();
 
-    public Location(String name, String description, String info) {
+    public Location(String name, String description) {
         this.name = name;
         this.description = description;
-        this.info = info;
     }
-
-    public String getName() {
-        return name;
+    public ArrayList<String> getRooms()  {
+        return rooms;
     }
-
-    public void addRoom(Room room) {
-        rooms.add(room);
+    public void addRoom(String room) {
+            rooms.add(room);
+    }
+    public String getRoomIndex(int index) throws IndexOutOfBoundsException{
+            return rooms.get(index);
+    }
+    public void removeAllRooms(){
+        rooms.clear();
+    }
+    public void removeRoomIndex(int index) throws IndexOutOfBoundsException{
+        rooms.remove(index);
     }
 }

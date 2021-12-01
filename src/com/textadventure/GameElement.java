@@ -1,12 +1,10 @@
 package com.textadventure;
 
- public class GameElement {
+import java.io.Serializable;
+
+public class GameElement implements Serializable {
     protected String description;
-    protected String info;
     protected String name;
-    public String getInfo(){
-        return info;
-    }
     public String getName(){
         return name;
     }
@@ -15,9 +13,6 @@ package com.textadventure;
     }
     public void setDescription(String description){
         this.description=description;
-    }
-    public void setInfo(String info){
-        this.info = info;
     }
     public void setName(String name){
         this.name = name;

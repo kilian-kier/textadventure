@@ -18,9 +18,8 @@ public class Player extends GameElement implements Containable, RoomChangeable {
     public Room currentRoom;
     private Room previousRoom;
 
-    public Player(String name, String description, String info, Room currentRoom) {
+    public Player(String name, String description, Room currentRoom) {
         this.name = name;
-        this.info = info;
         this.description = description;
         this.currentRoom = currentRoom;
         this.previousRoom = null;
@@ -28,13 +27,14 @@ public class Player extends GameElement implements Containable, RoomChangeable {
 
     @Override
     public void changeRoom(String exit) {
-        previousRoom = currentRoom;
+        //TODO muss so umgschriebm werdn dass der Funktion die World ibergebn werd und do exit String in do hashmap gsuicht werd
+       /* previousRoom = currentRoom;
         try {
             Exit temp = currentRoom.getExit(exit);
             currentRoom = temp.getDestination();
         } catch (ExitNotFoundException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
     }
 
     @Override

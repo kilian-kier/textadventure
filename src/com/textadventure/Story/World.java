@@ -7,66 +7,33 @@ import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
+import com.textadventure.things.Container;
 import com.textadventure.things.Item;
+import com.textadventure.things.Tool;
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 public class World {
     public HashMap<String, Room> roomMap = new HashMap<>();
     public HashMap<String, Exit> exitMap = new HashMap<>();
     public HashMap<String, Location> locationMap = new HashMap<>();
-    public HashMap<String, Item> itemMap = new HashMap<>();
+    public HashMap<String, Tool> toolMap = new HashMap<>();
+    public HashMap<String, Container> containerMap = new HashMap<>();
     public HashMap<String, NPC> npcMap = new HashMap<>();
     //TODO Add Events (in Rooms)
     public HashMap<String, Event> eventMap = new HashMap<>();
 
-
-    private void loadEventMap(String path) {
-        /*File directory = new File(path);
-        File[] contents= directory.listFiles();
-        String content="";
-        for(File f: contents){
-            try {
-                content= Files.readString(Path.of(f.getAbsolutePath()));
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
-            System.out.println(content);
-        }*/
-    }
-
-    public void load(String path) throws FileNotFoundException {
-        /*File directory = new File(path);
-        if(!directory.exists()){
-            throw new FileNotFoundException(path+" not found");
-        }
-        File[] contents = directory.listFiles();
-        for ( File f : contents) {
-            if(f.getName().equals("Events")){
-                loadEventMap(f.getAbsolutePath());
-            }
-            System.out.println(f.getName());
-        }
-        Properties properties = new Properties();
-        properties.setProperty("Type","Location");
-        properties.setProperty("Name","Forestis ad Lusinam");
-        properties.setProperty("Info","Dies ist ein kleines altes Dorf. Es trägt den Namen Forestis ad Lusinam. ");
-        properties.setProperty("Description","Die Leute hier sind sehr freundlich. Ich habe mich in einem kleinen abgelegenen Gasthaus die Nacht verbracht. Es gibt einen kleinen Dorfplatz, wo man immer Leute antrifft. Davor steht eine für ein Dorf dieser Größe prächtige Kirche. Es gibt nicht viele Häuser. Hervor sticht aber eine kleine Hütte am Waldrand.");
-        ArrayList<String> rooms=new ArrayList();
-        rooms.add("Gasthaus");
-        rooms.add("Dorfplatz");
-        rooms.add("Kirche");
-        rooms.add("Hütte");
-        properties.setProperty("Rooms", rooms.toString());
-        FileOutputStream out = new FileOutputStream(path);
+    public void load(String path){
         try {
-            properties.storeToXML(out, "Lüsen");
+            LoadStoreWorld.load(path, this);
         }catch(Exception e){
-
-        }*/
+            e.printStackTrace();
+        }
     }
-
+    public void store(String path){
+        LoadStoreWorld.store(path,this);
+    }
     public void worldEditor(String path) {
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
@@ -96,6 +63,12 @@ public class World {
                         System.out.println("Too few arguments");
                     }
                     break;
+                case "store":
+                    store("0_Story/");
+                    break;
+                case "load":
+                        load("0_Story/");
+                    break;
                 case "overview":
                 case "ov":
                     //TODO Funktion which checks for inconsistencies. e.g. a Location contains a room, but the room does not reference the location
@@ -112,7 +85,7 @@ public class World {
     private void editGameElement(LinkedList<String> args) {
 
     }
-
+    //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
     private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = new GameElement();
@@ -124,7 +97,8 @@ public class World {
             case "exit":
             case "location":
             case "room":
-            case "item":
+            case "tool":
+            case "container":
                 if (args.size() > 2) { //Check if name parameter exists
                     element.setName(args.get(2));
                 } else {
@@ -149,7 +123,6 @@ public class World {
                 } catch (ElementNotFoundException e) {
                     //Everything's ok
                 }
-                inputInfo(element);
                 inputDescription(element);
                 break;
             case "element":
@@ -164,24 +137,24 @@ public class World {
         //TODO Extra Options
         switch (args.get(1)) {
             case "npc":
-                NPC npc = new NPC(element.getName(), element.getDescription(), element.getInfo());
+                NPC npc = new NPC(element.getName(), element.getDescription());
                 //Dialogs - Events Dialogs can cause
                 //Location/Room
                 npcMap.put(npc.getName(), npc);
                 break;
             case "exit":
-                Exit exit = new Exit(element.getName(), element.getDescription(), element.getInfo(), null);
+                Exit exit = new Exit(element.getName(), element.getDescription());
                 //Destination Location/Room
                 //Location/Room
                 exitMap.put(exit.getName(), exit);
                 break;
             case "location":
-                Location location = new Location(element.getName(), element.getDescription(), element.getInfo());
+                Location location = new Location(element.getName(), element.getDescription());
                 //Rooms
                 locationMap.put(location.getName(), location);
                 break;
             case "room":
-                Room room = new Room(element.getName(), element.getDescription(), element.getInfo(), null);
+                Room room = new Room(element.getName(), element.getDescription());
                 //Location
                 //Items
                 //Exits
@@ -189,10 +162,16 @@ public class World {
                 //Possibly Image Path for later on
                 roomMap.put(room.getName(), room);
                 break;
-            case "item":
-                Item item = new Item(element.getName(), element.getDescription(), element.getInfo(), null);
+            case "tool":
+                Tool tool = new Tool(element.getName(), element.getDescription());
                 //Room
-                itemMap.put(item.getName(), item);
+                toolMap.put(tool.getName(), tool);
+                break;
+            case "container":
+                Container container = new Container(element.getName(), element.getDescription());
+                //Room
+                //Items
+                containerMap.put(container.getName(), container);
                 break;
             case "event":
                 //TODO Add Event
@@ -218,8 +197,11 @@ public class World {
             case "location":
                 if (locationMap.containsKey(name)) return locationMap.get(name);
                 break;
-            case "item":
-                if (itemMap.containsKey(name)) return itemMap.get(name);
+            case "tool":
+                if (toolMap.containsKey(name)) return toolMap.get(name);
+                break;
+            case "container":
+                if (containerMap.containsKey(name)) return containerMap.get(name);
                 break;
             case "npc":
                 if (npcMap.containsKey(name)) return npcMap.get(name);
@@ -243,27 +225,20 @@ public class World {
     private void addNPC(NPC npc) {
         npcMap.put(npc.getName(), npc);
     }
-
-    private void addItem(Item item) {
-        itemMap.put(item.getName(), item);
+    private void addTool(Tool tool){
+        toolMap.put(tool.getName(),tool);
     }
+    private void addContainer(Container container){
+        containerMap.put(container.getName(),container);
+    }
+
 
     private void inputName(GameElement element) {
         Scanner scanner = new Scanner(System.in);
         String input;
         System.out.print("name: ");
         while ((input = scanner.nextLine()).length() == 0) ;
-        if (input.equals("exit")) return;
         element.setName(input);
-    }
-
-    private void inputInfo(GameElement element) {
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        System.out.print("info: ");
-        while ((input = scanner.nextLine()).length() == 0) ;
-        if (input.equals("exit")) return;
-        element.setInfo(input);
     }
 
     private void inputDescription(GameElement element) {
@@ -271,7 +246,6 @@ public class World {
         String input;
         System.out.print("description: ");
         while ((input = scanner.nextLine()).length() == 0) ;
-        if (input.equals("exit")) return;
         element.setDescription(input);
     }
 
