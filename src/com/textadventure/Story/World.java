@@ -10,10 +10,7 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Item;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class World {
     public HashMap<String, Room> roomMap = new HashMap<>();
@@ -73,7 +70,7 @@ public class World {
     public void worldEditor(String path) {
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> commands;
+        LinkedList<String> commands;
         String input;
         boolean exit = false;
         while (!exit) {
@@ -83,8 +80,8 @@ public class World {
             input = input.toLowerCase();
             if (input.equals(""))
                 continue;
-            //TODO: gscheida do frisch an Array hernemm
-            commands = new ArrayList<>(Arrays.asList(input.split(" \n")));
+            commands = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
+            commands.removeIf(s -> s.equals(""));
             switch (commands.get(0)) {
                 case "new":
                     try {
@@ -114,11 +111,11 @@ public class World {
         }
     }
 
-    private void editGameElement(ArrayList<String> args) {
+    private void editGameElement(LinkedList<String> args) {
 
     }
 
-    private void newGameElement(ArrayList<String> args) {
+    private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = new GameElement();
         GameElement temp = null;
