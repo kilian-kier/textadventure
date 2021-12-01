@@ -7,7 +7,8 @@ import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 
 abstract public class Item  extends GameElement implements RoomChangeable{
-    private Containable currentIn;
+    private String room;
+
 
     public Item(String name, String description) {
         this.name = name;
@@ -24,7 +25,12 @@ abstract public class Item  extends GameElement implements RoomChangeable{
         throw new NoBackException(this.name);
     }
 
-    public java.lang.String getName() {
-        return name;
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 }

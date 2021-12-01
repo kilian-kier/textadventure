@@ -157,6 +157,7 @@ public class World {
             case "container":
                 Container container = new Container(element.getName(), element.getDescription());
                 //Room
+                //Items
                 itemMap.put(container.getName(), container);
                 break;
             case "event":
