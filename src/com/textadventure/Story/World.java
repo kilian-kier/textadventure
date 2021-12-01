@@ -21,8 +21,8 @@ public class World {
     public HashMap<String, Tool> toolMap = new HashMap<>();
     public HashMap<String, Container> containerMap = new HashMap<>();
     public HashMap<String, NPC> npcMap = new HashMap<>();
-    //TODO Add Events (in Rooms)
     public HashMap<String, Event> eventMap = new HashMap<>();
+    public HashMap<String, Event> eventMapFast = new HashMap<>();
 
     public void load(String path){
         try {
