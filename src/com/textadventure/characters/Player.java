@@ -18,9 +18,8 @@ public class Player extends GameElement implements Containable, RoomChangeable {
     public Room currentRoom;
     private Room previousRoom;
 
-    public Player(String name, String description, String info, Room currentRoom) {
+    public Player(String name, String description, Room currentRoom) {
         this.name = name;
-        this.info = info;
         this.description = description;
         this.currentRoom = currentRoom;
         this.previousRoom = null;

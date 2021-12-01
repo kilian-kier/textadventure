@@ -4,13 +4,11 @@ import com.textadventure.GameElement;
 import com.textadventure.characters.Player;
 import com.textadventure.interfaces.Interactable;
 
-public class Exit extends GameElement implements Interactable {
+public class Exit extends GameElement {
     private Room destination;
 
-    public Exit(String name, String description, String info, Room destination) {
+    public Exit(String name, String description) {
         this.name = name;
-        this.destination = destination;
-        this.info = info;
         this.description = description;
     }
 
@@ -19,7 +17,7 @@ public class Exit extends GameElement implements Interactable {
         return this.destination;
     }
 
-    @Override
+    /*@Override
     public void look() {
         System.out.println("Da ist ein Ausgang, der nach " + this.destination.getName() + " führt.");
     }
@@ -38,7 +36,7 @@ public class Exit extends GameElement implements Interactable {
     public void investigate() {
         System.out.println(this.description);
     }
-
+*/
     public java.lang.String getName() {
         return this.name;
     }

@@ -6,14 +6,12 @@ import com.textadventure.interfaces.Containable;
 import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 
-public class Item  extends GameElement implements RoomChangeable{
+abstract public class Item  extends GameElement implements RoomChangeable{
     private Containable currentIn;
 
-    public Item(String name, String description, String info, Containable currentIn) {
+    public Item(String name, String description) {
         this.name = name;
         this.description = description;
-        this.info = info;
-        this.currentIn = currentIn;
     }
 
     @Override

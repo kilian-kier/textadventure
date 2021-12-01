@@ -9,10 +9,9 @@ public class Location extends GameElement {
     //TODO: welche Collection?
     private Collection<Room> rooms = new HashSet<>();
 
-    public Location(String name, String description, String info) {
+    public Location(String name, String description) {
         this.name = name;
         this.description = description;
-        this.info = info;
     }
 
     public String getName() {

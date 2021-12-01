@@ -13,11 +13,9 @@ public class Room extends GameElement implements Containable{
     //TODO: welche Collection?
     private final Map<java.lang.String, Exit> exits = new HashMap<>();
     private String location;
-    public Room(String name, String description, String info,String location) {
+    public Room(String name, String description) {
         this.name = name;
         this.description = description;
-        this.location = location;
-        this.info = info;
     }
 
     public java.lang.String getName() {
