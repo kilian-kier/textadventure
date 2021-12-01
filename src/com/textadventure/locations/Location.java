@@ -8,19 +8,19 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class Location extends GameElement implements Serializable {
-    private ArrayList<String> rooms=new ArrayList<>();
+    private ArrayList<Room> rooms=new ArrayList<>();
 
     public Location(String name, String description) {
         this.name = name;
         this.description = description;
     }
-    public ArrayList<String> getRooms()  {
+    public ArrayList<Room> getRooms()  {
         return rooms;
     }
-    public void addRoom(String room) {
+    public void addRoom(Room room) {
             rooms.add(room);
     }
-    public String getRoomIndex(int index) throws IndexOutOfBoundsException{
+    public Room getRoomIndex(int index) throws IndexOutOfBoundsException{
             return rooms.get(index);
     }
     public void removeAllRooms(){

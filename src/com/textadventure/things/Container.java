@@ -6,24 +6,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Container extends Item  implements Serializable {
-    ArrayList<String> tools = new ArrayList<>();
+    ArrayList<Tool> tools = new ArrayList<>();
     public Container(String name, String description) {
         super(name, description);
     }
 
-    public void addTool(String item) {
+    public void addTool(Tool item) {
         tools.add(item);
     }
     public void removeToolsIndex(int index) throws IndexOutOfBoundsException{
         tools.remove(index);
     }
-    public ArrayList<String> getTools(){
+    public ArrayList<Tool> getTools(){
         return this.tools;
     }
     public void removeAllTools(){
         tools.clear();
     }
-    public String getToolIndex(int index) throws IndexOutOfBoundsException{
+    public Tool getToolIndex(int index) throws IndexOutOfBoundsException{
         return tools.get(index);
     }
 }
