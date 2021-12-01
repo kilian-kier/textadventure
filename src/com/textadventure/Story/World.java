@@ -74,7 +74,6 @@ public class World {
         String input;
         boolean exit = false;
         while (!exit) {
-
             System.out.print(">> ");
             input = scanner.nextLine();
             input = input.toLowerCase();
@@ -110,7 +109,6 @@ public class World {
             }
         }
     }
-
     private void editGameElement(LinkedList<String> args) {
 
     }
@@ -121,19 +119,19 @@ public class World {
         GameElement temp = null;
         String ret;
 
-        switch (args.get(1)) {
+        switch (args[1]) {
             case "npc":
             case "exit":
             case "location":
             case "room":
             case "item":
-                if (args.size() > 2) { //Check if name parameter exists
-                    element.setName(args.get(2));
+                if (args.length > 2) { //Check if name parameter exists
+                    element.setName(args[2]);
                 } else {
                     inputName(element);
                 }
                 try { // If Element already exists somewhere
-                    getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
+                    getElement(element.getName(), args[1]); // Throws Exception if Element exists
                     System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
                     String[] options = {"o", "a", "e"};
                     ret = Input.switchOptions(options);
@@ -143,8 +141,8 @@ public class World {
                         case "o":
                             break;
                         case "e":
-                            args.set(0, "edit");
-                            args.set(1, element.getName());
+                            args[0] = "edit";
+                            args[1] = element.getName();
                             editGameElement(args);
                             return;
                     }
@@ -164,7 +162,7 @@ public class World {
 
         //For Specific features
         //TODO Extra Options
-        switch (args.get(1)) {
+        switch (args[1]) {
             case "npc":
                 NPC npc = new NPC(element.getName(), element.getDescription(), element.getInfo());
                 //Dialogs - Events Dialogs can cause
