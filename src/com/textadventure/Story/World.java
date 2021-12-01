@@ -11,22 +11,29 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Item;
 import com.textadventure.things.Tool;
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 public class World {
     public HashMap<String, Room> roomMap = new HashMap<>();
     public HashMap<String, Exit> exitMap = new HashMap<>();
     public HashMap<String, Location> locationMap = new HashMap<>();
-    public HashMap<String, Item> itemMap = new HashMap<>();
+    public HashMap<String, Tool> toolMap = new HashMap<>();
+    public HashMap<String, Container> containerMap = new HashMap<>();
     public HashMap<String, NPC> npcMap = new HashMap<>();
     //TODO Add Events (in Rooms)
     public HashMap<String, Event> eventMap = new HashMap<>();
 
-    public void load(String path) throws FileNotFoundException {
-
+    public void load(String path){
+        try {
+            LoadStoreWorld.load(path, this);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
-
+    public void store(String path){
+        LoadStoreWorld.store(path,this);
+    }
     public void worldEditor(String path) {
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
@@ -56,6 +63,12 @@ public class World {
                         System.out.println("Too few arguments");
                     }
                     break;
+                case "store":
+                    store("0_Story/");
+                    break;
+                case "load":
+                        load("0_Story/");
+                    break;
                 case "overview":
                 case "ov":
                     //TODO Funktion which checks for inconsistencies. e.g. a Location contains a room, but the room does not reference the location
@@ -72,7 +85,7 @@ public class World {
     private void editGameElement(LinkedList<String> args) {
 
     }
-
+    //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
     private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = new GameElement();
@@ -152,13 +165,13 @@ public class World {
             case "tool":
                 Tool tool = new Tool(element.getName(), element.getDescription());
                 //Room
-                itemMap.put(tool.getName(), tool);
+                toolMap.put(tool.getName(), tool);
                 break;
             case "container":
                 Container container = new Container(element.getName(), element.getDescription());
                 //Room
                 //Items
-                itemMap.put(container.getName(), container);
+                containerMap.put(container.getName(), container);
                 break;
             case "event":
                 //TODO Add Event
@@ -184,8 +197,11 @@ public class World {
             case "location":
                 if (locationMap.containsKey(name)) return locationMap.get(name);
                 break;
-            case "item":
-                if (itemMap.containsKey(name)) return itemMap.get(name);
+            case "tool":
+                if (toolMap.containsKey(name)) return toolMap.get(name);
+                break;
+            case "container":
+                if (containerMap.containsKey(name)) return containerMap.get(name);
                 break;
             case "npc":
                 if (npcMap.containsKey(name)) return npcMap.get(name);
@@ -209,10 +225,13 @@ public class World {
     private void addNPC(NPC npc) {
         npcMap.put(npc.getName(), npc);
     }
-
-    private void addItem(Item item) {
-        itemMap.put(item.getName(), item);
+    private void addTool(Tool tool){
+        toolMap.put(tool.getName(),tool);
     }
+    private void addContainer(Container container){
+        containerMap.put(container.getName(),container);
+    }
+
 
     private void inputName(GameElement element) {
         Scanner scanner = new Scanner(System.in);

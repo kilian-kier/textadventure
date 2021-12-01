@@ -27,13 +27,14 @@ public class Player extends GameElement implements Containable, RoomChangeable {
 
     @Override
     public void changeRoom(String exit) {
-        previousRoom = currentRoom;
+        //TODO muss so umgschriebm werdn dass der Funktion die World ibergebn werd und do exit String in do hashmap gsuicht werd
+       /* previousRoom = currentRoom;
         try {
             Exit temp = currentRoom.getExit(exit);
             currentRoom = temp.getDestination();
         } catch (ExitNotFoundException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.textadventure;
 
- public class GameElement{
+import java.io.Serializable;
+
+public class GameElement implements Serializable {
     protected String description;
     protected String name;
     public String getName(){

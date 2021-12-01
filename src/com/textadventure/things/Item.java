@@ -6,7 +6,9 @@ import com.textadventure.interfaces.Containable;
 import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 
-abstract public class Item  extends GameElement implements RoomChangeable{
+import java.io.Serializable;
+
+abstract public class Item  extends GameElement implements RoomChangeable, Serializable {
     private String room;
 
 
