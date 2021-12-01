@@ -10,10 +10,7 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Item;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class World {
     public HashMap<String, Room> roomMap = new HashMap<>();
@@ -73,7 +70,7 @@ public class World {
     public void worldEditor(String path) {
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
-        String[] commands;
+        LinkedList<String> commands;
         String input;
         boolean exit = false;
         while (!exit) {
@@ -82,12 +79,9 @@ public class World {
             input = input.toLowerCase();
             if (input.equals(""))
                 continue;
-            while (input.charAt(0) == ' ')
-                input = input.replaceFirst(" ", "");
-            while (input.charAt(input.length() - 1) == ' ')
-                input = input.substring(0, input.length() - 1);
-            commands = input.replaceFirst(" ", "@").replaceAll(" ", "").split("[@\n]", -1);
-            switch (commands[0]) {
+            commands = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
+            commands.removeIf(s -> s.equals(""));
+            switch (commands.get(0)) {
                 case "new":
                     try {
                         newGameElement(commands);
@@ -115,12 +109,11 @@ public class World {
             }
         }
     }
-
-    private void editGameElement(String[] args) {
+    private void editGameElement(LinkedList<String> args) {
 
     }
 
-    private void newGameElement(String[] args) {
+    private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = new GameElement();
         GameElement temp = null;
