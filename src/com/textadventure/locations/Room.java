@@ -36,6 +36,10 @@ public class Room extends GameElement implements Containable{
         return exits.get(name);
     }
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public void put(Tool tool) {
 

@@ -165,7 +165,7 @@ public class World {
         switch (args.get(1)) {
             case "npc":
                 NPC npc = new NPC(element.getName(), element.getDescription(), element.getInfo());
-                //Dialogs - Events Dialogs can cause
+                //Dialogs - Events Dialogs can cause<
                 //Location/Room
                 npcMap.put(npc.getName(), npc);
                 break;
@@ -182,7 +182,7 @@ public class World {
                 break;
             case "room":
                 Room room = new Room(element.getName(), element.getDescription(), element.getInfo(), null);
-                //Location
+                room.setLocation(inputLocation());
                 //Items
                 //Exits
                 //Npcs
@@ -273,6 +273,14 @@ public class World {
         while ((input = scanner.nextLine()).length() == 0) ;
         if (input.equals("exit")) return;
         element.setDescription(input);
+    }
+
+    private String inputLocation() {
+        Scanner scanner = new Scanner(System.in);
+        String input;
+        System.out.print("Umgebung: ");
+        while ((input = scanner.nextLine()).length() == 0) ;
+        return input;
     }
 
 }
