@@ -19,7 +19,7 @@ public class Player extends GameElement implements Containable, RoomChangeable {
     private Room previousRoom;
 
     public Player(String name, String description, Room currentRoom) {
-        this.name = name;
+        super(name);
         this.description = description;
         this.currentRoom = currentRoom;
         this.previousRoom = null;
@@ -48,6 +48,13 @@ public class Player extends GameElement implements Containable, RoomChangeable {
         }
     }
 
+    @Override
+    public void investigate() {
+        System.out.println("Inventar:");
+        for (Item item : inventory) {
+            System.out.println(item.getName());
+        }
+    }
 
     @Override
     public void put(Tool tool) {

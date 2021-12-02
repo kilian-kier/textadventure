@@ -21,8 +21,8 @@ public class World {
     public HashMap<String, Tool> toolMap = new HashMap<>();
     public HashMap<String, Container> containerMap = new HashMap<>();
     public HashMap<String, NPC> npcMap = new HashMap<>();
-    //TODO Add Events (in Rooms)
     public HashMap<String, Event> eventMap = new HashMap<>();
+    public HashMap<String, Event> eventMapFast = new HashMap<>();
 
     public void load(String path){
         try {
@@ -88,7 +88,7 @@ public class World {
     //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
     private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
-        GameElement element = new GameElement();
+        GameElement element = null;
         GameElement temp = null;
         String ret;
 
@@ -100,9 +100,9 @@ public class World {
             case "tool":
             case "container":
                 if (args.size() > 2) { //Check if name parameter exists
-                    element.setName(args.get(2));
+                    element = new GameElement(args.get(2));
                 } else {
-                    inputName(element);
+                    element = new GameElement(inputName());
                 }
                 try { // If Element already exists somewhere
                     getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
@@ -131,6 +131,9 @@ public class World {
                 System.out.println("Object does not exist");
                 return;
         }
+
+        //sist hot er do untn ongst dass element null isch
+        Objects.requireNonNull(element);
 
 
         //For Specific features
@@ -233,12 +236,12 @@ public class World {
     }
 
 
-    private void inputName(GameElement element) {
+    private String inputName() {
         Scanner scanner = new Scanner(System.in);
         String input;
         System.out.print("name: ");
         while ((input = scanner.nextLine()).length() == 0) ;
-        element.setName(input);
+        return input;
     }
 
     private void inputDescription(GameElement element) {

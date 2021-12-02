@@ -5,15 +5,16 @@ import com.textadventure.exeptions.NoBackException;
 import com.textadventure.interfaces.Containable;
 import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
+import com.textadventure.locations.Room;
 
 import java.io.Serializable;
 
 abstract public class Item  extends GameElement implements RoomChangeable, Serializable {
-    private String room;
+    private Room room;
 
 
     public Item(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
     }
 
@@ -28,11 +29,16 @@ abstract public class Item  extends GameElement implements RoomChangeable, Seria
     }
 
 
-    public String getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public void setRoom(String room) {
+    public void setRoom(Room room) {
         this.room = room;
+    }
+
+    @Override
+    public void investigate() {
+        //TODO: comparen
     }
 }
