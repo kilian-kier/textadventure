@@ -10,7 +10,7 @@ public class Exit extends GameElement implements Serializable {
     private String room;
 
     public Exit(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description; //Beschreibung 1 isch links vor an @ und die Beschreibung 2 ich rechts noch an @
     }
 
@@ -39,26 +39,17 @@ public class Exit extends GameElement implements Serializable {
         this.destination1 = destination1;
     }
 
-    /*@Override
+    @Override
         public void look() {
-            System.out.println("Da ist ein Ausgang, der nach " + this.destination.getName() + " führt.");
+            //TODO: jojo
+            //System.out.println("Da ist ein Ausgang, der nach " + this.destination.getName() + " führt.");
         }
 
-        @Override
-        public void use(Player player) {
-            player.changeRoom(this.name);
-        }
+    @Override
+    public void investigate() {
+        System.out.println(this.description);
+    }
 
-        @Override
-        public void talk() {
-            System.out.println("Du bist ja lustig im Kopf, erwartest du dir eine Antwort von einem Ausgang?");
-        }
-
-        @Override
-        public void investigate() {
-            System.out.println(this.description);
-        }
-    */
     public java.lang.String getName() {
         return this.name;
     }

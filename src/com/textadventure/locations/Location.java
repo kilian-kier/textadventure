@@ -11,7 +11,7 @@ public class Location extends GameElement implements Serializable {
     private ArrayList<String> rooms=new ArrayList<>();
 
     public Location(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
     }
     public ArrayList<String> getRooms()  {
