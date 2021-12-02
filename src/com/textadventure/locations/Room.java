@@ -111,7 +111,7 @@ public class Room extends GameElement implements Containable, Serializable {
     @Override
     public void investigate() {
         System.out.println("Ausgänge:");
-        for (String exit : exits) {
+        for (Exit exit : exits) {
             System.out.println(exit);
         }
     }
