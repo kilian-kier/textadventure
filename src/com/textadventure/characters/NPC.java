@@ -10,7 +10,7 @@ public class NPC extends GameElement implements Serializable {
     private Room room;
     public ArrayList<String[]> dialog= new ArrayList<String[]>(); // Array[3]: An index 0 die Froge, an index 1 die Antwort und an index 2 a event (string ) oder null
     public NPC(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
     }
 

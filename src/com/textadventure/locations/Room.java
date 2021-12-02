@@ -1,6 +1,7 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.exeptions.ExitNotFoundException;
 import com.textadventure.characters.NPC;
 import com.textadventure.interfaces.Containable;
 import com.textadventure.things.Container;
@@ -17,10 +18,9 @@ public class Room extends GameElement implements Containable, Serializable {
     private ArrayList<NPC> npcs = new ArrayList<>();
     private Location location;
     public Room(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
     }
-
 
 
     @Override
@@ -107,4 +107,12 @@ public class Room extends GameElement implements Containable, Serializable {
     }
 
 
+
+    @Override
+    public void investigate() {
+        System.out.println("Ausgänge:");
+        for (String exit : exits) {
+            System.out.println(exit);
+        }
+    }
 }

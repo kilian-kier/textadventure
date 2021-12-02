@@ -14,7 +14,7 @@ abstract public class Item  extends GameElement implements RoomChangeable, Seria
 
 
     public Item(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
     }
 
@@ -35,5 +35,10 @@ abstract public class Item  extends GameElement implements RoomChangeable, Seria
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    @Override
+    public void investigate() {
+        //TODO: comparen
     }
 }
