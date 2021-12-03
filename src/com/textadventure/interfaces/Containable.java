@@ -1,8 +1,10 @@
 package com.textadventure.interfaces;
 
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.exeptions.KeyAlreadyUsedException;
 import com.textadventure.things.Tool;
 
 public interface Containable {
-    public void put (Tool tool);
-    public Tool take (String name);
+    void put (Tool tool) throws KeyAlreadyUsedException;
+    Tool take (String name) throws ItemNotFoundException;
 }

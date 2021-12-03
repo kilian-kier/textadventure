@@ -15,26 +15,26 @@ import java.io.*;
 import java.util.*;
 
 public class World {
-    public HashMap<String, Room> roomMap = new HashMap<>();
-    public HashMap<String, Exit> exitMap = new HashMap<>();
-    public HashMap<String, Location> locationMap = new HashMap<>();
-    public HashMap<String, Tool> toolMap = new HashMap<>();
-    public HashMap<String, Container> containerMap = new HashMap<>();
-    public HashMap<String, NPC> npcMap = new HashMap<>();
+    static public HashMap<String, Room> roomMap = new HashMap<>();
+    static public HashMap<String, Exit> exitMap = new HashMap<>();
+    static public HashMap<String, Location> locationMap = new HashMap<>();
+    static public HashMap<String, Tool> toolMap = new HashMap<>();
+    static public HashMap<String, Container> containerMap = new HashMap<>();
+    static public HashMap<String, NPC> npcMap = new HashMap<>();
     //TODO Add Events (in Rooms)
-    public HashMap<String, Event> eventMap = new HashMap<>();
+    static public HashMap<String, Event> eventMap = new HashMap<>();
 
-    public void load(String path){
+    static public void load(String path){
         try {
-            LoadStoreWorld.load(path, this);
+            LoadStoreWorld.load(path);
         }catch(Exception e){
             e.printStackTrace();
         }
     }
-    public void store(String path){
-        LoadStoreWorld.store(path,this);
+    static public void store(String path){
+        LoadStoreWorld.store(path);
     }
-    public void worldEditor(String path) {
+    static public void worldEditor(String path) {
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
@@ -82,11 +82,11 @@ public class World {
             }
         }
     }
-    private void editGameElement(LinkedList<String> args) {
+    static private void editGameElement(LinkedList<String> args) {
 
     }
     //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
-    private void newGameElement(LinkedList<String> args) {
+    static private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = null;
         GameElement temp = null;
@@ -192,7 +192,7 @@ public class World {
      * @return GameElement if it was found
      * @throws ElementNotFoundException if Element is not found this Exception is being thrown
      */
-    private GameElement getElement(String name, String type) throws ElementNotFoundException {
+    static private GameElement getElement(String name, String type) throws ElementNotFoundException {
         switch (type) {
             case "room":
                 if (roomMap.containsKey(name)) return roomMap.get(name);
@@ -217,26 +217,26 @@ public class World {
     }
 
 
-    private void addLocation(Location location) {
+    static private void addLocation(Location location) {
         locationMap.put(location.getName(), location);
     }
 
-    private void addRoom(Room room) {
+    static private void addRoom(Room room) {
         roomMap.put(room.getName(), room);
     }
 
-    private void addNPC(NPC npc) {
+    static private void addNPC(NPC npc) {
         npcMap.put(npc.getName(), npc);
     }
-    private void addTool(Tool tool){
+    static private void addTool(Tool tool){
         toolMap.put(tool.getName(),tool);
     }
-    private void addContainer(Container container){
+    static private void addContainer(Container container){
         containerMap.put(container.getName(),container);
     }
 
 
-    private String inputName() {
+    static private String inputName() {
         Scanner scanner = new Scanner(System.in);
         String input;
         System.out.print("name: ");
@@ -244,7 +244,7 @@ public class World {
         return input;
     }
 
-    private void inputDescription(GameElement element) {
+    static private void inputDescription(GameElement element) {
         Scanner scanner = new Scanner(System.in);
         String input;
         System.out.print("description: ");

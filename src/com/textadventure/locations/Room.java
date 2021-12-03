@@ -1,12 +1,16 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.Story.World;
 import com.textadventure.exeptions.ExitNotFoundException;
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.exeptions.KeyAlreadyUsedException;
 import com.textadventure.interfaces.Containable;
 import com.textadventure.things.Tool;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Room extends GameElement implements Containable, Serializable {
 
@@ -26,13 +30,22 @@ public class Room extends GameElement implements Containable, Serializable {
 
 
     @Override
-    public void put(Tool tool) {
-
+    public void put(Tool tool) throws KeyAlreadyUsedException {
+        if (tools.contains(tool.getName()))
+            throw new KeyAlreadyUsedException(tool.getName());
+        if (World.toolMap.containsKey(tool.getName()))
+            throw new KeyAlreadyUsedException(tool.getName());
+        World.toolMap.put(tool.getName(), tool);
     }
 
     @Override
-    public Tool take(String name) {
-        return null;
+    public Tool take(String name) throws ItemNotFoundException {
+        Tool ret = World.toolMap.get(name);
+        if (ret == null)
+            throw new ItemNotFoundException(name);
+        if (!tools.contains(name))
+            throw new ItemNotFoundException(name);
+        return ret;
     }
 
 
@@ -53,11 +66,8 @@ public class Room extends GameElement implements Containable, Serializable {
         return exits.get(index);
     }
 
-    public void addTool(String item) {
-        tools.add(item);
-    }
-    public void removeToolsIndex(int index) throws IndexOutOfBoundsException{
-        tools.remove(index);
+    public void removeToolsKey(String name) throws IndexOutOfBoundsException{
+        tools.remove(name);
     }
     public ArrayList<String> getTools(){
         return this.tools;
@@ -65,9 +75,7 @@ public class Room extends GameElement implements Containable, Serializable {
     public void removeAllTools(){
         tools.clear();
     }
-    public String getToolIndex(int index) throws IndexOutOfBoundsException{
-        return tools.get(index);
-    }
+
 
     public void addContainer(String item) {
         container.add(item);
