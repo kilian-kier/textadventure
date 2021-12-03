@@ -2,26 +2,25 @@ package com.textadventure.locations;
 
 import com.textadventure.GameElement;
 import com.textadventure.Story.World;
-import com.textadventure.exeptions.ExitNotFoundException;
 import com.textadventure.exeptions.ItemNotFoundException;
-import com.textadventure.exeptions.KeyAlreadyUsedException;
-import com.textadventure.interfaces.Containable;
+import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class Room extends GameElement implements Containable, Serializable {
+public class Room extends GameElement implements Serializable {
 
-    private ArrayList<String> exits=new ArrayList<>();
-    private ArrayList<String> tools =new ArrayList<>();
+    private ArrayList<String> exits = new ArrayList<>();
+    private Container tools = new Container(this.name, "Dinge, die sich in diesem Raum (" + this.name + ") befinden");
     private ArrayList<String> container = new ArrayList<>();
     private ArrayList<String> npcs = new ArrayList<>();
     private String location;
+
     public Room(String name, String description) {
         super(name);
         this.description = description;
+        World.containerMap.put(this.name, tools);
     }
 
     public java.lang.String getName() {
@@ -29,93 +28,105 @@ public class Room extends GameElement implements Containable, Serializable {
     }
 
 
-    @Override
-    public void put(Tool tool) throws KeyAlreadyUsedException {
-        if (tools.contains(tool.getName()))
-            throw new KeyAlreadyUsedException(tool.getName());
-        if (World.toolMap.containsKey(tool.getName()))
-            throw new KeyAlreadyUsedException(tool.getName());
-        World.toolMap.put(tool.getName(), tool);
-    }
-
-    @Override
-    public Tool take(String name) throws ItemNotFoundException {
-        Tool ret = World.toolMap.get(name);
-        if (ret == null)
-            throw new ItemNotFoundException(name);
-        if (!tools.contains(name))
-            throw new ItemNotFoundException(name);
-        return ret;
-    }
-
-
-
+    //TODO: vielleicht amol löschen wenns do Herr Gamper nt braucht
     public void addExit(String exit) {
         exits.add(exit);
     }
-    public void removeExitIndex(int index) throws IndexOutOfBoundsException{
+
+    public void removeExitIndex(int index) throws IndexOutOfBoundsException {
         exits.remove(index);
     }
-    public ArrayList<String> getExits(){
+
+    public ArrayList<String> getExits() {
         return this.exits;
     }
-    public void removeAllExits(){
+
+    public void removeAllExits() {
         exits.clear();
     }
-    public String getExitIndex(int index)throws IndexOutOfBoundsException{
+
+    public String getExitIndex(int index) throws IndexOutOfBoundsException {
         return exits.get(index);
     }
 
-    public void removeToolsKey(String name) throws IndexOutOfBoundsException{
-        tools.remove(name);
-    }
-    public ArrayList<String> getTools(){
-        return this.tools;
-    }
-    public void removeAllTools(){
-        tools.clear();
+    public void removeToolsKey(String name) throws IndexOutOfBoundsException {
+        tools.removeTool(name);
     }
 
+    public ArrayList<String> getTools() {
+        return this.tools.getTools();
+    }
+
+    public Tool getTool(String name) throws ItemNotFoundException {
+        if (tools.getTools().contains(name)) {
+            return tools.getTool(name);
+        } else
+            throw new ItemNotFoundException(name);
+    }
+
+    public void removeAllTools() {
+        tools.removeAllTools();
+    }
+
+    public void addTool(String tool) {
+        tools.addTool(tool);
+    }
 
     public void addContainer(String item) {
         container.add(item);
     }
-    public void removeContainerIndex(int index) throws IndexOutOfBoundsException{
+
+    public void removeContainerIndex(int index) throws IndexOutOfBoundsException {
         container.remove(index);
     }
-    public ArrayList<String> getContainer(){
+
+    public ArrayList<String> getContainers() {
         return this.container;
     }
-    public void removeAllContainer(){
+    public Container getContainer(String name) throws ItemNotFoundException {
+        if (!container.contains(name))
+            throw new ItemNotFoundException(name);
+        Container ret = World.containerMap.get(name);
+        if (ret == null)
+            throw new ItemNotFoundException(name);
+        return ret;
+    }
+
+    public void removeAllContainer() {
         container.clear();
     }
-    public String getContainerIndex(int index) throws IndexOutOfBoundsException{
+
+    public String getContainerIndex(int index) throws IndexOutOfBoundsException {
         return container.get(index);
     }
 
     public void addNpcs(String item) {
         npcs.add(item);
     }
-    public void removeNpcsIndex(int index) throws IndexOutOfBoundsException{
+
+    public void removeNpcsIndex(int index) throws IndexOutOfBoundsException {
         npcs.remove(index);
     }
-    public ArrayList<String> getNpcs(){
+
+    public ArrayList<String> getNpcs() {
         return this.npcs;
     }
-    public void removeAllNpcs(){
+
+    public void removeAllNpcs() {
         npcs.clear();
     }
-    public String getNpcsIndex(int index) throws IndexOutOfBoundsException{
+
+    public String getNpcsIndex(int index) throws IndexOutOfBoundsException {
         return npcs.get(index);
     }
 
     public String getLocation() {
         return location;
     }
+
     public void setLocation(String location) {
         this.location = location;
     }
-
 
 
     @Override
