@@ -48,8 +48,7 @@ public class Room extends GameElement implements Containable, Serializable {
         return ret;
     }
 
-
-
+    //TODO: vielleicht amol löschen wenns do Herr Gamper nt braucht
     public void addExit(String exit) {
         exits.add(exit);
     }
