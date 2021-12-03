@@ -15,7 +15,7 @@ import com.textadventure.things.Tool;
 import java.util.ArrayList;
 
 public class Player extends GameElement implements RoomChangeable {
-    public Room currentRoom;
+    private Room currentRoom;
     Container inventory = new Container("Rucksack", "Das ist dein Rucksack. Hier kannst du alle Dinge finden, die du besitzt.");
     private Room previousRoom;
 
@@ -24,6 +24,15 @@ public class Player extends GameElement implements RoomChangeable {
         this.description = description;
         this.currentRoom = currentRoom;
         this.previousRoom = null;
+    }
+
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    //TODO: löschen, hons lei in do Main zin testen gebraucht
+    public Room getPreviousRoom() {
+        return previousRoom;
     }
 
     @Override

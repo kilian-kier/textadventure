@@ -219,22 +219,22 @@ public class World {
         throw new ElementNotFoundException(name);
     }
 
-
-    static private void addLocation(Location location) {
+    //TODO: entweder de löschen oder die Maps private mochen, wos schiana war
+    static public void addLocation(Location location) {
         locationMap.put(location.getName(), location);
     }
 
-    static private void addRoom(Room room) {
+    static public void addRoom(Room room) {
         roomMap.put(room.getName(), room);
     }
 
-    static private void addNPC(NPC npc) {
+    static public void addNPC(NPC npc) {
         npcMap.put(npc.getName(), npc);
     }
-    static private void addTool(Tool tool){
+    static public void addTool(Tool tool){
         toolMap.put(tool.getName(),tool);
     }
-    static private void addContainer(Container container){
+    static public void addContainer(Container container){
         containerMap.put(container.getName(),container);
     }
 

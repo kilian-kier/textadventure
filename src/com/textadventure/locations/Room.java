@@ -1,6 +1,7 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.Story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
@@ -19,6 +20,7 @@ public class Room extends GameElement implements Serializable {
     public Room(String name, String description) {
         super(name);
         this.description = description;
+        World.containerMap.put(this.name, tools);
     }
 
     public java.lang.String getName() {
@@ -78,8 +80,16 @@ public class Room extends GameElement implements Serializable {
         container.remove(index);
     }
 
-    public ArrayList<String> getContainer() {
+    public ArrayList<String> getContainers() {
         return this.container;
+    }
+    public Container getContainer(String name) throws ItemNotFoundException {
+        if (!container.contains(name))
+            throw new ItemNotFoundException(name);
+        Container ret = World.containerMap.get(name);
+        if (ret == null)
+            throw new ItemNotFoundException(name);
+        return ret;
     }
 
     public void removeAllContainer() {
