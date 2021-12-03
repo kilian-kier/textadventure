@@ -2,6 +2,7 @@ package com.textadventure.Story;
 
 import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
+import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
@@ -23,6 +24,8 @@ public class World {
     static public HashMap<String, NPC> npcMap = new HashMap<>();
     //TODO Add Events (in Rooms)
     static public HashMap<String, Event> eventMap = new HashMap<>();
+    //TODO new Player
+    static public Player player;
 
     static public void load(String path){
         try {

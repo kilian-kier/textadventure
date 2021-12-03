@@ -6,17 +6,17 @@ import com.textadventure.exeptions.ExitNotFoundException;
 import com.textadventure.exeptions.ItemNotFoundException;
 import com.textadventure.exeptions.KeyAlreadyUsedException;
 import com.textadventure.exeptions.NoBackException;
-import com.textadventure.interfaces.Containable;
 import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Room;
+import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.util.ArrayList;
 
-public class Player extends GameElement implements Containable, RoomChangeable {
+public class Player extends GameElement implements RoomChangeable {
     public Room currentRoom;
-    ArrayList<String> tools = new ArrayList<>();
+    Container inventory = new Container("Rucksack", "Das ist dein Rucksack. Hier kannst du alle Dinge finden, die du besitzt.");
     private Room previousRoom;
 
     public Player(String name, String description, Room currentRoom) {
@@ -60,29 +60,28 @@ public class Player extends GameElement implements Containable, RoomChangeable {
 
     @Override
     public void investigate() {
-        System.out.println("Inventar:");
-        for (String item : tools) {
+        System.out.println("Rucksack:");
+        for (String item : inventory.getTools()) {
             System.out.println(item);
         }
     }
 
-    @Override
-    public void put(Tool tool) throws KeyAlreadyUsedException {
-        if (tools.contains(tool.getName()))
-            throw new KeyAlreadyUsedException(tool.getName());
-        if (World.toolMap.containsKey(tool.getName()))
-            throw new KeyAlreadyUsedException(tool.getName());
-        World.toolMap.put(tool.getName(), tool);
-        tool.setContainer(this.name);
+    public ArrayList<String> getTools() {
+        return this.inventory.getTools();
     }
 
-    @Override
-    public Tool take(String name) throws ItemNotFoundException {
-        Tool ret = World.toolMap.get(name);
-        if (ret == null)
+    public Tool getTool(String name) throws ItemNotFoundException {
+        if (inventory.getTools().contains(name)) {
+            return inventory.getTool(name);
+        } else
             throw new ItemNotFoundException(name);
-        if (!tools.contains(name))
-            throw new ItemNotFoundException(name);
-        return ret;
+    }
+
+    public void removeAllTools() {
+        inventory.removeAllTools();
+    }
+
+    public void addTool(String tool) {
+        inventory.addTool(tool);
     }
 }
