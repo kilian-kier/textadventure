@@ -1,5 +1,6 @@
 package com.textadventure;
 
+import com.textadventure.Event.ContainerDiff;
 import com.textadventure.Story.World;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ExitNotFoundException;
@@ -12,12 +13,17 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
 public class Main {
 
     public static void main(java.lang.String[] args) {
+       /*
+       world.worldEditor("/home/kilian/IdeaProjects/textadventure/1_Story");*/
 
-        /*World world = new World();
-        world.worldEditor("/home/kilian/IdeaProjects/textadventure/1_Story");*/
 
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten");
@@ -25,6 +31,8 @@ public class Main {
         Exit door = new Exit("Tür", "Hier geht es zum Garten");
         Container chest = new Container("Truhe", "Eine alte Trueh in der Ecke");
         Tool hammer = new Tool("Hammer", "Ein alter rostiger Hammer");
+        hammer.setContainer("Haus");
+        house.addTool("Hammer");
         Tool apple = new Tool("Apfel", "Ein reifer roter Apfel");
 
         World.locationMap.put(village.getName(), village);
@@ -51,13 +59,14 @@ public class Main {
         World.player = new Player("Stefe", "Manchmal frage ich mich, wer bin ich überhaupt?", house);
 
         System.out.println(World.player.getCurrentRoom().getName() + " : " + World.player.getPreviousRoom());
+
         try {
-            World.toolMap.get("Hammer").changeContainer("Truhe");
+            World.toolMap.get("Hammer").changeContainer("player");
             System.out.println("Du hast nun einen " + World.player.getTools().toString() + " in deinem Rucksack\n");
-        } catch (ItemNotFoundException | ItemNotFoundInContainerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
+/*
         try {
             World.player.changeRoom("Tür");
         } catch (ExitNotFoundException e) {
@@ -70,7 +79,7 @@ public class Main {
             System.out.println("Es befinden sich nun " + World.player.getCurrentRoom().getTools().toString() + " im Garten");
             World.toolMap.get("Apfel").changeContainer("Garten");
             System.out.println("Du hast nun einen " + World.player.getTools().toString() + " aufgehoben\n");
-        } catch (ItemNotFoundException | ItemNotFoundInContainerException e) {
+        } catch (ItemNotFoundException  e) {
             e.printStackTrace();
         }
 
@@ -84,7 +93,7 @@ public class Main {
         try {
             World.toolMap.get("Apfel").changeContainer("Truhe");
             System.out.println("Du hast nun den " + World.containerMap.get("Truhe").getTools().toString() + " in die Truhe gelegt");
-        } catch (ItemNotFoundException | ItemNotFoundInContainerException e) {
+        } catch (ItemNotFoundException e) {
             e.printStackTrace();
         }
 

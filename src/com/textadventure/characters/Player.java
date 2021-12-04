@@ -82,6 +82,9 @@ public class Player extends GameElement implements RoomChangeable {
         } else
             throw new ItemNotFoundException(name);
     }
+    public Container getToolsContainer(){
+        return this.inventory;
+    }
 
     public void removeAllTools() {
         inventory.removeAllTools();
@@ -89,5 +92,8 @@ public class Player extends GameElement implements RoomChangeable {
 
     public void addTool(String tool) {
         inventory.addTool(tool);
+    }
+    public void removeTool(String tool) {
+        inventory.removeTool(tool);
     }
 }

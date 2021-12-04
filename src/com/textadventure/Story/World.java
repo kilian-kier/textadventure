@@ -1,5 +1,6 @@
 package com.textadventure.Story;
 
+import com.textadventure.Event.Event;
 import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
