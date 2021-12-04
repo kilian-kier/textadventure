@@ -2,6 +2,7 @@ package com.textadventure.exeptions;
 
 public class ItemNotFoundException extends Exception {
     private final String item;
+
     public ItemNotFoundException(String item) {
         this.item = item;
     }

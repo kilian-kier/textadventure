@@ -1,9 +1,9 @@
 package com.textadventure.exeptions;
 
 public class ItemNotFoundInContainerException extends Exception {
-    String item;
-    String container1;
-    String container2;
+    private final String item;
+    private final String container1;
+    private final String container2;
 
     public ItemNotFoundInContainerException(String item, String container1, String container2) {
         this.item = item;

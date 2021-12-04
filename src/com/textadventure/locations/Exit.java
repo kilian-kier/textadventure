@@ -40,10 +40,10 @@ public class Exit extends GameElement implements Serializable {
     }
 
     @Override
-        public void look() {
-            //TODO: jojo
-            //System.out.println("Da ist ein Ausgang, der nach " + this.destination.getName() + " führt.");
-        }
+    public void look() {
+        //TODO: schaugn wo man isch und donn in ondon Raum ausgeben
+        //System.out.println("Da ist ein Ausgang, der nach " + this.destination.getName() + " führt.");
+    }
 
     @Override
     public void investigate() {

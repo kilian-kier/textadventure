@@ -2,6 +2,7 @@ package com.textadventure.exeptions;
 
 public class KeyAlreadyUsedException extends Exception {
     private final String key;
+
     public KeyAlreadyUsedException(String key) {
         this.key = key;
     }

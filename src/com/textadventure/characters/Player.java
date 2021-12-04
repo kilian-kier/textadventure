@@ -2,10 +2,7 @@ package com.textadventure.characters;
 
 import com.textadventure.GameElement;
 import com.textadventure.Story.World;
-import com.textadventure.exeptions.ExitNotFoundException;
-import com.textadventure.exeptions.ItemNotFoundException;
-import com.textadventure.exeptions.KeyAlreadyUsedException;
-import com.textadventure.exeptions.NoBackException;
+import com.textadventure.exeptions.*;
 import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Room;
@@ -15,8 +12,8 @@ import com.textadventure.things.Tool;
 import java.util.ArrayList;
 
 public class Player extends GameElement implements RoomChangeable {
+    private final Container inventory = new Container("Rucksack", "Das ist dein Rucksack. Hier kannst du alle Dinge finden, die du besitzt.");
     private Room currentRoom;
-    Container inventory = new Container("Rucksack", "Das ist dein Rucksack. Hier kannst du alle Dinge finden, die du besitzt.");
     private Room previousRoom;
 
     public Player(String name, String description, Room currentRoom) {

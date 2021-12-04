@@ -28,7 +28,7 @@ public class Main {
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten");
         Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus");
-        Exit door = new Exit("Tür",  "Hier geht es zum Garten");
+        Exit door = new Exit("Tür", "Hier geht es zum Garten");
         Container chest = new Container("Truhe", "Eine alte Trueh in der Ecke");
         Tool hammer = new Tool("Hammer", "Ein alter rostiger Hammer");
         hammer.setContainer("Haus");

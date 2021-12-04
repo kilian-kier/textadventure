@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Container extends Item implements Serializable {
-    ArrayList<String> tools = new ArrayList<>();
+    private final ArrayList<String> tools = new ArrayList<>();
 
 
     public Container(String name, String description) {
