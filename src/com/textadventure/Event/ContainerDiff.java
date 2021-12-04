@@ -2,8 +2,6 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
-import com.textadventure.exeptions.TypeDoesNotExistException;
-import com.textadventure.exeptions.TypeNotValidException;
 import com.textadventure.things.Container;
 
 import java.util.Collection;
@@ -26,7 +24,19 @@ public class ContainerDiff extends Diff{
         }catch(Exception e){}
         try{
            container.changeContainer(getRoom());
-        }catch(Exception e){e.printStackTrace();}
+        }catch(Exception e){}
+        try{
+            for (String i:getAddTools()) {
+                World.toolMap.get("i").changeContainer(this.name);
+                container.addTool(i);
+            }
+        }catch(Exception e){}
+        try{
+            for (String i:getRmTools()) {
+                World.toolMap.get("i").setContainer(null);
+                container.removeTool(i);
+            }
+        }catch(Exception e){}
     }
 
     public void setRoom(String room)  {
