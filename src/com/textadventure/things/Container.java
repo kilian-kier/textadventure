@@ -1,6 +1,8 @@
 package com.textadventure.things;
 
 import com.textadventure.Story.World;
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.exeptions.ItemNotFoundInContainerException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,9 +15,13 @@ public class Container extends Item implements Serializable {
         super(name, description);
     }
 
-    //TODO: vielleicht amol löschen wenns do Herr Gamper nt braucht
-    public void removeToolsIndex(int index) throws IndexOutOfBoundsException {
-        tools.remove(index);
+    @Override
+    Container findItemContainer(String container) throws ItemNotFoundException{
+        Container newContainer=World.roomMap.get(container).getToolsContainer();
+        if(newContainer==null){
+            throw new ItemNotFoundException(container);
+        }
+        return newContainer;
     }
 
     public Tool getTool(String name) {
@@ -33,11 +39,6 @@ public class Container extends Item implements Serializable {
     public void removeAllTools() {
         tools.clear();
     }
-
-    public String getToolIndex(int index) throws IndexOutOfBoundsException {
-        return tools.get(index);
-    }
-
     public String removeTool(String name) {
         tools.remove(name);
         return name;

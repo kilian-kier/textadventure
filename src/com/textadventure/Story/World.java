@@ -1,5 +1,6 @@
 package com.textadventure.Story;
 
+import com.textadventure.Event.Event;
 import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
@@ -9,10 +10,8 @@ import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
-import com.textadventure.things.Item;
 import com.textadventure.things.Tool;
 
-import java.io.*;
 import java.util.*;
 
 public class World {

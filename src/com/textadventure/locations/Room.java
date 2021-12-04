@@ -7,6 +7,7 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Room extends GameElement implements Serializable {
@@ -56,6 +57,10 @@ public class Room extends GameElement implements Serializable {
     public ArrayList<String> getTools() {
         return this.tools.getTools();
     }
+    public Container getToolsContainer() {
+        return this.tools;
+    }
+
 
     public Tool getTool(String name) throws ItemNotFoundException {
         if (tools.getTools().contains(name)) {
@@ -64,21 +69,10 @@ public class Room extends GameElement implements Serializable {
             throw new ItemNotFoundException(name);
     }
 
-    public void removeAllTools() {
-        tools.removeAllTools();
-    }
-
     public void addTool(String tool) {
         tools.addTool(tool);
     }
 
-    public void addContainer(String item) {
-        container.add(item);
-    }
-
-    public void removeContainerIndex(int index) throws IndexOutOfBoundsException {
-        container.remove(index);
-    }
 
     public ArrayList<String> getContainers() {
         return this.container;
@@ -92,12 +86,16 @@ public class Room extends GameElement implements Serializable {
         return ret;
     }
 
-    public void removeAllContainer() {
-        container.clear();
-    }
 
-    public String getContainerIndex(int index) throws IndexOutOfBoundsException {
-        return container.get(index);
+
+    public String getContainerKey(String string){
+        return container.get(container.indexOf(string));
+    }
+    public void removeContainer(String string){
+        container.remove(string);
+    }
+    public void addContainerKey(String string){
+        container.add(string);
     }
 
     public void addNpcs(String item) {
@@ -135,5 +133,9 @@ public class Room extends GameElement implements Serializable {
         for (String exit : exits) {
             System.out.println(exit);
         }
+    }
+
+    public void addContainer(String name) {
+        container.add(name);
     }
 }

@@ -1,5 +1,6 @@
 package com.textadventure.Story;
 
+import com.textadventure.Event.Event;
 import com.textadventure.characters.NPC;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
