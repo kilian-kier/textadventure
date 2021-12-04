@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 public class Room extends GameElement implements Serializable {
 
-    private ArrayList<String> exits = new ArrayList<>();
-    private Container tools = new Container(this.name, "Dinge, die sich in diesem Raum (" + this.name + ") befinden");
-    private ArrayList<String> container = new ArrayList<>();
-    private ArrayList<String> npcs = new ArrayList<>();
+    private final ArrayList<String> exits = new ArrayList<>();
+    private final Container tools = new Container(this.name, "Dinge, die sich in diesem Raum (" + this.name + ") befinden");
+    private final ArrayList<String> container = new ArrayList<>();
+    private final ArrayList<String> npcs = new ArrayList<>();
     private String location;
 
     public Room(String name, String description) {
@@ -83,6 +83,7 @@ public class Room extends GameElement implements Serializable {
     public ArrayList<String> getContainers() {
         return this.container;
     }
+
     public Container getContainer(String name) throws ItemNotFoundException {
         if (!container.contains(name))
             throw new ItemNotFoundException(name);

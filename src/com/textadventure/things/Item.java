@@ -4,7 +4,7 @@ import com.textadventure.GameElement;
 
 import java.io.Serializable;
 
-abstract public class Item  extends GameElement implements Serializable {
+abstract public class Item extends GameElement implements Serializable {
     private String currentContainer;
 
 

@@ -9,10 +9,8 @@ import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
-import com.textadventure.things.Item;
 import com.textadventure.things.Tool;
 
-import java.io.*;
 import java.util.*;
 
 public class World {
@@ -27,16 +25,18 @@ public class World {
     //TODO new Player
     static public Player player;
 
-    static public void load(String path){
+    static public void load(String path) {
         try {
             LoadStoreWorld.load(path);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    static public void store(String path){
+
+    static public void store(String path) {
         LoadStoreWorld.store(path);
     }
+
     static public void worldEditor(String path) {
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
@@ -70,7 +70,7 @@ public class World {
                     store("0_Story/");
                     break;
                 case "load":
-                        load("0_Story/");
+                    load("0_Story/");
                     break;
                 case "overview":
                 case "ov":
@@ -85,9 +85,11 @@ public class World {
             }
         }
     }
+
     static private void editGameElement(LinkedList<String> args) {
 
     }
+
     //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
     static private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
@@ -231,27 +233,31 @@ public class World {
     static public void addNPC(NPC npc) {
         npcMap.put(npc.getName(), npc);
     }
-    static public void addTool(Tool tool){
-        toolMap.put(tool.getName(),tool);
+
+    static public void addTool(Tool tool) {
+        toolMap.put(tool.getName(), tool);
     }
-    static public void addContainer(Container container){
-        containerMap.put(container.getName(),container);
+
+    static public void addContainer(Container container) {
+        containerMap.put(container.getName(), container);
     }
 
 
     static private String inputName() {
         Scanner scanner = new Scanner(System.in);
-        String input;
+        String input = "";
         System.out.print("name: ");
-        while ((input = scanner.nextLine()).length() == 0) ;
+        while (input.length() == 0)
+            input = scanner.nextLine();
         return input;
     }
 
     static private void inputDescription(GameElement element) {
         Scanner scanner = new Scanner(System.in);
-        String input;
+        String input = "";
         System.out.print("description: ");
-        while ((input = scanner.nextLine()).length() == 0) ;
+        while (input.length() == 0)
+            input = scanner.nextLine();
         element.setDescription(input);
     }
 

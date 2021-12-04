@@ -1,7 +1,8 @@
 package com.textadventure.exeptions;
 
-public class CommandSyntaxException extends Exception{
+public class CommandSyntaxException extends Exception {
     private final String command;
+
     CommandSyntaxException(String command) {
         this.command = command;
     }
