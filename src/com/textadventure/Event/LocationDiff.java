@@ -42,7 +42,27 @@ public class LocationDiff extends Diff{
 
     @Override
     boolean checkValidity() {
-        return false;
+        Collection<String> collTemp;
+        boolean ret=true;
+        collTemp=getAddRooms();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.roomMap.get(i)==null){
+                    System.out.printf("Raum (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getRmRooms();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.roomMap.get(i)==null){
+                    System.out.printf("Raum (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        return ret;
     }
 
     public void setAddRooms(Collection<String> rooms){

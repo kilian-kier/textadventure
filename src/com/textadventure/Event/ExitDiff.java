@@ -6,6 +6,8 @@ import com.textadventure.exeptions.TypeDoesNotExistException;
 import com.textadventure.locations.Exit;
 import com.textadventure.things.Container;
 
+import java.util.Collection;
+
 public class ExitDiff extends Diff{
     public ExitDiff(String name){
         super(name);
@@ -35,7 +37,30 @@ public class ExitDiff extends Diff{
 
     @Override
     boolean checkValidity() {
-        return false;
+        String stringTemp;
+        boolean ret=true;
+        stringTemp=getRoom();
+        if(stringTemp!=null){
+            if(World.roomMap.get(stringTemp)==null){
+                System.out.printf("Raum %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
+                ret=false;
+            }
+        }
+        stringTemp=getDestination1();
+        if(stringTemp!=null){
+            if(World.roomMap.get(stringTemp)==null){
+                System.out.printf("Raum (Destination 1) %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
+                ret=false;
+            }
+        }
+        stringTemp=getDestination2();
+        if(stringTemp!=null){
+            if(World.roomMap.get(stringTemp)==null){
+                System.out.printf("Raum (Destination 2) %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
+                ret=false;
+            }
+        }
+        return ret;
     }
 
     public void setRoom(String room)  {

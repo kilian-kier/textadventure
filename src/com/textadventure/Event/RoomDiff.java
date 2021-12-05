@@ -80,7 +80,89 @@ public class RoomDiff extends Diff{
 
     @Override
     boolean checkValidity() {
-        return false;
+        String stringTemp;
+        Collection<String> collTemp;
+        boolean ret=true;
+        stringTemp=getLocation();
+        if(stringTemp!=null){
+            if(World.locationMap.get(stringTemp)==null){
+                System.out.printf("Location %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
+                ret=false;
+            }
+        }
+        collTemp=getAddTools();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.toolMap.get(i)==null){
+                    System.out.printf("Tool (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getRmTools();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.toolMap.get(i)==null){
+                    System.out.printf("Tool (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getAddExits();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.exitMap.get(i)==null){
+                    System.out.printf("Exit (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getRmExits();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.exitMap.get(i)==null){
+                    System.out.printf("Exit (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getAddContainer();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.containerMap.get(i)==null){
+                    System.out.printf("Container (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getRmContainer();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.containerMap.get(i)==null){
+                    System.out.printf("Container (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getAddNpcs();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.npcMap.get(i)==null){
+                    System.out.printf("Npc (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getRmNpcs();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.npcMap.get(i)==null){
+                    System.out.printf("Npc (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        return ret;
     }
 
     public void setLocation(String location)  {

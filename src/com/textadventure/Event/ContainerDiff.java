@@ -56,7 +56,7 @@ public class ContainerDiff extends Diff{
         if(collTemp!=null){
             for (String i:collTemp) {
                 if(World.toolMap.get(i)==null){
-                    System.out.printf("Tool %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    System.out.printf("Tool (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
                     ret=false;
                 }
             }
@@ -65,7 +65,7 @@ public class ContainerDiff extends Diff{
         if(collTemp!=null){
             for (String i:collTemp) {
                 if(World.toolMap.get(i)==null){
-                    System.out.printf("Tool %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    System.out.printf("Tool (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
                     ret=false;
                 }
             }
