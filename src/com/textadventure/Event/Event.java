@@ -1,46 +1,110 @@
 package com.textadventure.Event;
 
+import com.textadventure.Story.World;
+import com.textadventure.exeptions.EventExistsException;
+
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Event implements Serializable {
+    //TODO Eingobe va Events und die Diffs de sebm drin san
     private String name;
     private Collection<String> cmd;
-    private Collection<Diff> differences=new LinkedList<>();
-    private String fastaccess="";
-
+    private final HashMap<String,Diff> differences=new HashMap<>();
+    private Collection<String> dependent;
+    private boolean happened=false;
+    public Event(String name) throws EventExistsException {
+        setName(name);
+    }
     public String getName(){
         return name;
     }
     public void setName( String name){
+        String accessKey= World.eventKeyMap.get(this.name);
+        World.eventKeyMap.remove(this.name);
+        World.eventKeyMap.put(name,accessKey);
         this.name =name;
     }
     public Collection<String> getCmd() {
         return cmd;
     }
 
-    public String setCmd(Collection<String> cmd) {
+    public String storeEvent(Collection<String> cmd) {
         this.cmd = cmd;
-        return stringForHash(cmd);
+        String accessKey = stringForHash(cmd);
+        World.eventMap.remove(accessKey);
+        World.eventMap.put(accessKey,this);
+        World.eventKeyMap.put(name,accessKey);
+        return accessKey;
     }
-    private String stringForHash(Collection<String> strings){
+    public void rmEvent(){
+        World.eventMap.remove(World.eventKeyMap.get(name));
+        World.eventKeyMap.remove(name);
+    }
+    private static String stringForHash(Collection<String> strings){
         String temp;
         temp="";
         for (String i:strings) {
-            temp=temp+i;
+            temp+=i;
         }
         temp=temp.toLowerCase();
         return temp;
     }
     public void addDiff(Diff diff){
-        differences.add(diff);
+        differences.put(diff.getName(),diff);
     }
-    public void applyDiff(Diff diff){
+    public Diff getDiff(String diff){
+        return differences.get(diff);
+    }
+    public void rmDiff(String diff){
+        differences.remove(diff);
+    }
+    private boolean applyDiffsToWorld(){
+        for (String i:dependent) {
+            try{
+                if(!World.eventMap.get(i).isHappened()){
+                    return false;
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        for (Diff diff:differences.values()) {
+            try {
+                diff.applyDiffToWorld();
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        setHappened(true);
+        return true;
+    }
 
-    }
     public static boolean execEvent(Collection<String> args){
-
+        String hash = stringForHash(args);
+        if(World.eventMap.containsKey(hash)){
+            return World.eventMap.get(hash).applyDiffsToWorld();
+        }
         return false;
+    }
+
+
+    public Collection<String> getDependent() {
+        return dependent;
+    }
+
+    public void setDependent(Collection<String> dependent) {
+        this.dependent = dependent;
+    }
+
+    public boolean isHappened() {
+        return happened;
+    }
+
+    public void setHappened(boolean happened) {
+        this.happened = happened;
     }
 }

@@ -86,9 +86,7 @@ public class Player extends GameElement implements RoomChangeable {
         return this.inventory;
     }
 
-    public void removeAllTools() {
-        inventory.removeAllTools();
-    }
+
 
     public void addTool(String tool) {
         inventory.addTool(tool);

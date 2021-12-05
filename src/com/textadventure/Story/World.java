@@ -21,8 +21,8 @@ public class World {
     static public HashMap<String, Tool> toolMap = new HashMap<>();
     static public HashMap<String, Container> containerMap = new HashMap<>();
     static public HashMap<String, NPC> npcMap = new HashMap<>();
-    //TODO Add Events (in Rooms)
     static public HashMap<String, Event> eventMap = new HashMap<>();
+    static public HashMap<String, String> eventKeyMap = new HashMap<>();
     //TODO new Player
     static public Player player;
 

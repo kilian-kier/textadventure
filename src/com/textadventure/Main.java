@@ -28,7 +28,7 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
-        HashMap<String,String> map = new HashMap<>();
+
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten");
         Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus");

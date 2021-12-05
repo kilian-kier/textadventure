@@ -14,7 +14,7 @@ public class ExitDiff extends Diff{
     }
 
     @Override
-    void applyDiffToWorld() throws GameElementNotFoundException {
+    public void applyDiffToWorld() throws GameElementNotFoundException {
         Exit exit ;
         try {
             exit= World.exitMap.get(name);
@@ -36,7 +36,7 @@ public class ExitDiff extends Diff{
     }
 
     @Override
-    boolean checkValidity() {
+    public boolean checkValidity() {
         String stringTemp;
         boolean ret=true;
         stringTemp=getRoom();

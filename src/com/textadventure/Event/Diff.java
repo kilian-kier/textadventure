@@ -15,9 +15,6 @@ import java.util.HashMap;
 
 public abstract class Diff implements Serializable {
     protected String name;
-    protected boolean happened=false;
-
-    private String[] dependent;
     protected HashMap<String,Object> differences= new HashMap<>();
     public Diff(String name)  {
         this.name=name;
@@ -28,35 +25,15 @@ public abstract class Diff implements Serializable {
     public String getDescription(){
         return (String)differences.get("description");
     }
-    public String[] getDependent() {
-        return dependent;
+
+    public abstract void applyDiffToWorld() throws GameElementNotFoundException;
+    public abstract boolean checkValidity();
+
+    public String getName() {
+        return name;
     }
 
-    public void setDependent(String[] dependent) {
-        this.dependent = dependent;
+    public void setName(String name) {
+        this.name = name;
     }
-
-    public boolean isHappened() {
-        return happened;
-    }
-
-    public void setHappened(boolean happened) {
-        this.happened = happened;
-    }
-    abstract void applyDiffToWorld() throws GameElementNotFoundException;
-    abstract boolean checkValidity();
-    /*
-    Ibosicht vo mi, dass i mi auskenn
-    location String       check      room
-    room String           check      container, tool, exit
-    rooms List<String>    check      location
-    dialog List<String[]> check      npc
-    destination1 String   check      exit
-    destination2 String   check      exit
-    description String    check      container, tool, exit, location, room, npc
-    exits List<String>    check      room
-    tools List<String>    check      container, room
-    container List<String>check      room
-   */
-
 }

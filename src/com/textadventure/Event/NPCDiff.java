@@ -16,7 +16,7 @@ public class NPCDiff extends Diff{
     }
 
     @Override
-    void applyDiffToWorld() throws GameElementNotFoundException {
+    public void applyDiffToWorld() throws GameElementNotFoundException {
         NPC npc ;
         try {
             npc= World.npcMap.get(name);
@@ -35,7 +35,7 @@ public class NPCDiff extends Diff{
     }
 
     @Override
-    boolean checkValidity() {
+    public boolean checkValidity() {
         String stringTemp;
         boolean ret=true;
         stringTemp=getRoom();
