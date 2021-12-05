@@ -44,6 +44,7 @@ public abstract class Diff implements Serializable {
         this.happened = happened;
     }
     abstract void applyDiffToWorld() throws GameElementNotFoundException;
+    abstract boolean checkValidity();
     /*
     Ibosicht vo mi, dass i mi auskenn
     location String       check      room

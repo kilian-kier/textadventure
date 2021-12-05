@@ -3,6 +3,7 @@ package com.textadventure.locations;
 import com.textadventure.GameElement;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Location extends GameElement implements Serializable {
@@ -18,9 +19,13 @@ public class Location extends GameElement implements Serializable {
     }
 
     public void addRoom(String room) {
-        rooms.add(room);
+        if(!rooms.contains(room)){
+            rooms.add(room);
+        }
     }
-
+    public void setRooms(ArrayList<String> rooms){
+        this.rooms=rooms;
+    }
     public String getRoomIndex(int index) throws IndexOutOfBoundsException {
         return rooms.get(index);
     }

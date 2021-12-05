@@ -1,7 +1,10 @@
 package com.textadventure.Event;
 
+import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.TypeDoesNotExistException;
+import com.textadventure.locations.Exit;
+import com.textadventure.things.Container;
 
 public class ExitDiff extends Diff{
     public ExitDiff(String name){
@@ -10,7 +13,29 @@ public class ExitDiff extends Diff{
 
     @Override
     void applyDiffToWorld() throws GameElementNotFoundException {
+        Exit exit ;
+        try {
+            exit= World.exitMap.get(name);
+        }catch(Exception e){
+            throw new GameElementNotFoundException(name,"exit");
+        }
+        try{ //Description
+            exit.setDescription(getDescription());
+        }catch(Exception e){}
+        try{  //CurrentContainer
+            exit.changeContainer(getRoom());
+        }catch(Exception e){}
+        try{ //Destination1
+            exit.setDestination1(getDestination1());
+        }catch(Exception e){}
+        try{ //Destination1
+            exit.setDestination2(getDestination2());
+        }catch(Exception e){}
+    }
 
+    @Override
+    boolean checkValidity() {
+        return false;
     }
 
     public void setRoom(String room)  {

@@ -26,7 +26,7 @@ abstract public class Item  extends GameElement implements Serializable {
     }
     public void changeContainer(String newContainerString) throws ItemNotFoundException , NullPointerException{
         Container newContainer=findItemContainer(newContainerString);
-        if(this.currentContainer==null) {
+        if(this.currentContainer!=null) {
             Container oldContainer = findItemContainer(this.currentContainer);
             if (oldContainer.getTools().contains(this.name)) {
                 oldContainer.removeTool(this.name);
