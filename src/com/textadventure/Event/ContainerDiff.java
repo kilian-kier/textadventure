@@ -12,7 +12,7 @@ public class ContainerDiff extends Diff{
     }
 
     @Override
-    void applyDiffToWorld() throws GameElementNotFoundException {
+    public void applyDiffToWorld() throws GameElementNotFoundException {
         Container container ;
         try {
             container= World.containerMap.get(name);
@@ -41,7 +41,7 @@ public class ContainerDiff extends Diff{
     }
 
     @Override
-    boolean checkValidity() {
+    public boolean checkValidity() {
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;
@@ -71,6 +71,17 @@ public class ContainerDiff extends Diff{
             }
         }
         return ret;
+    }
+
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Raum: %s\n",getRoom());
+        string+=String.format("AddTools: %s\n",getAddTools()!=null?getAddTools().toString():null);
+        string+=String.format("RmTools: %s\n",getRmTools()!=null?getRmTools().toString():null);
+        return string;
     }
 
     public void setRoom(String room)  {

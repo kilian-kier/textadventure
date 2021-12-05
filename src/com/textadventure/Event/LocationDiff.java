@@ -64,7 +64,15 @@ public class LocationDiff extends Diff{
         }
         return ret;
     }
-
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Räume (Add): %s\n",getAddRooms()!=null?getAddRooms().toString():null);
+        string+=String.format("Räume (Rm): %s\n",getRmRooms()!=null?getRmRooms().toString():null);
+        return string;
+    }
     public void setAddRooms(Collection<String> rooms){
         differences.put("addrooms",rooms);
     }
