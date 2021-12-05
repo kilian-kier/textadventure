@@ -16,7 +16,7 @@ public class LocationDiff extends Diff{
     }
 
     @Override
-    void applyDiffToWorld() throws GameElementNotFoundException {
+    public void applyDiffToWorld() throws GameElementNotFoundException {
         Location location ;
         try {
             location= World.locationMap.get(name);
@@ -41,7 +41,7 @@ public class LocationDiff extends Diff{
     }
 
     @Override
-    boolean checkValidity() {
+    public boolean checkValidity() {
         Collection<String> collTemp;
         boolean ret=true;
         collTemp=getAddRooms();

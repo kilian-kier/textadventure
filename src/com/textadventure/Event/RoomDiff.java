@@ -15,7 +15,7 @@ public class RoomDiff extends Diff{
     }
 
     @Override
-    void applyDiffToWorld() throws GameElementNotFoundException {
+    public void applyDiffToWorld() throws GameElementNotFoundException {
         Room room ;
         try {
             room= World.roomMap.get(name);
@@ -79,7 +79,7 @@ public class RoomDiff extends Diff{
     }
 
     @Override
-    boolean checkValidity() {
+    public boolean checkValidity() {
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;

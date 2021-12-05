@@ -14,7 +14,7 @@ public class ToolDiff extends Diff{
     }
 
     @Override
-    void applyDiffToWorld() throws GameElementNotFoundException {
+    public void applyDiffToWorld() throws GameElementNotFoundException {
         Tool tool ;
         try {
             tool= World.toolMap.get(name);
@@ -30,7 +30,7 @@ public class ToolDiff extends Diff{
     }
 
     @Override
-    boolean checkValidity() {
+    public boolean checkValidity() {
         String stringTemp;
         boolean ret=true;
         stringTemp=getContainer();
