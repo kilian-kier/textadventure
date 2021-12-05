@@ -26,6 +26,9 @@ public class NPCDiff extends Diff{
         try{ //Description
             npc.setDescription(getDescription());
         }catch(Exception e){}
+        try{  //CurrentContainer
+            npc.changeContainer(getRoom());
+        }catch(Exception e){}
         try{ //Dialog
             npc.setDialog((ArrayList<String[]>) getDialog());
         }catch(Exception e){}
@@ -33,9 +36,23 @@ public class NPCDiff extends Diff{
 
     @Override
     boolean checkValidity() {
-        return false;
+        String stringTemp;
+        boolean ret=true;
+        stringTemp=getRoom();
+        if(stringTemp!=null){
+            if(World.roomMap.get(stringTemp)==null){
+                System.out.printf("Raum %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
+                ret=false;
+            }
+        }
+        return ret;
     }
-
+    public void setRoom(String room)  {
+        differences.put("room",room);
+    }
+    public String getRoom()  {
+        return (String)differences.get("room");
+    }
     public void setDialog(Collection<String[]> dialog){
         differences.put("dialog",dialog);
     }
