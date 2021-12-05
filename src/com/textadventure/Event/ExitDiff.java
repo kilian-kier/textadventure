@@ -62,7 +62,16 @@ public class ExitDiff extends Diff{
         }
         return ret;
     }
-
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Raum: %s\n",getRoom());
+        string+=String.format("Destination1: %s\n",getDestination1());
+        string+=String.format("Destination2: %s\n",getDestination2());
+        return string;
+    }
     public void setRoom(String room)  {
         differences.put("room",room);
     }

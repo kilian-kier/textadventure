@@ -47,6 +47,25 @@ public class NPCDiff extends Diff{
         }
         return ret;
     }
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Raum: %s\n",getRoom());
+        string+="Dialog:\n";
+        if(getDialog()!=null){
+            for (String[] i: getDialog()) {
+                try {
+                    string += String.format("Frage: %s; Antwort: %s; Event: %s", i[0], i[1], i[2]);
+                }catch(IndexOutOfBoundsException e){
+                    System.err.println("Ungültiger Dialog");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return string;
+    }
     public void setRoom(String room)  {
         differences.put("room",room);
     }

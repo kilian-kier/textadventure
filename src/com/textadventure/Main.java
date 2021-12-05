@@ -23,6 +23,10 @@ public class Main {
     public static void main(java.lang.String[] args) {
        /*
        world.worldEditor("/home/kilian/IdeaProjects/textadventure/1_Story");*/
+        /*ContainerDiff diff = new ContainerDiff("nix");
+        diff.setRoom("meinRaum");
+        diff.checkValidity();
+        System.out.println(diff);*/
 
         HashMap<String,String> map = new HashMap<>();
         Location village = new Location("Dorf", "Ein Dorf in Lusina");

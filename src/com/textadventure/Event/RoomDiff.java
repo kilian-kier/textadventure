@@ -165,6 +165,22 @@ public class RoomDiff extends Diff{
         return ret;
     }
 
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Location: %s\n",getLocation());
+        string+=String.format("AddTools: %s\n",getAddTools()!=null?getAddTools().toString():null);
+        string+=String.format("RmTools: %s\n",getRmTools()!=null?getRmTools().toString():null);
+        string+=String.format("AddNpcs: %s\n",getAddNpcs()!=null?getAddNpcs().toString():null);
+        string+=String.format("RmNpcs: %s\n",getRmNpcs()!=null?getRmNpcs().toString():null);
+        string+=String.format("AddContainer: %s\n",getAddContainer()!=null?getAddContainer().toString():null);
+        string+=String.format("RmContainer: %s\n",getRmContainer()!=null?getRmContainer().toString():null);
+        string+=String.format("AddExits: %s\n",getAddExits()!=null?getAddExits().toString():null);
+        string+=String.format("RmExits: %s\n",getRmExits()!=null?getRmExits().toString():null);
+        return string;
+    }
     public void setLocation(String location)  {
         differences.put("location",location);
     }

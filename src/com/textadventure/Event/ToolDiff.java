@@ -42,7 +42,14 @@ public class ToolDiff extends Diff{
         }
         return ret;
     }
-
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Container/Raum: %s\n",getContainer());
+        return string;
+    }
     public void setContainer(String container)  {
         differences.put("container",container);
     }
