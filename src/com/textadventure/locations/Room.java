@@ -33,21 +33,8 @@ public class Room extends GameElement implements Serializable {
     public void addExit(String exit) {
         exits.add(exit);
     }
-
-    public void removeExitIndex(int index) throws IndexOutOfBoundsException {
-        exits.remove(index);
-    }
-
     public ArrayList<String> getExits() {
         return this.exits;
-    }
-
-    public void removeAllExits() {
-        exits.clear();
-    }
-
-    public String getExitIndex(int index) throws IndexOutOfBoundsException {
-        return exits.get(index);
     }
 
     public void removeToolsKey(String name) throws IndexOutOfBoundsException {
@@ -61,7 +48,6 @@ public class Room extends GameElement implements Serializable {
         return this.tools;
     }
 
-
     public Tool getTool(String name) throws ItemNotFoundException {
         if (tools.getTools().contains(name)) {
             return tools.getTool(name);
@@ -70,7 +56,9 @@ public class Room extends GameElement implements Serializable {
     }
 
     public void addTool(String tool) {
-        tools.addTool(tool);
+        if(!tools.getTools().contains(tool)){
+            tools.addTool(tool);
+        }
     }
 
 
@@ -95,28 +83,16 @@ public class Room extends GameElement implements Serializable {
     public void removeContainer(String string){
         container.remove(string);
     }
-    public void addContainerKey(String string){
-        container.add(string);
-    }
+
 
     public void addNpcs(String item) {
-        npcs.add(item);
-    }
-
-    public void removeNpcsIndex(int index) throws IndexOutOfBoundsException {
-        npcs.remove(index);
+        if(!npcs.contains(item)){
+            npcs.add(item);
+        }
     }
 
     public ArrayList<String> getNpcs() {
         return this.npcs;
-    }
-
-    public void removeAllNpcs() {
-        npcs.clear();
-    }
-
-    public String getNpcsIndex(int index) throws IndexOutOfBoundsException {
-        return npcs.get(index);
     }
 
     public String getLocation() {
@@ -137,6 +113,23 @@ public class Room extends GameElement implements Serializable {
     }
 
     public void addContainer(String name) {
-        container.add(name);
+        if(!container.contains(name)){
+            container.add(name);
+        }
+    }
+    public void changeLocation(String newLocationString) throws ItemNotFoundException, NullPointerException{
+        Location newLocation= World.locationMap.get(newLocationString);
+        if(this.location!=null) {
+            Location oldLocation = World.locationMap.get(location);
+            if (oldLocation.getRooms().contains(this.name)) {
+                oldLocation.getRooms().remove(name);
+                newLocation.addRoom(this.name);
+            } else {
+                throw new ItemNotFoundException(name);
+            }
+        }else{
+            newLocation.addRoom(this.name);
+        }
+        this.name=newLocationString;
     }
 }

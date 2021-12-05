@@ -1,6 +1,9 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.Story.World;
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.things.Container;
 
 import java.io.Serializable;
 
@@ -12,6 +15,22 @@ public class Exit extends GameElement implements Serializable {
     public Exit(String name, String description) {
         super(name);
         this.description = description; //Beschreibung 1 isch links vor an @ und die Beschreibung 2 ich rechts noch an @
+    }
+
+    public void changeContainer(String newRoomString) throws ItemNotFoundException, NullPointerException{
+        Room newRoom= World.roomMap.get(newRoomString);
+        if(this.room!=null) {
+            Room oldRoom = World.roomMap.get(room);
+            if (oldRoom.getExits().contains(this.name)) {
+                oldRoom.getExits().remove(name);
+                newRoom.addExit(this.name);
+            } else {
+                throw new ItemNotFoundException(name);
+            }
+        }else{
+            newRoom.addExit(this.name);
+        }
+        this.name=newRoomString;
     }
 
     public String getRoom() {

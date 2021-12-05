@@ -19,24 +19,58 @@ public class ContainerDiff extends Diff{
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"container");
         }
-        try{
+
+        try{ //Description
             container.setDescription(getDescription());
         }catch(Exception e){}
-        try{
+        try{  //CurrentContainer
            container.changeContainer(getRoom());
         }catch(Exception e){}
-        try{
+        try{ //AddTool
             for (String i:getAddTools()) {
-                World.toolMap.get("i").changeContainer(this.name);
+                World.toolMap.get(i).changeContainer(this.name);
                 container.addTool(i);
             }
         }catch(Exception e){}
-        try{
+        try{  //RemoveTool
             for (String i:getRmTools()) {
-                World.toolMap.get("i").setContainer(null);
+                World.toolMap.get(i).setContainer(null);
                 container.removeTool(i);
             }
         }catch(Exception e){}
+    }
+
+    @Override
+    boolean checkValidity() {
+        String stringTemp;
+        Collection<String> collTemp;
+        boolean ret=true;
+        stringTemp=getRoom();
+        if(stringTemp!=null){
+            if(World.roomMap.get(stringTemp)==null){
+                System.out.printf("Raum %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
+                ret=false;
+            }
+        }
+        collTemp=getAddTools();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.toolMap.get(i)==null){
+                    System.out.printf("Tool %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        collTemp=getRmTools();
+        if(collTemp!=null){
+            for (String i:collTemp) {
+                if(World.toolMap.get(i)==null){
+                    System.out.printf("Tool %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
+                    ret=false;
+                }
+            }
+        }
+        return ret;
     }
 
     public void setRoom(String room)  {
