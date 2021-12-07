@@ -93,9 +93,8 @@ public class World {
         }
     }
 
-    private void editGameElement(LinkedList<String> args){}
 
-    private void editElement(LinkedList<String> args) {
+    static private void editElement(LinkedList<String> args) {
         GameElement temp;
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> command;
@@ -103,7 +102,7 @@ public class World {
             System.out.print(args.get(1) +" "+ args.get(2) + ": ");
             input = scanner.nextLine();
             command = splitInput(input);
-            temp = (GameElement) editMap.get(args.get(1)).get(args.get(2));
+            temp = (GameElement) editMap.get(args.get(1)).get(args.get(2)); //TODO: Element not found
 
 
             switch (command.get(0)) {
@@ -297,7 +296,7 @@ public class World {
             input = scanner.nextLine();
         element.setDescription(input);
     }
-    private LinkedList<String> splitInput (String input){
+    static private LinkedList<String> splitInput (String input){
         input = input.toLowerCase();
         if (input.equals("")) return null;
         LinkedList<String> command = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
