@@ -7,16 +7,17 @@ import com.textadventure.exeptions.TypeNotValidException;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class LocationDiff extends Diff{
+public class LocationDiff extends Diff implements Serializable {
     public LocationDiff(String name) {
         super(name);
     }
 
     @Override
-    public void applyDiffToWorld() throws GameElementNotFoundException {
+    public void applyDiffToWorld() throws GameElementNotFoundException  {
         Location location ;
         try {
             location= World.locationMap.get(name);
@@ -41,7 +42,7 @@ public class LocationDiff extends Diff{
     }
 
     @Override
-    public boolean checkValidity() {
+    public boolean check() {
         Collection<String> collTemp;
         boolean ret=true;
         collTemp=getAddRooms();
@@ -70,7 +71,7 @@ public class LocationDiff extends Diff{
         string+=String.format("Diff von %s\n",name);
         string+=String.format("Beschreibung: %s\n",getDescription());
         string+=String.format("Räume (Add): %s\n",getAddRooms()!=null?getAddRooms().toString():null);
-        string+=String.format("Räume (Rm): %s\n",getRmRooms()!=null?getRmRooms().toString():null);
+        string+=String.format("Räume (Rm): %s",getRmRooms()!=null?getRmRooms().toString():null);
         return string;
     }
     public void setAddRooms(Collection<String> rooms){

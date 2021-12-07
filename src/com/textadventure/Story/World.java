@@ -27,18 +27,8 @@ public class World {
     static public Player player;
     static public HashMap<String,HashMap> editMap = new HashMap<>();
 
-    static public void load(String path) {
-        try {
-            LoadStoreWorld.load(path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    static public void store(String path) {
-        LoadStoreWorld.store(path);
-    }
-    static void worldEditor(String path) {
+    static public void worldEditor(String path) {
         editMap.put("room", roomMap);
         editMap.put("exit", exitMap);
         editMap.put("location", locationMap);
@@ -74,14 +64,15 @@ public class World {
                     }
                     break;
                 case "store":
-                    store("0_Story/");
+                    store("world.world");
                     break;
                 case "load":
-                    load("0_Story/");
+                    load("world.world");
                     break;
-                case "overview":
-                case "ov":
-                    //TODO Funktion which checks for inconsistencies. e.g. a Location contains a room, but the room does not reference the location
+                case "check":
+                    if(!check()){
+                        System.out.println("Es gibt Fehler in der Welt");
+                    }
                     break;
                 case "exit":
                     exit = true;
@@ -109,7 +100,6 @@ public class World {
                 case "exit":
                     return;
                 case "add":
-
                     break;
                 case "changet":
                     break;
@@ -302,5 +292,58 @@ public class World {
         LinkedList<String> command = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
         command.removeIf(s -> s.equals(""));
         return command;
+    }
+
+
+
+    static public void load(String path) {
+        try {
+            LoadStoreWorld.load(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private static boolean check(){
+        boolean ret=true;
+        for (Room room: roomMap.values() ) {
+            if(!room.check()){
+                ret=false;
+            }
+        }
+        for (Location location: locationMap.values() ) {
+            if(!location.check()){
+                ret=false;
+            }
+        }
+        for (Tool tool: toolMap.values() ) {
+            if(!tool.check()){
+                ret=false;
+            }
+        }
+        for (Container container: containerMap.values() ) {
+            if(!container.check()){
+                ret=false;
+            }
+        }
+        for (NPC npc: npcMap.values() ) {
+            if(!npc.check()){
+                ret=false;
+            }
+        }
+        for (Exit exit: exitMap.values() ) {
+            if(!exit.check()){
+                ret=false;
+            }
+        }
+        for (Event event: eventMap.values() ) {
+            if(!event.check()){
+                ret=false;
+            }
+        }
+        return ret;
+    }
+
+    static public void store(String path) {
+        LoadStoreWorld.store(path);
     }
 }

@@ -24,6 +24,32 @@ public class Container extends Item implements Serializable {
         return newContainer;
     }
 
+    @Override
+    public boolean check() {
+        boolean ret= super.check();
+        for (String tool:tools) {
+            if(World.toolMap.get(tool)==null){
+                System.out.printf("Tool %s von Container %s existiert nicht\n",tool,name);
+                ret=false;
+            }else{
+                if(!World.toolMap.get(tool).getCurrentContainer().equals(name)){
+                    System.out.printf("Tool %s wird von Container %s referenziert aber nicht umgekehrt\n",tool,name);
+                    ret=false;
+                }
+            }
+        }
+        return ret;
+    }
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Container/Raum: %s\n",currentContainer);
+        string+=String.format("Tools: %s",tools);
+        return string;
+    }
+
     public Tool getTool(String name) {
         return World.toolMap.get(name);
     }
