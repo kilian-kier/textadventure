@@ -21,9 +21,7 @@ public class Room extends GameElement implements Containable, Serializable {
 
 
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+
 
     @Override
     public void put(Tool tool) {
@@ -34,8 +32,6 @@ public class Room extends GameElement implements Containable, Serializable {
     public Tool take(String name) {
         return null;
     }
-
-
 
     public void addExit(String exit) {
         exits.add(exit);
@@ -103,6 +99,10 @@ public class Room extends GameElement implements Containable, Serializable {
 
     public String getLocation() {
         return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
 

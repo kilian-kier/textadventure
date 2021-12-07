@@ -2,6 +2,7 @@ package com.textadventure.Story;
 
 import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
+import com.textadventure.exeptions.CommandNotFoundException;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
@@ -20,9 +21,9 @@ public class World {
     public HashMap<String, Location> locationMap = new HashMap<>();
     public HashMap<String, Tool> toolMap = new HashMap<>();
     public HashMap<String, Container> containerMap = new HashMap<>();
-    public HashMap<String, NPC> npcMap = new HashMap<>();
-    //TODO Add Events (in Rooms)
+    public HashMap<String, NPC> npcMap = new HashMap<>(); //TODO Add Events (in Rooms)
     public HashMap<String, Event> eventMap = new HashMap<>();
+    public HashMap<String,HashMap> editMap = new HashMap<>();
 
     public void load(String path){
         try {
@@ -35,6 +36,15 @@ public class World {
         LoadStoreWorld.store(path,this);
     }
     public void worldEditor(String path) {
+        editMap.put("room", roomMap);
+        editMap.put("exit", exitMap);
+        editMap.put("location", locationMap);
+        editMap.put("tool", toolMap);
+        editMap.put("container", containerMap);
+        editMap.put("npc", npcMap);
+        editMap.put("event", eventMap);
+
+        //TODO bei gelegenheit
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
@@ -43,11 +53,8 @@ public class World {
         while (!exit) {
             System.out.print(">> ");
             input = scanner.nextLine();
-            input = input.toLowerCase();
-            if (input.equals(""))
-                continue;
-            commands = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
-            commands.removeIf(s -> s.equals(""));
+            commands = splitInput(input);
+            if (commands == null) continue;
             switch (commands.get(0)) {
                 case "new":
                     try {
@@ -82,57 +89,83 @@ public class World {
             }
         }
     }
-    private void editGameElement(LinkedList<String> args) {
 
+    private void editGameElement(LinkedList<String> args){}
+
+    private void editElement(LinkedList<String> args) {
+        GameElement temp;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> command;
+        String input;
+            System.out.print(args.get(1) +" "+ args.get(2) + ": ");
+            input = scanner.nextLine();
+            command = splitInput(input);
+            temp = (GameElement) editMap.get(args.get(1)).get(args.get(2));
+
+
+            switch (command.get(0)) {
+                case "exit":
+                    return;
+                case "add":
+
+                    break;
+                case "changet":
+                    break;
+                case "remove":
+                    break;
+                default:
+                    System.out.println("command not found");
+                    break;
+
+        }
     }
+
     //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
     private void newGameElement(LinkedList<String> args) {
-        //Get GameElement Properties name, description and info
-        GameElement element = new GameElement();
-        GameElement temp = null;
-        String ret;
+            //Get GameElement Properties name, description and info
+            GameElement element = new GameElement();
+            GameElement temp = null;
+            String ret;
 
-        switch (args.get(1)) {
-            case "npc":
-            case "exit":
-            case "location":
-            case "room":
-            case "tool":
-            case "container":
-                if (args.size() > 2) { //Check if name parameter exists
-                    element.setName(args.get(2));
-                } else {
-                    inputName(element);
-                }
-                try { // If Element already exists somewhere
-                    getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
-                    System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
-                    String[] options = {"o", "a", "e"};
-                    ret = Input.switchOptions(options);
-                    switch (ret) {
-                        case "a":
-                            return;
-                        case "o":
-                            break;
-                        case "e":
-                            args.set(0, "edit");
-                            args.set(1, element.getName());
-                            editGameElement(args);
-                            return;
+            switch (args.get(1)) {
+                case "npc":
+                case "exit":
+                case "location":
+                case "room":
+                case "tool":
+                case "container":
+                    if (args.size() > 2) { //Check if name parameter exists
+                        element.setName(args.get(2));
+                    } else {
+                        inputName(element);
                     }
-                } catch (ElementNotFoundException e) {
-                    //Everything's ok
-                }
-                inputDescription(element);
-                break;
-            case "element":
-                break;
-            default:
-                System.out.println("Object does not exist");
-                return;
-        }
-
-
+                    try { // If Element already exists somewhere
+                        getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
+                        System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
+                        String[] options = {"o", "a", "e"};
+                        ret = Input.switchOptions(options);
+                        switch (ret) {
+                            case "a":
+                                return;
+                            case "o":
+                                break;
+                            case "e":
+                                args.set(0, "edit");
+                                args.set(1, element.getName());
+                                editGameElement(args);
+                                return;
+                        }
+                    } catch (ElementNotFoundException e) {
+                        //Everything's ok
+                    }
+                    inputDescription(element);
+                    break;
+                case "element":
+                    break;
+                default:
+                    System.out.println("Object does not exist");
+                    return;
+            }
         //For Specific features
         //TODO Extra Options
         switch (args.get(1)) {
@@ -155,7 +188,6 @@ public class World {
                 break;
             case "room":
                 Room room = new Room(element.getName(), element.getDescription());
-                //Location
                 //Items
                 //Exits
                 //Npcs
@@ -178,7 +210,7 @@ public class World {
                 //Which Action, Which Items, in Which Room cause Which Changes to a GameElement
                 break;
         }
-    }
+        }
 
 
     /**
@@ -248,13 +280,11 @@ public class World {
         while ((input = scanner.nextLine()).length() == 0) ;
         element.setDescription(input);
     }
-
-    private String inputLocation() {
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        System.out.print("Umgebung: ");
-        while ((input = scanner.nextLine()).length() == 0) ;
-        return input;
+    private LinkedList<String> splitInput (String input){
+        input = input.toLowerCase();
+        if (input.equals("")) return null;
+        LinkedList<String> command = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
+        command.removeIf(s -> s.equals(""));
+        return command;
     }
-
 }
