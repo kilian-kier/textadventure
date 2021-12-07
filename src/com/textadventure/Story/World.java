@@ -1,41 +1,44 @@
 package com.textadventure.Story;
 
+import com.textadventure.Event.Event;
 import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
-import com.textadventure.exeptions.CommandNotFoundException;
+import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
-import com.textadventure.things.Item;
 import com.textadventure.things.Tool;
 
-import java.io.*;
 import java.util.*;
 
 public class World {
-    public HashMap<String, Room> roomMap = new HashMap<>();
-    public HashMap<String, Exit> exitMap = new HashMap<>();
-    public HashMap<String, Location> locationMap = new HashMap<>();
-    public HashMap<String, Tool> toolMap = new HashMap<>();
-    public HashMap<String, Container> containerMap = new HashMap<>();
-    public HashMap<String, NPC> npcMap = new HashMap<>(); //TODO Add Events (in Rooms)
-    public HashMap<String, Event> eventMap = new HashMap<>();
-    public HashMap<String,HashMap> editMap = new HashMap<>();
+    static public HashMap<String, Room> roomMap = new HashMap<>();
+    static public HashMap<String, Exit> exitMap = new HashMap<>();
+    static public HashMap<String, Location> locationMap = new HashMap<>();
+    static public HashMap<String, Tool> toolMap = new HashMap<>();
+    static public HashMap<String, Container> containerMap = new HashMap<>();
+    static public HashMap<String, NPC> npcMap = new HashMap<>();
+    static public HashMap<String, Event> eventMap = new HashMap<>();
+    static public HashMap<String, String> eventKeyMap = new HashMap<>();
+    //TODO new Player
+    static public Player player;
+    static public HashMap<String,HashMap> editMap = new HashMap<>();
 
-    public void load(String path){
+    static public void load(String path) {
         try {
-            LoadStoreWorld.load(path, this);
-        }catch(Exception e){
+            LoadStoreWorld.load(path);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void store(String path){
-        LoadStoreWorld.store(path,this);
+
+    static public void store(String path) {
+        LoadStoreWorld.store(path);
     }
-    public void worldEditor(String path) {
+    static void worldEditor(String path) {
         editMap.put("room", roomMap);
         editMap.put("exit", exitMap);
         editMap.put("location", locationMap);
@@ -74,7 +77,7 @@ public class World {
                     store("0_Story/");
                     break;
                 case "load":
-                        load("0_Story/");
+                    load("0_Story/");
                     break;
                 case "overview":
                 case "ov":
@@ -120,52 +123,61 @@ public class World {
         }
     }
 
-    //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
-    private void newGameElement(LinkedList<String> args) {
-            //Get GameElement Properties name, description and info
-            GameElement element = new GameElement();
-            GameElement temp = null;
-            String ret;
+    static private void editGameElement(LinkedList<String> args) {
 
-            switch (args.get(1)) {
-                case "npc":
-                case "exit":
-                case "location":
-                case "room":
-                case "tool":
-                case "container":
-                    if (args.size() > 2) { //Check if name parameter exists
-                        element.setName(args.get(2));
-                    } else {
-                        inputName(element);
+    }
+
+    //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
+    static private void newGameElement(LinkedList<String> args) {
+        //Get GameElement Properties name, description and info
+        GameElement element = null;
+        GameElement temp = null;
+        String ret;
+
+        switch (args.get(1)) {
+            case "npc":
+            case "exit":
+            case "location":
+            case "room":
+            case "tool":
+            case "container":
+                if (args.size() > 2) { //Check if name parameter exists
+                    element = new GameElement(args.get(2));
+                } else {
+                    element = new GameElement(inputName());
+                }
+                try { // If Element already exists somewhere
+                    getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
+                    System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
+                    String[] options = {"o", "a", "e"};
+                    ret = Input.switchOptions(options);
+                    switch (ret) {
+                        case "a":
+                            return;
+                        case "o":
+                            break;
+                        case "e":
+                            args.set(0, "edit");
+                            args.set(1, element.getName());
+                            editGameElement(args);
+                            return;
                     }
-                    try { // If Element already exists somewhere
-                        getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
-                        System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
-                        String[] options = {"o", "a", "e"};
-                        ret = Input.switchOptions(options);
-                        switch (ret) {
-                            case "a":
-                                return;
-                            case "o":
-                                break;
-                            case "e":
-                                args.set(0, "edit");
-                                args.set(1, element.getName());
-                                editGameElement(args);
-                                return;
-                        }
-                    } catch (ElementNotFoundException e) {
-                        //Everything's ok
-                    }
-                    inputDescription(element);
-                    break;
-                case "element":
-                    break;
-                default:
-                    System.out.println("Object does not exist");
-                    return;
-            }
+                } catch (ElementNotFoundException e) {
+                    //Everything's ok
+                }
+                inputDescription(element);
+                break;
+            case "element":
+                break;
+            default:
+                System.out.println("Object does not exist");
+                return;
+        }
+
+        //sist hot er do untn ongst dass element null isch
+        Objects.requireNonNull(element);
+
+
         //For Specific features
         //TODO Extra Options
         switch (args.get(1)) {
@@ -188,6 +200,7 @@ public class World {
                 break;
             case "room":
                 Room room = new Room(element.getName(), element.getDescription());
+                //Location
                 //Items
                 //Exits
                 //Npcs
@@ -210,7 +223,7 @@ public class World {
                 //Which Action, Which Items, in Which Room cause Which Changes to a GameElement
                 break;
         }
-        }
+    }
 
 
     /**
@@ -221,7 +234,7 @@ public class World {
      * @return GameElement if it was found
      * @throws ElementNotFoundException if Element is not found this Exception is being thrown
      */
-    private GameElement getElement(String name, String type) throws ElementNotFoundException {
+    static private GameElement getElement(String name, String type) throws ElementNotFoundException {
         switch (type) {
             case "room":
                 if (roomMap.containsKey(name)) return roomMap.get(name);
@@ -245,39 +258,43 @@ public class World {
         throw new ElementNotFoundException(name);
     }
 
-
-    private void addLocation(Location location) {
+    //TODO: entweder de löschen oder die Maps private mochen, wos schiana war
+    static public void addLocation(Location location) {
         locationMap.put(location.getName(), location);
     }
 
-    private void addRoom(Room room) {
+    static public void addRoom(Room room) {
         roomMap.put(room.getName(), room);
     }
 
-    private void addNPC(NPC npc) {
+    static public void addNPC(NPC npc) {
         npcMap.put(npc.getName(), npc);
     }
-    private void addTool(Tool tool){
-        toolMap.put(tool.getName(),tool);
+
+    static public void addTool(Tool tool) {
+        toolMap.put(tool.getName(), tool);
     }
-    private void addContainer(Container container){
-        containerMap.put(container.getName(),container);
+
+    static public void addContainer(Container container) {
+        containerMap.put(container.getName(), container);
     }
 
 
-    private void inputName(GameElement element) {
+    static private String inputName() {
         Scanner scanner = new Scanner(System.in);
-        String input;
+        String input = "";
         System.out.print("name: ");
-        while ((input = scanner.nextLine()).length() == 0) ;
-        element.setName(input);
+        while (input.length() == 0)
+            input = scanner.nextLine();
+        return input;
     }
 
-    private void inputDescription(GameElement element) {
+    static private void inputDescription(GameElement element) {
         Scanner scanner = new Scanner(System.in);
-        String input;
+        String input = "";
         System.out.print("description: ");
-        while ((input = scanner.nextLine()).length() == 0) ;
+        while (input.length() == 0)
+            input = scanner.nextLine();
         element.setDescription(input);
     }
     private LinkedList<String> splitInput (String input){

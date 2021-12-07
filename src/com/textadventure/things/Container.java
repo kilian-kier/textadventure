@@ -1,29 +1,46 @@
 package com.textadventure.things;
 
-import com.textadventure.interfaces.Containable;
+import com.textadventure.Story.World;
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.exeptions.ItemNotFoundInContainerException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Container extends Item  implements Serializable {
-    ArrayList<String> tools = new ArrayList<>();
+public class Container extends Item implements Serializable {
+    private final ArrayList<String> tools = new ArrayList<>();
+
+
     public Container(String name, String description) {
         super(name, description);
     }
 
-    public void addTool(String item) {
-        tools.add(item);
+    @Override
+    Container findItemContainer(String container) throws ItemNotFoundException{
+        Container newContainer=World.roomMap.get(container).getToolsContainer();
+        if(newContainer==null){
+            throw new ItemNotFoundException(container);
+        }
+        return newContainer;
     }
-    public void removeToolsIndex(int index) throws IndexOutOfBoundsException{
-        tools.remove(index);
+
+    public Tool getTool(String name) {
+        return World.toolMap.get(name);
     }
-    public ArrayList<String> getTools(){
+
+    public void addTool(String tool) {
+        tools.add(tool);
+    }
+
+    public ArrayList<String> getTools() {
         return this.tools;
     }
-    public void removeAllTools(){
+
+    public void removeAllTools() {
         tools.clear();
     }
-    public String getToolIndex(int index) throws IndexOutOfBoundsException{
-        return tools.get(index);
+    public String removeTool(String name) {
+        tools.remove(name);
+        return name;
     }
 }

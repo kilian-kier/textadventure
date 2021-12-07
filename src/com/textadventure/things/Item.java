@@ -1,38 +1,48 @@
 package com.textadventure.things;
 
 import com.textadventure.GameElement;
-import com.textadventure.exeptions.NoBackException;
-import com.textadventure.interfaces.Containable;
-import com.textadventure.interfaces.RoomChangeable;
-import com.textadventure.locations.Exit;
+import com.textadventure.Story.World;
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.exeptions.ItemNotFoundInContainerException;
 
 import java.io.Serializable;
 
-abstract public class Item  extends GameElement implements RoomChangeable, Serializable {
-    private String room;
+abstract public class Item  extends GameElement implements Serializable {
+    protected String currentContainer;
 
 
     public Item(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
     }
 
+
+    public String getCurrentContainer() {
+        return currentContainer;
+    }
+
+    public void setContainer(String container) {
+        this.currentContainer = container;
+    }
+    public void changeContainer(String newContainerString) throws ItemNotFoundException , NullPointerException{
+        Container newContainer=findItemContainer(newContainerString);
+        if(this.currentContainer!=null) {
+            Container oldContainer = findItemContainer(this.currentContainer);
+            if (oldContainer.getTools().contains(this.name)) {
+                oldContainer.removeTool(this.name);
+                newContainer.addTool(this.name);
+            } else {
+                throw new ItemNotFoundException(name);
+            }
+        }else{
+            newContainer.addTool(this.name);
+        }
+        this.currentContainer=newContainerString;
+    }
+    abstract Container findItemContainer(String container) throws ItemNotFoundException;
+
     @Override
-    public void changeRoom(String exit) {
-        //TODO: Container wechseln
-    }
-
-    @Override
-    public void goBack() throws NoBackException {
-        throw new NoBackException(this.name);
-    }
-
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
+    public void investigate() {
+        //TODO: comparen
     }
 }

@@ -3,30 +3,38 @@ package com.textadventure.locations;
 import com.textadventure.GameElement;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 
 public class Location extends GameElement implements Serializable {
-    private ArrayList<String> rooms=new ArrayList<>();
+    private ArrayList<String> rooms = new ArrayList<>();
 
     public Location(String name, String description) {
-        this.name = name;
+        super(name);
         this.description = description;
     }
-    public ArrayList<String> getRooms()  {
+
+    public ArrayList<String> getRooms() {
         return rooms;
     }
+
     public void addRoom(String room) {
+        if(!rooms.contains(room)){
             rooms.add(room);
+        }
     }
-    public String getRoomIndex(int index) throws IndexOutOfBoundsException{
-            return rooms.get(index);
+    public void setRooms(ArrayList<String> rooms){
+        this.rooms=rooms;
     }
-    public void removeAllRooms(){
+    public String getRoomIndex(int index) throws IndexOutOfBoundsException {
+        return rooms.get(index);
+    }
+
+    public void removeAllRooms() {
         rooms.clear();
     }
-    public void removeRoomIndex(int index) throws IndexOutOfBoundsException{
+
+    public void removeRoomIndex(int index) throws IndexOutOfBoundsException {
         rooms.remove(index);
     }
 }

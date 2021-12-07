@@ -1,10 +1,9 @@
 package com.textadventure.interfaces;
 
-import com.textadventure.exeptions.NoBackException;
-import com.textadventure.locations.Exit;
+import com.textadventure.exeptions.*;
 
 public interface RoomChangeable {
-    void changeRoom(String exit);
+    void changeRoom(String exit) throws ExitNotFoundException;
 
     void goBack() throws NoBackException;
 }
