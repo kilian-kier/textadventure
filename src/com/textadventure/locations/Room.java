@@ -74,17 +74,9 @@ public class Room extends GameElement implements Serializable {
             throw new ItemNotFoundException(name);
         return ret;
     }
-
-
-
-    public String getContainerKey(String string){
-        return container.get(container.indexOf(string));
-    }
     public void removeContainer(String string){
         container.remove(string);
     }
-
-
     public void addNpcs(String item) {
         if(!npcs.contains(item)){
             npcs.add(item);
@@ -131,5 +123,76 @@ public class Room extends GameElement implements Serializable {
             newLocation.addRoom(this.name);
         }
         this.name=newLocationString;
+    }
+    
+    public boolean check(){
+        boolean ret=true;
+        if(World.locationMap.get(location)==null){
+            System.out.printf("Location %s von Raum %s existiert nicht\n",location,name);
+            ret=false;
+        }else{
+            if(!World.locationMap.get(location).getRooms().contains(name)){
+                System.out.printf("Location %s wird von Raum %s referenziert aber nicht umgekehrt\n",location,name);
+                ret=false;
+            }
+        }
+        for (String tool:tools.getTools()) {
+            if(World.toolMap.get(tool)==null){
+                System.out.printf("Tool %s von Raum %s existiert nicht\n",tool,name);
+                ret=false;
+            }else{
+                if(!World.toolMap.get(tool).getCurrentContainer().equals(name)){
+                    System.out.printf("Tool %s wird von Raum %s referenziert aber nicht umgekehrt\n",tool,name);
+                    ret=false;
+                }
+            }
+        }
+        for (String cont:container) {
+            if(World.containerMap.get(cont)==null){
+                System.out.printf("Container %s von Raum %s existiert nicht\n",cont,name);
+                ret=false;
+            }else{
+                if(!World.containerMap.get(cont).getCurrentContainer().equals(name)){
+                    System.out.printf("Container %s wird von Raum %s referenziert aber nicht umgekehrt\n",cont,name);
+                    ret=false;
+                }
+            }
+        }
+        for (String npc:npcs) {
+            if(World.npcMap.get(npc)==null){
+                System.out.printf("NPC %s von Raum %s existiert nicht\n",npc,name);
+                ret=false;
+            }else{
+                if(!World.npcMap.get(npc).getRoom().equals(name)){
+                    System.out.printf("NPC %s wird von Raum %s referenziert aber nicht umgekehrt\n",npc,name);
+                    ret=false;
+                }
+            }
+        }
+        for (String exit:exits) {
+            if(World.exitMap.get(exit)==null){
+                System.out.printf("Exit %s von Raum %s existiert nicht\n",exit,name);
+                ret=false;
+            }else{
+                if(!World.exitMap.get(exit).getDestination1().equals(name) && !World.exitMap.get(exit).getDestination2().equals(name)){
+                    System.out.printf("Exit %s wird von Raum %s referenziert aber nicht umgekehrt\n",exit,name);
+                    ret=false;
+                }
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Location: %s\n",getLocation());
+        string+=String.format("Tools: %s\n",tools.getTools()!=null?tools.getTools().toString():null);
+        string+=String.format("Npcs: %s\n",npcs.toString());
+        string+=String.format("Container: %s\n",container.toString());
+        string+=String.format("Exits: %s",exits.toString());
+        return string;
     }
 }

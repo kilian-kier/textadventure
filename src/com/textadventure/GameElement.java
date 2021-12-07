@@ -39,4 +39,5 @@ public class GameElement implements Serializable, Interactable {
     }
 
     public static String[] elementTypes={"npc","exit","location","room","container","tool"};
+
 }

@@ -1,6 +1,7 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.Story.World;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -36,5 +37,30 @@ public class Location extends GameElement implements Serializable {
 
     public void removeRoomIndex(int index) throws IndexOutOfBoundsException {
         rooms.remove(index);
+    }
+    public boolean check(){
+        boolean ret=true;
+        for (String room:rooms) {
+            if(World.roomMap.get(room)==null){
+                System.out.printf("Raum %s von Location %s existiert nicht\n",room,name);
+                ret=false;
+            }else{
+                if(!World.roomMap.get(room).getLocation().equals(name)){
+                    System.out.printf("Raum %s wird von Location %s referenziert aber nicht umgekehrt\n",room,name);
+                    ret=false;
+                }
+            }
+        }
+        return ret;
+    }
+
+
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Räume: %s",rooms.toString());
+        return string;
     }
 }

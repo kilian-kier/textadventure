@@ -2,11 +2,9 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.EventExistsException;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Event implements Serializable {
     //TODO Eingobe va Events und die Diffs de sebm drin san
@@ -15,6 +13,7 @@ public class Event implements Serializable {
     private final HashMap<String,Diff> differences=new HashMap<>();
     private Collection<String> dependent;
     private boolean happened=false;
+    private String info=null;
     public Event(String name) throws EventExistsException {
         setName(name);
     }
@@ -86,6 +85,8 @@ public class Event implements Serializable {
     public static boolean execEvent(Collection<String> args){
         String hash = stringForHash(args);
         if(World.eventMap.containsKey(hash)){
+            //Story
+            System.out.println(World.eventMap.get(hash).getInfo());
             return World.eventMap.get(hash).applyDiffsToWorld();
         }
         return false;
@@ -106,5 +107,42 @@ public class Event implements Serializable {
 
     public void setHappened(boolean happened) {
         this.happened = happened;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public boolean check(){
+        boolean ret=true;
+        for (String i:dependent) {
+            if(!World.eventKeyMap.containsKey(i)){
+                    System.out.printf("Element %s nicht gefunden. In %s von %s\n",dependent,this.getClass().toString(),stringForHash(cmd));
+                    ret=false;
+            }
+        }
+        for (Diff i: differences.values()) {
+            if(!i.check()){
+                ret=false;
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Element %s\n",name);
+        string+=String.format("Info: %s\n",info);
+        string+=String.format("Dependent %s\n",dependent.toString());
+        string+="Diffs:\n";
+        for (Diff i: differences.values()) {
+            string+=i.toString();
+        }
+        return string;
     }
 }

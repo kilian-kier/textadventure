@@ -2,13 +2,11 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
-import com.textadventure.exeptions.TypeDoesNotExistException;
 import com.textadventure.locations.Exit;
-import com.textadventure.things.Container;
 
-import java.util.Collection;
+import java.io.Serializable;
 
-public class ExitDiff extends Diff{
+public class ExitDiff extends Diff implements Serializable {
     public ExitDiff(String name){
         super(name);
     }
@@ -24,28 +22,18 @@ public class ExitDiff extends Diff{
         try{ //Description
             exit.setDescription(getDescription());
         }catch(Exception e){}
-        try{  //CurrentContainer
-            exit.changeContainer(getRoom());
+        try{ //Destination1
+            exit.changeDestination(getDestination1(),false);
         }catch(Exception e){}
         try{ //Destination1
-            exit.setDestination1(getDestination1());
-        }catch(Exception e){}
-        try{ //Destination1
-            exit.setDestination2(getDestination2());
+            exit.changeDestination(getDestination2(),true);
         }catch(Exception e){}
     }
 
     @Override
-    public boolean checkValidity() {
+    public boolean check() {
         String stringTemp;
         boolean ret=true;
-        stringTemp=getRoom();
-        if(stringTemp!=null){
-            if(World.roomMap.get(stringTemp)==null){
-                System.out.printf("Raum %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
-                ret=false;
-            }
-        }
         stringTemp=getDestination1();
         if(stringTemp!=null){
             if(World.roomMap.get(stringTemp)==null){
@@ -67,16 +55,9 @@ public class ExitDiff extends Diff{
         String string="";
         string+=String.format("Diff von %s\n",name);
         string+=String.format("Beschreibung: %s\n",getDescription());
-        string+=String.format("Raum: %s\n",getRoom());
         string+=String.format("Destination1: %s\n",getDestination1());
-        string+=String.format("Destination2: %s\n",getDestination2());
+        string+=String.format("Destination2: %s",getDestination2());
         return string;
-    }
-    public void setRoom(String room)  {
-        differences.put("room",room);
-    }
-    public String getRoom()  {
-        return (String)differences.get("room");
     }
     public void setDestination1(String destination1)  {
         differences.put("destination1",destination1);

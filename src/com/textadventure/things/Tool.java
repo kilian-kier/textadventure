@@ -33,4 +33,12 @@ public class Tool extends Item implements Serializable {
         }
         return newContainer;
     }
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Container/Raum: %s",currentContainer);
+        return string;
+    }
 }

@@ -3,24 +3,27 @@ package com.textadventure.locations;
 import com.textadventure.GameElement;
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
-import com.textadventure.things.Container;
 
 import java.io.Serializable;
 
 public class Exit extends GameElement implements Serializable {
     private String destination1;
     private String destination2;
-    private String room;
 
     public Exit(String name, String description) {
         super(name);
         this.description = description; //Beschreibung 1 isch links vor an @ und die Beschreibung 2 ich rechts noch an @
     }
 
-    public void changeContainer(String newRoomString) throws ItemNotFoundException, NullPointerException{
+
+    public void changeDestination(String newRoomString, boolean oneOrTwo) throws ItemNotFoundException, NullPointerException{
         Room newRoom= World.roomMap.get(newRoomString);
-        if(this.room!=null) {
-            Room oldRoom = World.roomMap.get(room);
+        String destination=destination2;
+        if(!oneOrTwo){
+            destination=destination1;
+        }
+        if(destination!=null) {
+            Room oldRoom = World.roomMap.get(destination);
             if (oldRoom.getExits().contains(this.name)) {
                 oldRoom.getExits().remove(name);
                 newRoom.addExit(this.name);
@@ -33,13 +36,6 @@ public class Exit extends GameElement implements Serializable {
         this.name=newRoomString;
     }
 
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
-    }
 
 
     public String getDestination2() {
@@ -72,4 +68,37 @@ public class Exit extends GameElement implements Serializable {
     public java.lang.String getName() {
         return this.name;
     }
+
+    public boolean check(){
+        boolean ret=true;
+        if(World.roomMap.get(destination1)==null){
+            System.out.printf("Destination 1 %s von Exit %s existiert nicht\n",destination1,name);
+            ret=false;
+        }else{
+            if(!World.roomMap.get(destination1).getExits().contains(name)){
+                System.out.printf("Raum %s wird von Exit %s als Destination 1 referenziert aber nicht umgekehrt\n",destination1,name);
+                ret=false;
+            }
+        }
+        if(World.roomMap.get(destination2)==null){
+            System.out.printf("Destination 2 %s von Exit %s existiert nicht\n",destination2,name);
+            ret=false;
+        }else{
+            if(!World.roomMap.get(destination2).getExits().contains(name)){
+                System.out.printf("Raum %s wird von Exit %s als Destination 2 referenziert aber nicht umgekehrt\n",destination2,name);
+                ret=false;
+            }
+        }
+        return ret;
+    }
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Destination1: %s\n",destination1);
+        string+=String.format("Destination2: %s",destination2);
+        return string;
+    }
+
 }

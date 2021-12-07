@@ -64,4 +64,38 @@ public class NPC extends GameElement implements Serializable {
         }
         this.name=newRoomString;
     }
+
+    public boolean check(){
+        boolean ret=true;
+        if(World.roomMap.get(room)==null){
+            System.out.printf("Raum %s von NPC %s existiert nicht\n",room,name);
+            ret=false;
+        }else{
+            if(!World.roomMap.get(room).getNpcs().contains(name)){
+                System.out.printf("Raum %s wird von NPC %s referenziert aber nicht umgekehrt\n",room,name);
+                ret=false;
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("NPC %s\n",name);
+        string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Raum: %s\n",room);
+        string+="Dialog:\n";
+        if(getDialog()!=null){
+            for (String[] i: getDialog()) {
+                try {
+                    string += String.format("Frage: %s; Antwort: %s; Event: %s", i[0], i[1], i[2]);
+                }catch(IndexOutOfBoundsException e){
+                    System.err.println("Ungültiger Dialog");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return string;
+    }
 }
