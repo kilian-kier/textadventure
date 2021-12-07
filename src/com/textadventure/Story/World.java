@@ -37,7 +37,6 @@ public class World {
         editMap.put("npc", npcMap);
         editMap.put("event", eventMap);
 
-        //TODO bei gelegenheit
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
@@ -115,8 +114,7 @@ public class World {
     static private void editGameElement(LinkedList<String> args) {
 
     }
-
-    //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
+    //TODO Input
     static private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = null;
@@ -216,12 +214,12 @@ public class World {
 
 
     /**
-     * Checks if the name of a given GameElement type does already exist in their respective map
+     * Kontrolliert ob ein GameElement existiert
      *
-     * @param name name of an Element
-     * @param type type of an Element
-     * @return GameElement if it was found
-     * @throws ElementNotFoundException if Element is not found this Exception is being thrown
+     * @param name Name des Elements
+     * @param type Typ des Elements
+     * @return Falls das Element gefunden wird, wird es zurückgegeben
+     * @throws ElementNotFoundException Wenn das Element nicht gefunden wurde, entsteht diese Exception
      */
     static private GameElement getElement(String name, String type) throws ElementNotFoundException {
         switch (type) {
