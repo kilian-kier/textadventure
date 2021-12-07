@@ -25,6 +25,7 @@ public class World {
     static public HashMap<String, String> eventKeyMap = new HashMap<>();
     //TODO new Player
     static public Player player;
+    static public HashMap<String,HashMap> editMap = new HashMap<>();
 
     static public void load(String path) {
         try {
@@ -37,8 +38,16 @@ public class World {
     static public void store(String path) {
         LoadStoreWorld.store(path);
     }
+    static void worldEditor(String path) {
+        editMap.put("room", roomMap);
+        editMap.put("exit", exitMap);
+        editMap.put("location", locationMap);
+        editMap.put("tool", toolMap);
+        editMap.put("container", containerMap);
+        editMap.put("npc", npcMap);
+        editMap.put("event", eventMap);
 
-    static public void worldEditor(String path) {
+        //TODO bei gelegenheit
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
@@ -47,11 +56,8 @@ public class World {
         while (!exit) {
             System.out.print(">> ");
             input = scanner.nextLine();
-            input = input.toLowerCase();
-            if (input.equals(""))
-                continue;
-            commands = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
-            commands.removeIf(s -> s.equals(""));
+            commands = splitInput(input);
+            if (commands == null) continue;
             switch (commands.get(0)) {
                 case "new":
                     try {
@@ -84,6 +90,35 @@ public class World {
                     System.out.println("Command not found");
                     break;
             }
+        }
+    }
+
+
+    static private void editElement(LinkedList<String> args) {
+        GameElement temp;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> command;
+        String input;
+            System.out.print(args.get(1) +" "+ args.get(2) + ": ");
+            input = scanner.nextLine();
+            command = splitInput(input);
+            temp = (GameElement) editMap.get(args.get(1)).get(args.get(2)); //TODO: Element not found
+
+
+            switch (command.get(0)) {
+                case "exit":
+                    return;
+                case "add":
+
+                    break;
+                case "changet":
+                    break;
+                case "remove":
+                    break;
+                default:
+                    System.out.println("command not found");
+                    break;
+
         }
     }
 
@@ -261,5 +296,11 @@ public class World {
             input = scanner.nextLine();
         element.setDescription(input);
     }
-
+    static public LinkedList<String> splitInput (String input){
+        input = input.toLowerCase();
+        if (input.equals("")) return null;
+        LinkedList<String> command = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
+        command.removeIf(s -> s.equals(""));
+        return command;
+    }
 }
