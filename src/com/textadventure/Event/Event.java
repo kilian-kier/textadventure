@@ -119,10 +119,12 @@ public class Event implements Serializable {
 
     public boolean check(){
         boolean ret=true;
-        for (String i:dependent) {
-            if(!World.eventKeyMap.containsKey(i)){
-                    System.out.printf("Element %s nicht gefunden. In %s von %s\n",dependent,this.getClass().toString(),stringForHash(cmd));
-                    ret=false;
+        if(dependent!=null) {
+            for (String i : dependent) {
+                if (!World.eventKeyMap.containsKey(i)) {
+                    System.out.printf("Element %s nicht gefunden. In %s von %s\n", dependent, this.getClass().toString(), stringForHash(cmd));
+                    ret = false;
+                }
             }
         }
         for (Diff i: differences.values()) {
@@ -138,8 +140,9 @@ public class Event implements Serializable {
         String string="";
         string+=String.format("Element %s\n",name);
         string+=String.format("Info: %s\n",info);
-        string+=String.format("Dependent %s\n",dependent.toString());
-        string+="Diffs:\n";
+        string+=String.format("Befehl: %s\n",cmd.toString());
+        string+=String.format("Abhängig von: %s\n",dependent);
+        string+="Diffs:";
         for (Diff i: differences.values()) {
             string+=i.toString();
         }

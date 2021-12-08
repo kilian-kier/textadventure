@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Eine Art Item ohne Möglichkeit weitere Items zu speichern
+ */
 public class Tool extends Item implements Serializable {
     public Tool(String name, String description) {
         super(name, description);

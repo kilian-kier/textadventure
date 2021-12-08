@@ -67,9 +67,15 @@ public class World {
                 case "show":
                     try{
                         if(commands.size()>2){
-                            show(commands.get(2),commands.get(1));
+                            Show.show(commands.get(2),commands.get(1));
+                        }else if(commands.size()==2){
+                            try {
+                                Show.show(null,commands.get(1));
+                            }catch(ElementNotFoundException e){
+                                Show.show(commands.get(1), null);
+                            }
                         }else{
-                            show(commands.get(1),null);
+                            Show.show(null, null);
                         }
                     }catch (IndexOutOfBoundsException e) {
                         System.out.println("Zu wenig Argumente");
@@ -78,14 +84,20 @@ public class World {
                     }
                     break;
                 case "store":
-                    store(path);
+                    LoadStoreWorld.store(path);
                     break;
                 case "load":
-                    load(path);
+                    try {
+                        LoadStoreWorld.load(path);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "check":
-                    if(!check()){
+                    if(!Checker.check()){
                         System.out.println("Es gibt Fehler in der Welt");
+                    }else{
+                        System.out.println("Alles in Ordnung");
                     }
                     break;
                 case "exit":
@@ -113,8 +125,6 @@ public class World {
             input = scanner.nextLine();
             command = splitInput(input);
             temp = (GameElement) editMap.get(args.get(1)).get(args.get(2)); //TODO: Element not found
-
-
             switch (command.get(0)) {
                 case "exit":
                     return;
@@ -130,7 +140,9 @@ public class World {
 
         }
     }
+    static private void editEvent(LinkedList<String> args){
 
+    }
     static private void editGameElement(LinkedList<String> args) {
 
     }
@@ -176,8 +188,13 @@ public class World {
                 }
                 inputDescription(element);
                 break;
-            case "element":
-                break;
+            case "event":
+                if(args.size()>2) {
+                    EventEditor.edit(args.get(2));
+                }else{
+                    EventEditor.edit(null);
+                }
+                return;
             default:
                 System.out.println("Object does not exist");
                 return;
@@ -243,7 +260,7 @@ public class World {
      * @return Falls das Element gefunden wird, wird es zurückgegeben
      * @throws ElementNotFoundException Wenn das Element nicht gefunden wurde, entsteht diese Exception
      */
-    static private GameElement getElement(String name, String type) throws ElementNotFoundException {
+    static protected GameElement getElement(String name, String type) throws ElementNotFoundException {
         if(type!=null) {
             switch (type) {
                 case "room":
@@ -276,27 +293,7 @@ public class World {
         throw new ElementNotFoundException(name);
     }
 
-    //TODO: entweder de löschen oder die Maps private mochen, wos schiana war
-    static public void addLocation(Location location) {
-        locationMap.put(location.getName(), location);
-    }
-
-    static public void addRoom(Room room) {
-        roomMap.put(room.getName(), room);
-    }
-
-    static public void addNPC(NPC npc) {
-        npcMap.put(npc.getName(), npc);
-    }
-
-    static public void addTool(Tool tool) {
-        toolMap.put(tool.getName(), tool);
-    }
-
-    static public void addContainer(Container container) {
-        containerMap.put(container.getName(), container);
-    }
-
+    //TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn
 
     static private String inputName() {
         Scanner scanner = new Scanner(System.in);
@@ -325,80 +322,5 @@ public class World {
 
 
 
-    static public void load(String path) {
-        try {
-            LoadStoreWorld.load(path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    private static boolean check(){
-        boolean ret=true;
-        for (Room room: roomMap.values() ) {
-            if(!room.check()){
-                ret=false;
-            }
-        }
-        for (Location location: locationMap.values() ) {
-            if(!location.check()){
-                ret=false;
-            }
-        }
-        for (Tool tool: toolMap.values() ) {
-            if(!tool.check()){
-                ret=false;
-            }
-        }
-        for (Container container: containerMap.values() ) {
-            if(!container.check()){
-                ret=false;
-            }
-        }
-        for (NPC npc: npcMap.values() ) {
-            if(!npc.check()){
-                ret=false;
-            }
-        }
-        for (Exit exit: exitMap.values() ) {
-            if(!exit.check()){
-                ret=false;
-            }
-        }
-        for (Event event: eventMap.values() ) {
-            if(!event.check()){
-                ret=false;
-            }
-        }
-        return ret;
-    }
-
-    static public void store(String path) {
-        LoadStoreWorld.store(path);
-    }
-    private static void show(String name, String type) throws ElementNotFoundException{
-        GameElement element;
-        if(type==null){
-            try {
-                element=getElement(name, null);
-                System.out.println(element.toString());
-            } catch (ElementNotFoundException e ) {
-                try {
-                    System.out.println(eventMap.get(eventKeyMap.get(name)).toString());
-                }catch(NullPointerException ex ){
-                    throw new ElementNotFoundException(name);
-                }
-            }
-        }else{
-            if(type.equals("event")){
-                try {
-                    System.out.println(eventMap.get(eventKeyMap.get(name)).toString());
-                }catch(Exception e){
-                    throw new ElementNotFoundException(name);
-                }
-                return;
-            }
-            element=getElement(name, type);
-            System.out.println(element.toString());
-        }
-    }
 }
+
