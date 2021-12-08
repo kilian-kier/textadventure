@@ -1,5 +1,6 @@
 package com.textadventure.Story;
 
+
 import com.textadventure.Event.Event;
 import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
@@ -12,6 +13,7 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import javax.swing.text.Element;
 import java.util.*;
 
 public class World {
@@ -52,21 +54,34 @@ public class World {
                     try {
                         newGameElement(commands);
                     } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Too few arguments");
+                        System.out.println("Zu wenig Argumente");
                     }
                     break;
                 case "edit":
                     try {
                         editGameElement(commands);
                     } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Too few arguments");
+                        System.out.println("Zu wenig Argumente");
+                    }
+                    break;
+                case "show":
+                    try{
+                        if(commands.size()>2){
+                            show(commands.get(2),commands.get(1));
+                        }else{
+                            show(commands.get(1),null);
+                        }
+                    }catch (IndexOutOfBoundsException e) {
+                        System.out.println("Zu wenig Argumente");
+                    }catch(ElementNotFoundException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "store":
-                    store("world.world");
+                    store(path);
                     break;
                 case "load":
-                    load("world.world");
+                    load(path);
                     break;
                 case "check":
                     if(!check()){
@@ -77,11 +92,16 @@ public class World {
                     exit = true;
                     break;
                 default:
-                    System.out.println("Command not found");
+                    System.out.println("Befehl nicht gefunden");
                     break;
             }
         }
     }
+
+
+
+
+
 
 
     static private void editElement(LinkedList<String> args) {
@@ -105,7 +125,7 @@ public class World {
                 case "remove":
                     break;
                 default:
-                    System.out.println("command not found");
+                    System.out.println("Befehl nicht gefunden");
                     break;
 
         }
@@ -135,22 +155,24 @@ public class World {
                 }
                 try { // If Element already exists somewhere
                     getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
-                    System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
-                    String[] options = {"o", "a", "e"};
+                    System.out.println("Element existiert bereits. Möchtest du Überschreiben, Bearbeiten, oder Abbrechen? (ü,b,a)");
+                    String[] options = {"o", "a", "e","ü","b"};
                     ret = Input.switchOptions(options);
                     switch (ret) {
                         case "a":
                             return;
                         case "o":
+                        case "ü":
                             break;
                         case "e":
+                        case "b":
                             args.set(0, "edit");
                             args.set(1, element.getName());
                             editGameElement(args);
                             return;
                     }
                 } catch (ElementNotFoundException e) {
-                    //Everything's ok
+                    //Alles OK
                 }
                 inputDescription(element);
                 break;
@@ -170,7 +192,7 @@ public class World {
         switch (args.get(1)) {
             case "npc":
                 NPC npc = new NPC(element.getName(), element.getDescription());
-                //Dialogs - Events Dialogs can cause
+                //Dialogs -  Dialogs can cause Events
                 //Location/Room
                 npcMap.put(npc.getName(), npc);
                 break;
@@ -222,25 +244,34 @@ public class World {
      * @throws ElementNotFoundException Wenn das Element nicht gefunden wurde, entsteht diese Exception
      */
     static private GameElement getElement(String name, String type) throws ElementNotFoundException {
-        switch (type) {
-            case "room":
-                if (roomMap.containsKey(name)) return roomMap.get(name);
-                break;
-            case "location":
-                if (locationMap.containsKey(name)) return locationMap.get(name);
-                break;
-            case "tool":
-                if (toolMap.containsKey(name)) return toolMap.get(name);
-                break;
-            case "container":
-                if (containerMap.containsKey(name)) return containerMap.get(name);
-                break;
-            case "npc":
-                if (npcMap.containsKey(name)) return npcMap.get(name);
-                break;
-            case "exit":
-                if (exitMap.containsKey(name)) return exitMap.get(name);
-                break;
+        if(type!=null) {
+            switch (type) {
+                case "room":
+                    if (roomMap.containsKey(name)) return roomMap.get(name);
+                    break;
+                case "location":
+                    if (locationMap.containsKey(name)) return locationMap.get(name);
+                    break;
+                case "tool":
+                    if (toolMap.containsKey(name)) return toolMap.get(name);
+                    break;
+                case "container":
+                    if (containerMap.containsKey(name)) return containerMap.get(name);
+                    break;
+                case "npc":
+                    if (npcMap.containsKey(name)) return npcMap.get(name);
+                    break;
+                case "exit":
+                    if (exitMap.containsKey(name)) return exitMap.get(name);
+                    break;
+            }
+        }else{
+            if (roomMap.containsKey(name)) return roomMap.get(name);
+            if (locationMap.containsKey(name)) return locationMap.get(name);
+            if (toolMap.containsKey(name)) return toolMap.get(name);
+            if (containerMap.containsKey(name)) return containerMap.get(name);
+            if (npcMap.containsKey(name)) return npcMap.get(name);
+            if (exitMap.containsKey(name)) return exitMap.get(name);
         }
         throw new ElementNotFoundException(name);
     }
@@ -343,5 +374,31 @@ public class World {
 
     static public void store(String path) {
         LoadStoreWorld.store(path);
+    }
+    private static void show(String name, String type) throws ElementNotFoundException{
+        GameElement element;
+        if(type==null){
+            try {
+                element=getElement(name, null);
+                System.out.println(element.toString());
+            } catch (ElementNotFoundException e ) {
+                try {
+                    System.out.println(eventMap.get(eventKeyMap.get(name)).toString());
+                }catch(NullPointerException ex ){
+                    throw new ElementNotFoundException(name);
+                }
+            }
+        }else{
+            if(type.equals("event")){
+                try {
+                    System.out.println(eventMap.get(eventKeyMap.get(name)).toString());
+                }catch(Exception e){
+                    throw new ElementNotFoundException(name);
+                }
+                return;
+            }
+            element=getElement(name, type);
+            System.out.println(element.toString());
+        }
     }
 }

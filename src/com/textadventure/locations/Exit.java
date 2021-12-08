@@ -97,7 +97,7 @@ public class Exit extends GameElement implements Serializable {
     @Override
     public String toString() {
         String string="";
-        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Exit %s\n",name);
         string+=String.format("Beschreibung: %s\n",description);
         string+=String.format("Destination1: %s\n",destination1);
         string+=String.format("Destination2: %s",destination2);

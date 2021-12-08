@@ -58,7 +58,7 @@ public class Location extends GameElement implements Serializable {
     @Override
     public String toString() {
         String string="";
-        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Location %s\n",name);
         string+=String.format("Beschreibung: %s\n",getDescription());
         string+=String.format("Räume: %s",rooms.toString());
         return string;
