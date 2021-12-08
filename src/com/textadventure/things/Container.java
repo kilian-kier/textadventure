@@ -43,7 +43,7 @@ public class Container extends Item implements Serializable {
     @Override
     public String toString() {
         String string="";
-        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Container %s\n",name);
         string+=String.format("Beschreibung: %s\n",description);
         string+=String.format("Container/Raum: %s\n",currentContainer);
         string+=String.format("Tools: %s",tools);

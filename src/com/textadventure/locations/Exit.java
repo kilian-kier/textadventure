@@ -56,8 +56,11 @@ public class Exit extends GameElement implements Serializable {
 
     @Override
     public void look() {
-        //TODO: schaugn wo man isch und donn in ondon Raum ausgeben
-        //System.out.println("Da ist ein Ausgang, der nach " + this.destination.getName() + " führt.");
+        if(World.player.getCurrentRoom().getName().equals(destination1)){
+            System.out.println("Da ist ein Ausgang, der nach " + destination2 + " führt.");
+        }else{
+            System.out.println("Da ist ein Ausgang, der nach " + destination1 + " führt.");
+        }
     }
 
     @Override
@@ -94,7 +97,7 @@ public class Exit extends GameElement implements Serializable {
     @Override
     public String toString() {
         String string="";
-        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Exit %s\n",name);
         string+=String.format("Beschreibung: %s\n",description);
         string+=String.format("Destination1: %s\n",destination1);
         string+=String.format("Destination2: %s",destination2);

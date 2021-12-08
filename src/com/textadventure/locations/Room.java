@@ -186,7 +186,7 @@ public class Room extends GameElement implements Serializable {
     @Override
     public String toString() {
         String string="";
-        string+=String.format("Diff von %s\n",name);
+        string+=String.format("Raum %s\n",name);
         string+=String.format("Beschreibung: %s\n",getDescription());
         string+=String.format("Location: %s\n",getLocation());
         string+=String.format("Tools: %s\n",tools.getTools()!=null?tools.getTools().toString():null);
