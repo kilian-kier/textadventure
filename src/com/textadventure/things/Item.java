@@ -7,6 +7,9 @@ import com.textadventure.exeptions.ItemNotFoundInContainerException;
 
 import java.io.Serializable;
 
+/**
+ * Ein item enthält den Container in dem es sich befindet.
+ */
 abstract public class Item  extends GameElement implements Serializable {
     protected String currentContainer;
 
@@ -24,6 +27,13 @@ abstract public class Item  extends GameElement implements Serializable {
     public void setContainer(String container) {
         this.currentContainer = container;
     }
+
+    /**
+     * Ändert den Container in dem sich ein Item befindet.
+     * @param newContainerString neuer Container
+     * @throws ItemNotFoundException Wenn neuer Container nicht existiert
+     * @throws NullPointerException Wenn ein ungültiger Parameter übergeben wird.
+     */
     public void changeContainer(String newContainerString) throws ItemNotFoundException , NullPointerException{
         Container newContainer=findItemContainer(newContainerString);
         if(this.currentContainer!=null) {
@@ -44,11 +54,11 @@ abstract public class Item  extends GameElement implements Serializable {
     public boolean check(){
         boolean ret=true;
         if(World.roomMap.get(currentContainer)==null){
-            System.out.printf("Raum %s von Tool %s existiert nicht\n",currentContainer,name);
+            System.out.printf("Raum %s von Item %s existiert nicht\n",currentContainer,name);
             ret=false;
         }else{
             if(!World.roomMap.get(currentContainer).getTools().contains(name)){
-                System.out.printf("Raum %s wird von Tool %s referenziert aber nicht umgekehrt\n",currentContainer,name);
+                System.out.printf("Raum %s wird von Item %s referenziert aber nicht umgekehrt\n",currentContainer,name);
                 ret=false;
             }
         }

@@ -6,6 +6,10 @@ import com.textadventure.exeptions.ItemNotFoundException;
 
 import java.io.Serializable;
 
+/**
+ * Ein Ausgang enthält zwei Räume (destination1/2) zwischen denen er sich befinded. Es gibt eine Doppelte Beschreibung welche in der Mitte mit einem
+ * @ getrennt wird.
+ */
 public class Exit extends GameElement implements Serializable {
     private String destination1;
     private String destination2;
@@ -15,7 +19,13 @@ public class Exit extends GameElement implements Serializable {
         this.description = description; //Beschreibung 1 isch links vor an @ und die Beschreibung 2 ich rechts noch an @
     }
 
-
+    /**
+     * Ändert einen der Räume
+     * @param newRoomString neuer Raum
+     * @param oneOrTwo Raum bei destination 1 (false), oder 2 (true)
+     * @throws ItemNotFoundException Wenn der neue Raum nicht existiert
+     * @throws NullPointerException Wenn ungültige Parameter übergeben werden
+     */
     public void changeDestination(String newRoomString, boolean oneOrTwo) throws ItemNotFoundException, NullPointerException{
         Room newRoom= World.roomMap.get(newRoomString);
         String destination=destination2;

@@ -4,6 +4,9 @@ import com.textadventure.interfaces.Interactable;
 
 import java.io.Serializable;
 
+/**
+ * Ein GameElement ist ein Element welches eine Beschreibung und einen Namen besitzt. Röume, Orte, Items, Exits und NPCs sind Spiel Elemente
+ */
 public class GameElement implements Serializable, Interactable {
     protected String description;
     protected String name;

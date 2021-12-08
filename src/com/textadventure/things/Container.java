@@ -7,6 +7,9 @@ import com.textadventure.exeptions.ItemNotFoundInContainerException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Ein Item welches es ermöglicht Tools zu speichern. Tools befinden sich in einer Liste (tools).
+ */
 public class Container extends Item implements Serializable {
     private final ArrayList<String> tools = new ArrayList<>();
 

@@ -13,8 +13,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Lädt und Speichert Welt
+ */
 public class LoadStoreWorld {
-    public static void load(String path) throws FileNotFoundException {
+    /**
+     * Lädt Welt von Festplatte
+     * @param path Datei mit gespeicherter Welt
+     * @throws FileNotFoundException Wenn die Datei nicht gefunden wird
+     */
+    protected static void load(String path) throws FileNotFoundException {
         try {
             FileInputStream fileIn;
             ObjectInputStream in;
@@ -45,7 +53,11 @@ public class LoadStoreWorld {
         }
     }
 
-    public static void store(String path) {
+    /**
+     * Speichert die HashMaps der Welt mit Serializable in eine Datei
+     * @param path Datei zum Speichern
+     */
+    protected static void store(String path) {
         try {
             FileOutputStream fileOut;
             ObjectOutputStream out;

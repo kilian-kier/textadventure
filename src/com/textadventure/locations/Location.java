@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Enthält eine Liste mit Räumen, die sich an diesem Ort befinden
+ */
 public class Location extends GameElement implements Serializable {
     private ArrayList<String> rooms = new ArrayList<>();
 

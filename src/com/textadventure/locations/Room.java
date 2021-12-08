@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Enthält eine Liste mit Ausgängen, Tools, Containern, NPCs und Orten.
+ */
 public class Room extends GameElement implements Serializable {
 
     private final ArrayList<String> exits = new ArrayList<>();
@@ -109,6 +112,13 @@ public class Room extends GameElement implements Serializable {
             container.add(name);
         }
     }
+
+    /**
+     * Ändert den ort des Raumes
+     * @param newLocationString Neuer Ort
+     * @throws ItemNotFoundException Wenn neuer Ort nicht existiert
+     * @throws NullPointerException Wenn ungültige Parameter übergeben werden
+     */
     public void changeLocation(String newLocationString) throws ItemNotFoundException, NullPointerException{
         Location newLocation= World.locationMap.get(newLocationString);
         if(this.location!=null) {
@@ -128,7 +138,7 @@ public class Room extends GameElement implements Serializable {
     public boolean check(){
         boolean ret=true;
         if(World.locationMap.get(location)==null){
-            System.out.printf("Location %s von Raum %s existiert nicht\n",location,name);
+            System.out.printf("Location %s von Raum %s existiert nicht oder ist noch nicht gesetzt\n",location,name);
             ret=false;
         }else{
             if(!World.locationMap.get(location).getRooms().contains(name)){
