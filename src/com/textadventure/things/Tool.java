@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Eine Art Item ohne Möglichkeit weitere Items zu speichern
+ */
 public class Tool extends Item implements Serializable {
     public Tool(String name, String description) {
         super(name, description);
@@ -32,5 +35,13 @@ public class Tool extends Item implements Serializable {
             }
         }
         return newContainer;
+    }
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Tool %s\n",name);
+        string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Container/Raum: %s",currentContainer);
+        return string;
     }
 }

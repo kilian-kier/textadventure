@@ -7,10 +7,11 @@ import com.textadventure.exeptions.TypeDoesNotExistException;
 import com.textadventure.exeptions.TypeNotValidException;
 import com.textadventure.locations.Location;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class NPCDiff extends Diff{
+public class NPCDiff extends Diff implements Serializable {
     public NPCDiff(String name) {
         super(name);
     }
@@ -35,7 +36,7 @@ public class NPCDiff extends Diff{
     }
 
     @Override
-    public boolean checkValidity() {
+    public boolean check() {
         String stringTemp;
         boolean ret=true;
         stringTemp=getRoom();
@@ -57,9 +58,9 @@ public class NPCDiff extends Diff{
         if(getDialog()!=null){
             for (String[] i: getDialog()) {
                 try {
-                    string += String.format("Frage: %s; Antwort: %s; Event: %s", i[0], i[1], i[2]);
+                    string += String.format("Frage: %s; Antwort: %s; Event: %s\n", i[0], i[1], i[2]);
                 }catch(IndexOutOfBoundsException e){
-                    System.err.println("Ungültiger Dialog");
+                    System.err.println("Ungültiger Dialog\n");
                     e.printStackTrace();
                 }
             }
