@@ -312,7 +312,7 @@ public class World {
             input = scanner.nextLine();
         element.setDescription(input);
     }
-    static private LinkedList<String> splitInput (String input){
+    static public LinkedList<String> splitInput (String input){
         input = input.toLowerCase();
         if (input.equals("")) return null;
         LinkedList<String> command = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
