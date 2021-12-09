@@ -4,9 +4,10 @@ import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.things.Container;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class ContainerDiff extends Diff{
+public class ContainerDiff extends Diff implements Serializable {
     public ContainerDiff(String name){
         super(name);
     }
@@ -41,7 +42,7 @@ public class ContainerDiff extends Diff{
     }
 
     @Override
-    public boolean checkValidity() {
+    public boolean check() {
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;
@@ -80,7 +81,7 @@ public class ContainerDiff extends Diff{
         string+=String.format("Beschreibung: %s\n",getDescription());
         string+=String.format("Raum: %s\n",getRoom());
         string+=String.format("AddTools: %s\n",getAddTools()!=null?getAddTools().toString():null);
-        string+=String.format("RmTools: %s\n",getRmTools()!=null?getRmTools().toString():null);
+        string+=String.format("RmTools: %s",getRmTools()!=null?getRmTools().toString():null);
         return string;
     }
 

@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ *  Nicht Spieler Charakter im Spiel verfügt über Dialoge (dialog) und befindet sich in einem Raum (room).
+ */
 public class NPC extends GameElement implements Serializable {
     private ArrayList<String[]> dialog = new ArrayList<>(); // Array[3]: An index 0 die Froge, an index 1 die Antwort und an index 2 a event (string ) oder null
     private String room;
@@ -63,5 +66,39 @@ public class NPC extends GameElement implements Serializable {
             newRoom.addNpcs(this.name);
         }
         this.name=newRoomString;
+    }
+
+    public boolean check(){
+        boolean ret=true;
+        if(World.roomMap.get(room)==null){
+            System.out.printf("Raum %s von NPC %s existiert nicht\n",room,name);
+            ret=false;
+        }else{
+            if(!World.roomMap.get(room).getNpcs().contains(name)){
+                System.out.printf("Raum %s wird von NPC %s referenziert aber nicht umgekehrt\n",room,name);
+                ret=false;
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("NPC %s\n",name);
+        string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Raum: %s\n",room);
+        string+="Dialog:\n";
+        if(getDialog()!=null){
+            for (String[] i: getDialog()) {
+                try {
+                    string += String.format("Frage: %s; Antwort: %s; Event: %s", i[0], i[1], i[2]);
+                }catch(IndexOutOfBoundsException e){
+                    System.err.println("Ungültiger Dialog");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return string;
     }
 }

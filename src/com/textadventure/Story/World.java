@@ -1,5 +1,6 @@
 package com.textadventure.Story;
 
+
 import com.textadventure.Event.Event;
 import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
@@ -12,6 +13,7 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import javax.swing.text.Element;
 import java.util.*;
 
 public class World {
@@ -26,20 +28,12 @@ public class World {
     //TODO new Player
     static public Player player;
 
-    static public void load(String path) {
-        try {
-            LoadStoreWorld.load(path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     static public void store(String path) {
         LoadStoreWorld.store(path);
     }
     static void worldEditor(String path) {
 
-        //TODO bei gelegenheit
         System.out.println("Willkommen im Welten Editor");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
@@ -55,31 +49,57 @@ public class World {
                     try {
                         newGameElement(commands);
                     } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Too few arguments");
+                        System.out.println("Zu wenig Argumente");
                     }
                     break;
                 case "edit":
                     try {
                         editGameElement(commands);
                     } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Too few arguments");
+                        System.out.println("Zu wenig Argumente");
+                    }
+                    break;
+                case "show":
+                    try{
+                        if(commands.size()>2){
+                            Show.show(commands.get(2),commands.get(1));
+                        }else if(commands.size()==2){
+                            try {
+                                Show.show(null,commands.get(1));
+                            }catch(ElementNotFoundException e){
+                                Show.show(commands.get(1), null);
+                            }
+                        }else{
+                            Show.show(null, null);
+                        }
+                    }catch (IndexOutOfBoundsException e) {
+                        System.out.println("Zu wenig Argumente");
+                    }catch(ElementNotFoundException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "store":
-                    store("0_Story/");
+                    LoadStoreWorld.store(path);
                     break;
                 case "load":
-                    load("0_Story/");
+                    try {
+                        LoadStoreWorld.load(path);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
-                case "overview":
-                case "ov":
-                    //TODO Funktion which checks for inconsistencies. e.g. a Location contains a room, but the room does not reference the location
+                case "check":
+                    if(!Checker.check()){
+                        System.out.println("Es gibt Fehler in der Welt");
+                    }else{
+                        System.out.println("Alles in Ordnung");
+                    }
                     break;
                 case "exit":
                     exit = true;
                     break;
                 default:
-                    System.out.println("Command not found");
+                    System.out.println("Befehl nicht gefunden");
                     break;
             }
         }
@@ -165,6 +185,7 @@ public class World {
                 break;
         }
     }
+    static private void editEvent(LinkedList<String> args){
 
 
     /*
@@ -199,8 +220,7 @@ public class World {
                 break;
         }
     }
-
-    //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
+    //TODO Input
     static private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = null;
@@ -221,27 +241,34 @@ public class World {
                 }
                 try { // If Element already exists somewhere
                     getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
-                    System.out.println("Element with this name Exists already. Do you want to Overwrite, Edit, or Abort? (o,e,a)");
-                    String[] options = {"o", "a", "e"};
+                    System.out.println("Element existiert bereits. Möchtest du Überschreiben, Bearbeiten, oder Abbrechen? (ü,b,a)");
+                    String[] options = {"o", "a", "e","ü","b"};
                     ret = Input.switchOptions(options);
                     switch (ret) {
                         case "a":
                             return;
                         case "o":
+                        case "ü":
                             break;
                         case "e":
+                        case "b":
                             args.set(0, "edit");
                             args.set(1, element.getName());
                             editGameElement(args);
                             return;
                     }
                 } catch (ElementNotFoundException e) {
-                    //Everything's ok
+                    //Alles OK
                 }
                 element.setDescription(input("description"));
                 break;
-            case "element":
-                break;
+            case "event":
+                if(args.size()>2) {
+                    EventEditor.edit(args.get(2));
+                }else{
+                    EventEditor.edit(null);
+                }
+                return;
             default:
                 System.out.println("Object does not exist");
                 return;
@@ -256,7 +283,7 @@ public class World {
         switch (args.get(1)) {
             case "npc":
                 NPC npc = new NPC(element.getName(), element.getDescription());
-                //Dialogs - Events Dialogs can cause
+                //Dialogs -  Dialogs can cause Events
                 //Location/Room
                 npcMap.put(npc.getName(), npc);
                 break;
@@ -299,58 +326,47 @@ public class World {
 
 
     /**
-     * Checks if the name of a given GameElement type does already exist in their respective map
+     * Kontrolliert ob ein GameElement existiert
      *
-     * @param name name of an Element
-     * @param type type of an Element
-     * @return GameElement if it was found
-     * @throws ElementNotFoundException if Element is not found this Exception is being thrown
+     * @param name Name des Elements
+     * @param type Typ des Elements
+     * @return Falls das Element gefunden wird, wird es zurückgegeben
+     * @throws ElementNotFoundException Wenn das Element nicht gefunden wurde, entsteht diese Exception
      */
-    static private GameElement getElement(String name, String type) throws ElementNotFoundException {
-        switch (type) {
-            case "room":
-                if (roomMap.containsKey(name)) return roomMap.get(name);
-                break;
-            case "location":
-                if (locationMap.containsKey(name)) return locationMap.get(name);
-                break;
-            case "tool":
-                if (toolMap.containsKey(name)) return toolMap.get(name);
-                break;
-            case "container":
-                if (containerMap.containsKey(name)) return containerMap.get(name);
-                break;
-            case "npc":
-                if (npcMap.containsKey(name)) return npcMap.get(name);
-                break;
-            case "exit":
-                if (exitMap.containsKey(name)) return exitMap.get(name);
-                break;
+    static protected GameElement getElement(String name, String type) throws ElementNotFoundException {
+        if(type!=null) {
+            switch (type) {
+                case "room":
+                    if (roomMap.containsKey(name)) return roomMap.get(name);
+                    break;
+                case "location":
+                    if (locationMap.containsKey(name)) return locationMap.get(name);
+                    break;
+                case "tool":
+                    if (toolMap.containsKey(name)) return toolMap.get(name);
+                    break;
+                case "container":
+                    if (containerMap.containsKey(name)) return containerMap.get(name);
+                    break;
+                case "npc":
+                    if (npcMap.containsKey(name)) return npcMap.get(name);
+                    break;
+                case "exit":
+                    if (exitMap.containsKey(name)) return exitMap.get(name);
+                    break;
+            }
+        }else{
+            if (roomMap.containsKey(name)) return roomMap.get(name);
+            if (locationMap.containsKey(name)) return locationMap.get(name);
+            if (toolMap.containsKey(name)) return toolMap.get(name);
+            if (containerMap.containsKey(name)) return containerMap.get(name);
+            if (npcMap.containsKey(name)) return npcMap.get(name);
+            if (exitMap.containsKey(name)) return exitMap.get(name);
         }
         throw new ElementNotFoundException(name);
     }
 
-    //TODO: entweder de löschen oder die Maps private mochen, wos schiana war
-    static public void addLocation(Location location) {
-        locationMap.put(location.getName(), location);
-    }
-
-    static public void addRoom(Room room) {
-        roomMap.put(room.getName(), room);
-    }
-
-    static public void addNPC(NPC npc) {
-        npcMap.put(npc.getName(), npc);
-    }
-
-    static public void addTool(Tool tool) {
-        toolMap.put(tool.getName(), tool);
-    }
-
-    static public void addContainer(Container container) {
-        containerMap.put(container.getName(), container);
-    }
-
+    //TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn
 
     static private String input(String output) {
         Scanner scanner = new Scanner(System.in);

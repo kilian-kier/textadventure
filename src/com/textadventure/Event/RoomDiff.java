@@ -7,9 +7,10 @@ import com.textadventure.exeptions.TypeNotValidException;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class RoomDiff extends Diff{
+public class RoomDiff extends Diff implements Serializable {
     public RoomDiff(String name)  {
         super(name);
     }
@@ -34,18 +35,6 @@ public class RoomDiff extends Diff{
         try{  //RemoveTool
             for (String i:getRmTools()) {
                 World.toolMap.get(i).setContainer(null);
-                room.getTools().remove(i);
-            }
-        }catch(Exception e){}
-        try{ //AddExits
-            for (String i:getAddExits()) {
-                World.exitMap.get(i).changeContainer(this.name);
-                room.addExit(i);
-            }
-        }catch(Exception e){}
-        try{  //RemoveExits
-            for (String i:getRmExits()) {
-                World.exitMap.get(i).setRoom(null);
                 room.getTools().remove(i);
             }
         }catch(Exception e){}
@@ -79,7 +68,7 @@ public class RoomDiff extends Diff{
     }
 
     @Override
-    public boolean checkValidity() {
+    public boolean check() {
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;
@@ -104,24 +93,6 @@ public class RoomDiff extends Diff{
             for (String i:collTemp) {
                 if(World.toolMap.get(i)==null){
                     System.out.printf("Tool (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
-                    ret=false;
-                }
-            }
-        }
-        collTemp=getAddExits();
-        if(collTemp!=null){
-            for (String i:collTemp) {
-                if(World.exitMap.get(i)==null){
-                    System.out.printf("Exit (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
-                    ret=false;
-                }
-            }
-        }
-        collTemp=getRmExits();
-        if(collTemp!=null){
-            for (String i:collTemp) {
-                if(World.exitMap.get(i)==null){
-                    System.out.printf("Exit (Rm) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
                     ret=false;
                 }
             }
@@ -176,9 +147,7 @@ public class RoomDiff extends Diff{
         string+=String.format("AddNpcs: %s\n",getAddNpcs()!=null?getAddNpcs().toString():null);
         string+=String.format("RmNpcs: %s\n",getRmNpcs()!=null?getRmNpcs().toString():null);
         string+=String.format("AddContainer: %s\n",getAddContainer()!=null?getAddContainer().toString():null);
-        string+=String.format("RmContainer: %s\n",getRmContainer()!=null?getRmContainer().toString():null);
-        string+=String.format("AddExits: %s\n",getAddExits()!=null?getAddExits().toString():null);
-        string+=String.format("RmExits: %s\n",getRmExits()!=null?getRmExits().toString():null);
+        string+=String.format("RmContainer: %s",getRmContainer()!=null?getRmContainer().toString():null);
         return string;
     }
     public void setLocation(String location)  {
@@ -186,18 +155,6 @@ public class RoomDiff extends Diff{
     }
     public String getLocation() {
         return (String)differences.get("location");
-    }
-    public void setAddExits(Collection<String> exits){
-        differences.put("addexits",exits);
-    }
-    public Collection<String> getAddExits(){
-        return (Collection<String>)differences.get("addexits");
-    }
-    public void setRmExits(Collection<String> exits){
-        differences.put("rmexits",exits);
-    }
-    public Collection<String> getRmExits(){
-        return (Collection<String>)differences.get("rmexits");
     }
     public void setAddTools(Collection <String> tools){
         differences.put("addtools",tools);

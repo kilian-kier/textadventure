@@ -6,9 +6,10 @@ import com.textadventure.exeptions.TypeDoesNotExistException;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Tool;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class ToolDiff extends Diff{
+public class ToolDiff extends Diff implements Serializable {
     public ToolDiff(String name){
         super(name);
     }
@@ -30,7 +31,7 @@ public class ToolDiff extends Diff{
     }
 
     @Override
-    public boolean checkValidity() {
+    public boolean check() {
         String stringTemp;
         boolean ret=true;
         stringTemp=getContainer();
@@ -47,7 +48,7 @@ public class ToolDiff extends Diff{
         String string="";
         string+=String.format("Diff von %s\n",name);
         string+=String.format("Beschreibung: %s\n",getDescription());
-        string+=String.format("Container/Raum: %s\n",getContainer());
+        string+=String.format("Container/Raum: %s",getContainer());
         return string;
     }
     public void setContainer(String container)  {

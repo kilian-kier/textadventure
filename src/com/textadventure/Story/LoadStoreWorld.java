@@ -10,61 +10,40 @@ import com.textadventure.things.Tool;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
+/**
+ * Lädt und Speichert Welt
+ */
 public class LoadStoreWorld {
-    public static void load(String path) throws FileNotFoundException {
+    /**
+     * Lädt Welt von Festplatte
+     * @param path Datei mit gespeicherter Welt
+     * @throws FileNotFoundException Wenn die Datei nicht gefunden wird
+     */
+    protected static void load(String path) throws FileNotFoundException {
         try {
             FileInputStream fileIn;
             ObjectInputStream in;
 
-            fileIn = new FileInputStream(path + "rooms.tadv");
+            fileIn = new FileInputStream( path);
             in = new ObjectInputStream(fileIn);
-            World.roomMap = (HashMap<String, Room>) in.readObject();
+            HashMap<String, Object> map= (HashMap<String, Object>) in.readObject();
             in.close();
-            System.out.println("Rooms wurden geladen");
+
+            World.roomMap=(HashMap<String, Room>) map.get("rooms");
+            World.locationMap=(HashMap<String, Location>) map.get("locations");
+            World.toolMap=(HashMap<String, Tool>) map.get("tools");
+            World.exitMap=(HashMap<String, Exit>) map.get("exits");
+            World.npcMap=(HashMap<String, NPC>) map.get("npcs");
+            World.containerMap=(HashMap<String, Container>) map.get("container");
+            World.eventMap=(HashMap<String, Event>) map.get("events");
+            World.eventKeyMap=(HashMap<String, String>) map.get("eventkeys");
+
+            System.out.println("Welt wurde geladen");
             fileIn.close();
 
-            fileIn = new FileInputStream(path + "exits.tadv");
-            in = new ObjectInputStream(fileIn);
-            World.exitMap = (HashMap<String, Exit>) in.readObject();
-            in.close();
-            System.out.println("Exits wurden geladen");
-            fileIn.close();
-
-            fileIn = new FileInputStream(path + "locations.tadv");
-            in = new ObjectInputStream(fileIn);
-            World.locationMap = (HashMap<String, Location>) in.readObject();
-            in.close();
-            System.out.println("Locations wurden geladen");
-            fileIn.close();
-
-            fileIn = new FileInputStream(path + "tools.tadv");
-            in = new ObjectInputStream(fileIn);
-            World.toolMap = (HashMap<String, Tool>) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("Tools wurden geladen");
-
-            fileIn = new FileInputStream(path + "container.tadv");
-            in = new ObjectInputStream(fileIn);
-            World.containerMap = (HashMap<String, Container>) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("Container wurden geladen");
-
-            fileIn = new FileInputStream(path + "npcs.tadv");
-            in = new ObjectInputStream(fileIn);
-            World.npcMap = (HashMap<String, NPC>) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("NPCs wurden geladen");
-
-            fileIn = new FileInputStream(path + "events.tadv");
-            in = new ObjectInputStream(fileIn);
-            World.eventMap = (HashMap<String, Event>) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("Events wurden geladen");
 
         } catch (IOException i) {
             i.printStackTrace();
@@ -74,58 +53,33 @@ public class LoadStoreWorld {
         }
     }
 
-    public static void store(String path) {
+    /**
+     * Speichert die HashMaps der Welt mit Serializable in eine Datei
+     * @param path Datei zum Speichern
+     */
+    protected static void store(String path) {
         try {
             FileOutputStream fileOut;
             ObjectOutputStream out;
-            fileOut = new FileOutputStream(path + "rooms.tadv");
+            fileOut = new FileOutputStream(path );
             out = new ObjectOutputStream(fileOut);
-            out.writeObject(World.roomMap);
-            out.close();
-            fileOut.close();
-            System.out.println("Rooms wurden gespeichert");
 
-            fileOut = new FileOutputStream(path + "exits.tadv");
-            out = new ObjectOutputStream(fileOut);
-            out.writeObject(World.exitMap);
-            out.close();
-            fileOut.close();
-            System.out.println("Exits wurden gespeichert");
+            HashMap<String, Object> map= new HashMap<>();
+            map.put("rooms",World.roomMap);
+            map.put("locations",World.locationMap);
+            map.put("tools",World.toolMap);
+            map.put("exits",World.exitMap);
+            map.put("npcs",World.npcMap);
+            map.put("container",World.containerMap);
+            map.put("events",World.eventMap);
+            map.put("eventkeys",World.eventKeyMap);
+            //map.put("player",World.player); ????
 
-            fileOut = new FileOutputStream(path + "locations.tadv");
-            out = new ObjectOutputStream(fileOut);
-            out.writeObject(World.locationMap);
+            out.writeObject(map);
             out.close();
             fileOut.close();
-            System.out.println("Locations wurden gespeichert");
+            System.out.println("Welt wurde gespeichert");
 
-            fileOut = new FileOutputStream(path + "tools.tadv");
-            out = new ObjectOutputStream(fileOut);
-            out.writeObject(World.toolMap);
-            out.close();
-            fileOut.close();
-            System.out.println("Tools wurden gespeichert");
-
-            fileOut = new FileOutputStream(path + "container.tadv");
-            out = new ObjectOutputStream(fileOut);
-            out.writeObject(World.containerMap);
-            out.close();
-            fileOut.close();
-            System.out.println("Container wurden gespeichert");
-
-            fileOut = new FileOutputStream(path + "npcs.tadv");
-            out = new ObjectOutputStream(fileOut);
-            out.writeObject(World.npcMap);
-            out.close();
-            fileOut.close();
-            System.out.println("NPCs wurden gespeichert");
-
-            fileOut = new FileOutputStream(path + "events.tadv");
-            out = new ObjectOutputStream(fileOut);
-            out.writeObject(World.eventMap);
-            out.close();
-            fileOut.close();
-            System.out.println("Events wurden gespeichert");
         } catch (IOException i) {
             i.printStackTrace();
         }
