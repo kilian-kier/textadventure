@@ -25,7 +25,6 @@ public class World {
     static public HashMap<String, String> eventKeyMap = new HashMap<>();
     //TODO new Player
     static public Player player;
-    static public HashMap<String,HashMap> editMap = new HashMap<>();
 
     static public void load(String path) {
         try {
@@ -39,13 +38,6 @@ public class World {
         LoadStoreWorld.store(path);
     }
     static void worldEditor(String path) {
-        editMap.put("room", roomMap);
-        editMap.put("exit", exitMap);
-        editMap.put("location", locationMap);
-        editMap.put("tool", toolMap);
-        editMap.put("container", containerMap);
-        editMap.put("npc", npcMap);
-        editMap.put("event", eventMap);
 
         //TODO bei gelegenheit
         System.out.println("Willkommen im Welten Editor");
@@ -94,36 +86,118 @@ public class World {
     }
 
 
-    static private void editElement(LinkedList<String> args) {
-        GameElement temp;
-        Scanner scanner = new Scanner(System.in);
-        LinkedList<String> command;
-        String input;
-            System.out.print(args.get(1) +" "+ args.get(2) + ": ");
-            input = scanner.nextLine();
-            command = splitInput(input);
-            temp = (GameElement) editMap.get(args.get(1)).get(args.get(2)); //TODO: Element not found
-
-
-            switch (command.get(0)) {
-                case "exit":
-                    return;
-                case "add":
-
-                    break;
-                case "changet":
-                    break;
-                case "remove":
+    static private void editTool(LinkedList<String> args) {
+        Tool temp = null;
+        try {
+            temp = (Tool) getElement(args.get(1),"tool");
+        } catch (ElementNotFoundException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        LinkedList<String> command = getCommand(args);
+            switch(command.get(0)){
+                case "set":
+                    switch (command.get(1)) {
+                        case "description" -> temp.setDescription(input("description"));
+                        case "room" -> temp.setContainer(input("raum"));
+                        default -> System.out.println("command not found");
+                    }
                     break;
                 default:
                     System.out.println("command not found");
                     break;
+                }
+    }
 
+    static private void editContainer(LinkedList<String> args) {
+        Container temp = null;
+        try {
+            temp = (Container) getElement(args.get(1),"container");
+        } catch (ElementNotFoundException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        LinkedList<String> command = getCommand(args);
+        switch(command.get(0)){
+            case "add":
+                temp.addTool(command.get(2));
+                break;
+            case "remove":
+                if(! temp.removeTool(input(command.get(2)))) System.out.println("Element nicht gefunden!");
+                break;
+            case "set":
+                switch (command.get(1)) {
+                    case "description" -> temp.setDescription(input("description"));
+                    case "room" -> temp.setContainer(input("raum"));
+                    default -> System.out.println("command not found");
+                }
+                break;
+            default:
+                System.out.println("command not found");
+                break;
         }
     }
 
-    static private void editGameElement(LinkedList<String> args) {
+    static private void editLocation(LinkedList<String> args) {
+        Location temp = null;
+        try {
+            temp = (Location) getElement(args.get(1),"container");
+        } catch (ElementNotFoundException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        LinkedList<String> command = getCommand(args);
+        switch(command.get(0)){
+            case "add":
+                temp.addRoom(command.get(2));
+                break;
+            case "remove":
+                if(! temp.removeRoom(input(command.get(2)))) System.out.println("Element nicht gefunden!");
+                break;
+            case "set":
+                switch (command.get(1)) {
+                    case "description" -> temp.setDescription(input("description"));
+                    default -> System.out.println("command not found");
+                }
+                break;
+            default:
+                System.out.println("command not found");
+                break;
+        }
+    }
 
+
+    /*
+    exit
+    set
+    add
+    remove
+     */
+    static private LinkedList<String> getCommand(LinkedList<String> args){
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> command;
+        String input;
+        do {
+            System.out.print(args.get(1) + " " + args.get(2) + ": "); //??
+            input = scanner.nextLine();
+            command = splitInput(input);
+        }while(command == null);
+        return command;
+    }
+    static private void editGameElement(LinkedList<String> args) {
+        switch(args.get(1)){
+            case "exit": return;
+            //case "room": editRoom(args); break;
+            case "tool": editTool(args); break;
+            //case "exit": editExit(args); break;
+            case "location": editLocation(args); break;
+            case "container": editContainer(args); break;
+            //case "npc": editNpc(args); break;
+            //case "event": editEvent(args); break;
+            default:
+                System.out.println("command not found");
+                break;
+        }
     }
 
     //TODO input den gonzn scheiß, der itz in die Objekte isch, Check schreib i
@@ -143,7 +217,7 @@ public class World {
                 if (args.size() > 2) { //Check if name parameter exists
                     element = new GameElement(args.get(2));
                 } else {
-                    element = new GameElement(inputName());
+                    element = new GameElement(input("name"));
                 }
                 try { // If Element already exists somewhere
                     getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
@@ -164,7 +238,7 @@ public class World {
                 } catch (ElementNotFoundException e) {
                     //Everything's ok
                 }
-                inputDescription(element);
+                element.setDescription(input("description"));
                 break;
             case "element":
                 break;
@@ -203,7 +277,6 @@ public class World {
                 //Items
                 //Exits
                 //Npcs
-                //Possibly Image Path for later on
                 roomMap.put(room.getName(), room);
                 break;
             case "tool":
@@ -279,23 +352,15 @@ public class World {
     }
 
 
-    static private String inputName() {
+    static private String input(String output) {
         Scanner scanner = new Scanner(System.in);
         String input = "";
-        System.out.print("name: ");
+        System.out.print(output+ ": ");
         while (input.length() == 0)
             input = scanner.nextLine();
         return input;
     }
 
-    static private void inputDescription(GameElement element) {
-        Scanner scanner = new Scanner(System.in);
-        String input = "";
-        System.out.print("description: ");
-        while (input.length() == 0)
-            input = scanner.nextLine();
-        element.setDescription(input);
-    }
     static private LinkedList<String> splitInput (String input){
         input = input.toLowerCase();
         if (input.equals("")) return null;
