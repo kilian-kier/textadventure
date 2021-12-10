@@ -28,6 +28,8 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
+
+
         World.worldEditor("world.world");
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten");

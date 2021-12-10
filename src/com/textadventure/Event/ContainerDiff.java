@@ -11,6 +11,9 @@ public class ContainerDiff extends Diff implements Serializable {
     public ContainerDiff(String name){
         super(name);
     }
+    private String room=null;
+    private Collection<String> addTools =null;
+    private Collection<String> rmTools =null;
 
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
@@ -20,26 +23,34 @@ public class ContainerDiff extends Diff implements Serializable {
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"container");
         }
+        if(description!=null) { //Description
+            container.setDescription(description);
+        }
+       if(room!=null){ //Current Room
+           try {
+               container.changeContainer(room);
+           }catch(Exception e){
+               System.out.println(e.getMessage());
+           }
+       }
+       try{
+       if(addTools!=null){
+               for (String i:addTools) {
+                   World.toolMap.get(i).changeContainer(this.name);
+                   container.addTool(i);
+               }
+       }
+        if(rmTools!=null){
+                for (String i:rmTools) {
+                    World.toolMap.get(i).setContainer(null);
+                    container.removeTool(i);
+                }
+        }}
+        catch(Exception e){
+           e.printStackTrace();
+        }
+       }
 
-        try{ //Description
-            container.setDescription(getDescription());
-        }catch(Exception e){}
-        try{  //CurrentContainer
-           container.changeContainer(getRoom());
-        }catch(Exception e){}
-        try{ //AddTool
-            for (String i:getAddTools()) {
-                World.toolMap.get(i).changeContainer(this.name);
-                container.addTool(i);
-            }
-        }catch(Exception e){}
-        try{  //RemoveTool
-            for (String i:getRmTools()) {
-                World.toolMap.get(i).setContainer(null);
-                container.removeTool(i);
-            }
-        }catch(Exception e){}
-    }
 
     @Override
     public boolean check() {
@@ -86,21 +97,23 @@ public class ContainerDiff extends Diff implements Serializable {
     }
 
     public void setRoom(String room)  {
-        differences.put("room",room);
+        this.room=room;
     }
     public String getRoom()  {
-        return (String)differences.get("room");
+        return room;
     }
+
     public void setAddTools(Collection<String> tools){
-        differences.put("addtools",tools);
+        this.addTools =tools;
     }
     public Collection<String> getAddTools(){
-        return (Collection<String>) differences.get("addtools");
+        return addTools;
     }
+
     public void setRmTools(Collection <String> tools){
-        differences.put("romtools",tools);
+        this.rmTools =tools;
     }
     public Collection<String> getRmTools(){
-        return (Collection<String>) differences.get("rmtools");
+        return rmTools;
     }
 }

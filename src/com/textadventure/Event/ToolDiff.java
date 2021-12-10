@@ -13,7 +13,7 @@ public class ToolDiff extends Diff implements Serializable {
     public ToolDiff(String name){
         super(name);
     }
-
+    private String container;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
         Tool tool ;
@@ -22,12 +22,16 @@ public class ToolDiff extends Diff implements Serializable {
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"tool");
         }
-        try{ //Description
+        if(description!=null){
             tool.setDescription(getDescription());
-        }catch(Exception e){}
-        try{
-            tool.changeContainer(getContainer());
-        }catch(Exception e){}
+        }
+        if(container!=null){
+            try {
+                tool.changeContainer(getContainer());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -52,9 +56,9 @@ public class ToolDiff extends Diff implements Serializable {
         return string;
     }
     public void setContainer(String container)  {
-        differences.put("container",container);
+        this.container=container;
     }
     public String getContainer()  {
-        return (String)differences.get("container");
+        return container;
     }
 }

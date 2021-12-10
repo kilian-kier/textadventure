@@ -15,7 +15,8 @@ public class NPCDiff extends Diff implements Serializable {
     public NPCDiff(String name) {
         super(name);
     }
-
+    private Collection<String[]>  dialog=null;
+    private String room=null;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
         NPC npc ;
@@ -24,15 +25,20 @@ public class NPCDiff extends Diff implements Serializable {
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"npc");
         }
-        try{ //Description
+        if(description!=null){//Description
             npc.setDescription(getDescription());
-        }catch(Exception e){}
-        try{  //CurrentContainer
-            npc.changeContainer(getRoom());
-        }catch(Exception e){}
-        try{ //Dialog
-            npc.setDialog((ArrayList<String[]>) getDialog());
-        }catch(Exception e){}
+        }
+        try {
+            if (room != null) {
+                    npc.changeContainer(room);
+            }
+            if (dialog != null) {
+                    npc.setDialog((ArrayList<String[]>) getDialog());
+
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -68,15 +74,15 @@ public class NPCDiff extends Diff implements Serializable {
         return string;
     }
     public void setRoom(String room)  {
-        differences.put("room",room);
+        this.room=room;
     }
     public String getRoom()  {
-        return (String)differences.get("room");
+        return room;
     }
     public void setDialog(Collection<String[]> dialog){
-        differences.put("dialog",dialog);
+        this.dialog=dialog;
     }
     public Collection<String[]> getDialog(){
-        return (Collection<String[]>)differences.get("dialog");
+       return dialog;
     }
 }
