@@ -52,6 +52,11 @@ public class NPC extends GameElement implements Serializable {
         return dialog.get(index);
     }
 
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
+
     public void changeContainer(String newRoomString) throws ItemNotFoundException, NullPointerException{
         Room newRoom= World.roomMap.get(newRoomString);
         if(this.room!=null) {
