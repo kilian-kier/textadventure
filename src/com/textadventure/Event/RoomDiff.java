@@ -14,57 +14,70 @@ public class RoomDiff extends Diff implements Serializable {
     public RoomDiff(String name)  {
         super(name);
     }
+    String location=null;
+    Collection<String> addTools =null;
+    Collection<String> rmTools =null;
+    Collection<String> addContainer =null;
+    Collection<String> rmContainer =null;
+    Collection<String> addNPCs =null;
+    Collection<String> rmNPCs =null;
+
+
 
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
-        Room room ;
+        Room room;
         try {
-            room= World.roomMap.get(name);
-        }catch(Exception e){
-            throw new GameElementNotFoundException(name,"room");
+            room = World.roomMap.get(name);
+        } catch (Exception e) {
+            throw new GameElementNotFoundException(name, "room");
         }
-        try{ //Description
+        if (description != null) { //Description
             room.setDescription(getDescription());
-        }catch(Exception e){}
-        try{ //AddTool
-            for (String i:getAddTools()) {
-                World.toolMap.get(i).changeContainer(this.name);
-                room.addTool(i);
+        }
+        try{
+            if (addTools != null) {
+                for (String i : addTools) {
+                    World.toolMap.get(i).changeContainer(this.name);
+                    room.addTool(i);
+                }
             }
-        }catch(Exception e){}
-        try{  //RemoveTool
-            for (String i:getRmTools()) {
-                World.toolMap.get(i).setContainer(null);
-                room.getTools().remove(i);
+            if (rmTools != null) {
+                for (String i : rmTools) {
+                    World.toolMap.get(i).setContainer(null);
+                    room.getToolsContainer().removeTool(i);
+                }
             }
-        }catch(Exception e){}
-        try{ //AddContainer
-            for (String i:getAddContainer()) {
-                World.containerMap.get(i).changeContainer(this.name);
-                room.addContainer(i);
+            if (addContainer != null) {
+                for (String i : addContainer) {
+                    World.containerMap.get(i).changeContainer(this.name);
+                    room.addContainer(i);
+                }
             }
-        }catch(Exception e){}
-        try{  //RemoveContainer
-            for (String i:getRmContainer()) {
-                World.containerMap.get(i).changeContainer(null);
-                room.getContainers().remove(i);
+            if (rmContainer!=null){
+                    for (String i : rmContainer) {
+                        World.containerMap.get(i).changeContainer(null);
+                        room.getContainers().remove(i);
+                    }
+                }
+           if(addNPCs!=null){
+                for (String i : addNPCs) {
+                    World.npcMap.get(i).changeContainer(this.name);
+                    room.addNpcs(i);
+                }
             }
-        }catch(Exception e){}
-        try{ //AddNpcs
-            for (String i:getAddNpcs()) {
-                World.npcMap.get(i).changeContainer(this.name);
-                room.addNpcs(i);
+            if(rmNPCs!=null){
+                for (String i : rmNPCs) {
+                    World.containerMap.get(i).changeContainer(null);
+                    room.getNpcs().remove(i);
+                }
             }
-        }catch(Exception e){}
-        try{  //RemoveNpcs
-            for (String i:getRmNpcs()) {
-                World.containerMap.get(i).changeContainer(null);
-                room.getNpcs().remove(i);
+            if(location!=null){
+                room.changeLocation(getLocation());
             }
-        }catch(Exception e){}
-        try{ //Change Location
-            room.changeLocation(getLocation());
-        }catch(Exception e){}
+    }catch(Exception e){
+        e.printStackTrace();
+    }
     }
 
     @Override
@@ -151,45 +164,45 @@ public class RoomDiff extends Diff implements Serializable {
         return string;
     }
     public void setLocation(String location)  {
-        differences.put("location",location);
+        this.location=location;
     }
     public String getLocation() {
-        return (String)differences.get("location");
+        return location;
     }
     public void setAddTools(Collection <String> tools){
-        differences.put("addtools",tools);
+        this.addTools=tools;
     }
     public Collection<String> getAddTools(){
-        return (Collection<String>) differences.get("addtools");
+        return addTools;
     }
     public void setRmTools(Collection <String> tools){
-        differences.put("romtools",tools);
+        this.rmTools=tools;
     }
     public Collection<String> getRmTools(){
-        return (Collection<String>) differences.get("rmtools");
+       return rmTools;
     }
     public void setAddContainer(Collection<String> container){
-        differences.put("addcontainer",container);
+        this.addContainer=container;
     }
     public Collection<String> getAddContainer(){
-        return (Collection<String>) differences.get("addcontainer");
+        return addContainer;
     }
     public void setRmContainer(Collection<String> container){
-        differences.put("rmcontainer",container);
+        this.rmContainer=container;
     }
     public Collection<String> getRmContainer(){
-        return (Collection<String>) differences.get("rmcontainer");
+        return rmContainer;
     }
     public void setAddNpcs(Collection<String> npcs){
-        differences.put("addnpcs",npcs);
+        this.addNPCs=npcs;
     }
     public Collection<String> getAddNpcs(){
-        return (Collection<String>) differences.get("addnpcs");
+        return addNPCs;
     }
     public void setRmNpcs(Collection<String> npcs){
-        differences.put("rmnpcs",npcs);
+       this.rmNPCs=npcs;
     }
     public Collection<String> getRmNpcs(){
-        return (Collection<String>) differences.get("rmnpcs");
+        return rmNPCs;
     }
 }

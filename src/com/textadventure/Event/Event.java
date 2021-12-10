@@ -14,6 +14,16 @@ public class Event implements Serializable {
     private Collection<String> dependent;
     private boolean happened=false;
     private String info=null;
+    private String room;
+
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
     public Event(String name) throws EventExistsException {
         setName(name);
     }
@@ -138,12 +148,13 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         String string="";
-        string+=String.format("Element %s\n",name);
+        string+=String.format("Event Name: %s\n",name);
         string+=String.format("Info: %s\n",info);
         string+=String.format("Befehl: %s\n",cmd.toString());
         string+=String.format("Abhängig von: %s\n",dependent);
         string+="Diffs:";
         for (Diff i: differences.values()) {
+            string+="\n";
             string+=i.toString();
         }
         return string;

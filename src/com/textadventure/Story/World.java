@@ -319,8 +319,5 @@ public class World {
         command.removeIf(s -> s.equals(""));
         return command;
     }
-
-
-
 }
 
