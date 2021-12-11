@@ -61,6 +61,13 @@ public class EventEditor {
                     event.setInfo(info);
                     System.out.println("Info hinzugefügt");
                     break;
+                case "room": //Raum in dem das Event funktioniert
+                    try{
+                        event.setRoom(commands.get(1));
+                    }catch(IndexOutOfBoundsException e){
+                        event.setRoom(Input.input("Raum"));
+                    }
+                    System.out.println("Raum hinzugefügt");
                 case "add": //Diff hinzufügen und editieren, wenn es existiert
                     try{
                         newDiff(commands,event);

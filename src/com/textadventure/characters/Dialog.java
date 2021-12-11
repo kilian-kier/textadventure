@@ -1,7 +1,11 @@
 package com.textadventure.characters;
 
+import com.textadventure.input.Input;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Dialog {
     private ArrayList<String[]> dialog=new ArrayList<>();
@@ -17,9 +21,102 @@ public class Dialog {
             this.dialog = dialog;
         }
     }
+    public void setQA(int index, String question,String answer, String event) throws IndexOutOfBoundsException{
+        String[] arr= dialog.remove(index);
+        if(question!=null){
+            arr[0]=question;
+        }
+        if(answer!=null){
+            arr[1]=answer;
+        }
+        if(event!=null){
+            if(event.equals("none")){
+                arr[2]=null;
+            }else{
+                arr[2]=event;
+            }
+        }
+        dialog.set(index,arr);
+    }
 
-    public static void edit(){
 
+    public void edit(){
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Dialog " + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "set":
+                    try{
+                        switch(commands.get(2)){
+                            case "question":
+                                setQA(Integer.parseInt(commands.get(1)),Input.input("Frage"),null,null);
+                                break;
+                            case "answer":
+                                setQA(Integer.parseInt(commands.get(1)),null,Input.input("Antwort"),null);
+                                break;
+                            case "event":
+                                setQA(Integer.parseInt(commands.get(1)),null,null,Input.input("Event"));
+                                break;
+                        }
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Parameter");
+                    }catch(NumberFormatException e){
+                        System.out.println("Ungültiger Parameter");
+                    }
+                    break;
+                case "add":
+                    if(commands.size()>1){
+                        try {
+                            dialog.add(Integer.parseInt(commands.get(1)),inputQA());
+                        }catch(NumberFormatException e){
+                            System.out.println("Ungültiger Parameter");
+                        }
+                        System.out.println("Dialog bei Index " + Integer.valueOf(commands.get(1)) + " hinzugefügt");
+                    }else{
+                        dialog.add(inputQA());
+                        System.out.println("Dialog hinzugefügt");
+                    }
+                    break;
+                case "rm":
+                    if(commands.size()>1){
+                        try {
+                            dialog.remove(Integer.parseInt(commands.get(1)));
+                        }catch(NumberFormatException e){
+                            System.out.println("Ungültiger Parameter");
+                        }
+                        System.out.println("Dialog bei Index " + Integer.valueOf(commands.get(1)) + " entfernt");
+                    }else{
+                        System.out.println("Zu wenig Parameter");
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
+    }
+    public String[] inputQA(){
+        String[] qa = new String[3];
+        qa[0]=Input.input("Frage");
+        qa[1]=Input.input("Antwort");
+        qa[2]=Input.input("Event"); //Eingabe von none wenn kein Event
+        if(qa[2].equals("none")){
+            qa[2]=null;
+        }
+        return qa;
     }
     @Override
     public String toString(){
