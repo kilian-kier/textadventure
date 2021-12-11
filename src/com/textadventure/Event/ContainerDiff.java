@@ -95,7 +95,7 @@ public class ContainerDiff extends Diff implements Serializable {
             LinkedList<String> commands;
             String input;
             while(!exit) {
-                System.out.print("Diff " + getName()  + ">> ");
+                System.out.print("Container Diff " + getName()  + ">> ");
                 input = scanner.nextLine();
                 commands = Input.splitInput(input);
                 if (commands == null) continue;

@@ -4,11 +4,14 @@ import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.TypeDoesNotExistException;
 import com.textadventure.exeptions.TypeNotValidException;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class RoomDiff extends Diff implements Serializable {
     public RoomDiff(String name)  {
@@ -151,7 +154,144 @@ public class RoomDiff extends Diff implements Serializable {
 
     @Override
     public void edit() {
-
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Raum Diff " + getName()  + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "add":
+                    switch(commands.get(1)){
+                        case "description":
+                            if (Input.getEditor() != null) {
+                                setDescription(Input.edit(getDescription()));
+                            } else {
+                                setDescription(Input.input("Beschreibung"));
+                            }
+                            System.out.println("Beschreibung hinzugefügt");
+                            break;
+                        case "location":
+                            if(commands.size()>2){
+                                setLocation(commands.get(2));
+                            }else {
+                                setLocation(Input.input("Ort"));
+                            }
+                            System.out.println("Ort hinzugefügt");
+                            break;
+                        case "addtools":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddTools(commands);
+                            System.out.println("Addtools hinzugefügt");
+                            break;
+                        case "rmtools":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmTools(commands);
+                            System.out.println("Rmtools hinzugefügt");
+                            break;
+                        case "addcontainer":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddContainer(commands);
+                            System.out.println("Addcontainer hinzugefügt");
+                            break;
+                        case "rmcontainer":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmContainer(commands);
+                            System.out.println("Rmcontainer hinzugefügt");
+                            break;
+                        case "addnpcs":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddNpcs(commands);
+                            System.out.println("AddNPCs hinzugefügt");
+                            break;
+                        case "rmnpcs":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmNpcs(commands);
+                            System.out.println("RmNPCs hinzugefügt");
+                            break;    
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    switch(commands.get(1)){
+                        case "description":
+                            setDescription(null);
+                            System.out.println("Beschreibung entfernt");
+                            break;
+                        case "location":
+                            setLocation(null);
+                            System.out.println("Ort entfernt");
+                            break;
+                        case "addtools":
+                            setAddTools(null);
+                            System.out.println("Addtools entfernt");
+                            break;
+                        case "rmtools":
+                            setRmTools(null);
+                            System.out.println("Rmtools entfernt");
+                            break;
+                        case "addcontainer":
+                            setAddContainer(null);
+                            System.out.println("Addcontainer entfernt");
+                            break;
+                        case "rmcontainer":
+                            setRmContainer(null);
+                            System.out.println("Rmcontainer entfernt");
+                            break;
+                        case "addnpcs":
+                            setAddNpcs(null);
+                            System.out.println("AddNPCs entfernt");
+                            break;
+                        case "rmnpcs":
+                            setRmNpcs(null);
+                            System.out.println("RmNPCs entfernt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
     }
 
     @Override

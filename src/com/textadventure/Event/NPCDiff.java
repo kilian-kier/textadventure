@@ -88,7 +88,7 @@ public class NPCDiff extends Diff implements Serializable {
         LinkedList<String> commands;
         String input;
         while(!exit) {
-            System.out.print("Diff " + getName()  + ">> ");
+            System.out.print("NPC Diff " + getName()  + ">> ");
             input = scanner.nextLine();
             commands = Input.splitInput(input);
             if (commands == null) continue;
@@ -117,7 +117,8 @@ public class NPCDiff extends Diff implements Serializable {
                                 System.out.println("Zu wenig Parameter");
                                 break;
                             }
-                            setDialog(null);
+                            dialog=new Dialog();
+                            dialog.edit();
                             System.out.println("Dialog hinzugefügt");
                             break;
                         default:
@@ -136,7 +137,7 @@ public class NPCDiff extends Diff implements Serializable {
                             System.out.println("Raum entfernt");
                             break;
                         case "dialog":
-                            setDialog(null);
+                            dialog=null;
                             System.out.println("Dialog entfernt");
                             break;
                         default:
