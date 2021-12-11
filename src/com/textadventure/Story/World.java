@@ -290,7 +290,7 @@ public class World {
             if (npcMap.containsKey(name)) return npcMap.get(name);
             if (exitMap.containsKey(name)) return exitMap.get(name);
         }
-        throw new ElementNotFoundException(name);
+        throw new ElementNotFoundException(name, "Name");
     }
 
     //TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn
