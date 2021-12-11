@@ -1,23 +1,13 @@
 package com.textadventure;
 
-import com.textadventure.Event.ContainerDiff;
 import com.textadventure.Story.World;
 import com.textadventure.characters.Player;
-import com.textadventure.exeptions.ExitNotFoundException;
-import com.textadventure.exeptions.ItemNotFoundException;
-import com.textadventure.exeptions.ItemNotFoundInContainerException;
-import com.textadventure.exeptions.NoBackException;
 import com.textadventure.input.Game;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
-
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 public class Main {
 
@@ -36,10 +26,15 @@ public class Main {
         Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus");
         Exit door = new Exit("Tür", "Hier geht es zum Garten");
         Container chest = new Container("Truhe", "Eine alte Trueh in der Ecke");
+        chest.setContainer("Haus");
+        house.addContainer("Truhe");
         Tool hammer = new Tool("Hammer", "Ein alter rostiger Hammer");
-        hammer.setContainer("Haus");
-        house.addTool("Hammer");
+        //TODO: de nächsten 2 Zeilen kannt man woll irgendwia zommfossen
+        hammer.setContainer("Truhe");
+        chest.addTool("Hammer");
         Tool apple = new Tool("Apfel", "Ein reifer roter Apfel");
+        apple.setContainer("Garten");
+        yard.addTool("Apfel");
 
         World.locationMap.put(village.getName(), village);
         World.roomMap.put(house.getName(), house);
@@ -60,6 +55,8 @@ public class Main {
 
         village.addRoom(house.name);
         village.addRoom(yard.name);
+
+        World.player = new Player("Stefe", "Ein junger Mann", house);
 
         Game.start("");
         /*

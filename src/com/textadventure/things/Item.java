@@ -25,7 +25,7 @@ abstract public class Item  extends GameElement implements Serializable {
     }
 
     public void setContainer(String container) {
-        this.currentContainer = container;
+        this.currentContainer = container.toLowerCase();
     }
 
     /**

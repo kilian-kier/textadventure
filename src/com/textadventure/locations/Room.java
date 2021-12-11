@@ -108,8 +108,9 @@ public class Room extends GameElement implements Serializable {
     }
 
     public void addContainer(String name) {
-        if(!container.contains(name)){
-            container.add(name);
+        String tmp = name.toLowerCase();
+        if(!container.contains(tmp)){
+            container.add(tmp);
         }
     }
 
