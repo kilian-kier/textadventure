@@ -92,6 +92,10 @@ public class Event implements Serializable {
         return true;
     }
 
+    public boolean exec() {
+        return applyDiffsToWorld();
+    }
+
     public static boolean execEvent(Collection<String> args){
         String hash = stringForHash(args);
         if(World.eventMap.containsKey(hash)){

@@ -3,7 +3,7 @@ package com.textadventure.exeptions;
 public class CommandSyntaxException extends Exception {
     private final String command;
 
-    CommandSyntaxException(String command) {
+    public CommandSyntaxException(String command) {
         this.command = command;
     }
 
