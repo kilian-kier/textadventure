@@ -55,6 +55,10 @@ public class Checker {
                 ret=false;
             }
         }
+        if(World.eventKeyMap.get("start")==null){
+            System.out.println("Start Event nicht gefunden");
+            ret=false;
+        }
         return ret;
     }
 

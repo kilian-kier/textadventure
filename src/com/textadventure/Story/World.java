@@ -93,6 +93,16 @@ public class World {
                         e.printStackTrace();
                     }
                     break;
+                case "close":
+                    LoadStoreWorld.close();
+                    break;
+                case "include":
+                    try {
+                        LoadStoreWorld.include(commands.get(1));
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Parameter");
+                    }
+                    break;
                 case "check":
                     if(!Checker.check()){
                         System.out.println("Es gibt Fehler in der Welt");
