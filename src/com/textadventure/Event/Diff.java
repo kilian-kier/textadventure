@@ -21,6 +21,7 @@ public abstract class Diff implements Serializable  {
 
     public abstract void applyDiffToWorld() throws GameElementNotFoundException;
     public abstract boolean check();
+    public abstract void edit();
     public String getName() {
         return name;
     }

@@ -22,6 +22,9 @@ public class Input {
      * @return Bearbeiteter String
      */
     public static String edit(String string) {
+        if(string==null){
+            string="";
+        }
         Runtime runtime = Runtime.getRuntime();
         Random random = new Random();
         String filename;

@@ -150,6 +150,11 @@ public class RoomDiff extends Diff implements Serializable {
     }
 
     @Override
+    public void edit() {
+
+    }
+
+    @Override
     public String toString() {
         String string="";
         string+=String.format("Diff von %s\n",name);

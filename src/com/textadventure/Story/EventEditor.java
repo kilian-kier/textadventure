@@ -1,6 +1,8 @@
 package com.textadventure.Story;
 
 import com.textadventure.Event.*;
+import com.textadventure.exeptions.ElementExistsException;
+import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Room;
 
@@ -44,6 +46,7 @@ public class EventEditor {
                 case "needs": //Abhängigkeiten
                     commands.removeFirst();
                     event.setDependent(commands);
+                    System.out.println("Abhängigkeiten gesetzt");
                     break;
                 case "info": //Erzähler Text
                     String info = event.getInfo();
@@ -55,31 +58,57 @@ public class EventEditor {
                     } else {
                         info = Input.input("Info");
                     }
-                    System.out.println(info);
                     event.setInfo(info);
+                    System.out.println("Info hinzugefügt");
+                    break;
                 case "add": //Diff hinzufügen und editieren, wenn es existiert
                     try{
-                        event.addDiff(newDiff(commands));
+                        newDiff(commands,event);
+                        System.out.println("Neues Diff Hinzugefügt");
                     }catch(IndexOutOfBoundsException e){
                         System.out.println("Zu wenig Parameter");
+                    }catch(ElementExistsException e){
+                        System.out.println("Diff mit diesem Namen existiert bereits");
+                    }catch(Exception e){
+                        System.out.println("Unbekannter Diff Typ");
                     }
-                case "edit":
                     break;
-
-
-                case "remove": //Diff entfernen
+                case "edit":
+                    try{
+                        event.getDiff(commands.get(1)).edit();
+                        System.out.println("Diff bearbeitet");
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Parameter");
+                    }catch(Exception e){
+                        System.out.println("Diff existiert nicht");
+                    }
+                    break;
+                case "rm": //Diff entfernen
                     try{
                         event.rmDiff(commands.get(1));
-                        System.out.printf("Diff %s gelöscht",commands.get(1));
+                        System.out.printf("Diff %s gelöscht\n",commands.get(1));
                     }catch(IndexOutOfBoundsException e){
                         System.out.println("Zu wenig Parameter");
+                    }catch(ElementNotFoundException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "show":
-                    System.out.println(event.toString());
+                    if(commands.size()>1){
+                        try {
+                            System.out.println(event.getDiff(commands.get(1)).toString());
+                        }catch (Exception e){
+                            System.out.println("Diff nicht gefunden");
+                        }
+                    }else {
+                        System.out.println(event.toString());
+                    }
                     break;
                 case "back":
                     return;
+                case "help" :
+                    //TODO help
+                    break;
                 default:
                     System.out.println("Befehl nicht gefunden");
                     break;
@@ -87,13 +116,18 @@ public class EventEditor {
         }
         return;
     }
-    private static Diff newDiff(LinkedList<String> args) throws IndexOutOfBoundsException{
+    private static Diff newDiff(LinkedList<String> args,Event event) throws IndexOutOfBoundsException, ElementExistsException {
         String name ;
+        args.get(1);
         if(args.size()>2){
-            name = args.get(1);
+            name = args.get(2);
         }else{
             name=Input.input("Name");
         }
+        if(event.getDiff(name)!=null){
+            throw new ElementExistsException(name);
+        }
+
         Diff diff=null;
         switch(args.get(1)){
             case "container":
@@ -115,107 +149,12 @@ public class EventEditor {
                 diff=new ToolDiff(name);
                 break;
             default:
-                System.out.println("Unbekanntes Diff");
-                break;
+                throw new NullPointerException();
         }
-        editDiff(diff);
+        event.addDiff(diff);
+        diff.edit();
         return diff;
     }
-    private static void editDiff(Diff diff){
-       if(diff instanceof ContainerDiff){
-           editContainerDiff((ContainerDiff) diff);
-       }else if(diff instanceof ExitDiff){
-           editExitDiff((ExitDiff) diff);
-       }else if(diff instanceof LocationDiff){
-           editLocationDiff((LocationDiff) diff);
-       }else if(diff instanceof NPCDiff){
-           editNPCDiff((NPCDiff) diff);
-       }else if(diff instanceof RoomDiff){
-           editRoomDiff((RoomDiff) diff);
-       }else if(diff instanceof ToolDiff){
-           editToolDiff((ToolDiff) diff);
-       }else{
-           System.out.println("Unbekanntes Diff");
-       }
-    }
-    private static void editContainerDiff(ContainerDiff diff){
-        boolean exit = false;
-        Scanner scanner = new Scanner(System.in);
-        LinkedList<String> commands;
-        String input;
-        while(!exit) {
-            System.out.print("Diff " + diff.getName() + ">> ");
-            input = scanner.nextLine();
-            commands = Input.splitInput(input);
-            if (commands == null) continue;
-            switch (commands.get(0)) {
-                case "add":
-                    switch(commands.get(1)){
-                        case "description":
-                            diff.setDescription(Input.input("Beschreibung"));
-                            break;
-                        case "room":
-                            diff.setRoom(Input.input("Raum"));
-                            break;
-                        case "addtools":
-                            commands.removeFirst();
-                            if(commands.isEmpty()){
-                                System.out.println("Zu wenig Parameter");
-                                break;
-                            }
-                            diff.setAddTools(commands);
-                            break;
-                        case "rmtools":
-                            commands.removeFirst();
-                            if(commands.isEmpty()){
-                                System.out.println("Zu wenig Parameter");
-                                break;
-                            }
-                            diff.setRmTools(commands);
-                            break;
-                    }
-                    break;
-                case "rm":
-                    switch(commands.get(1)){
-                        case "description":
-                            diff.setDescription(null);
-                            break;
-                        case "room":
-                            diff.setRoom(null);
-                            break;
-                        case "addtools":
-                            diff.setAddTools(null);
-                            break;
-                        case "rmtools":
-                            diff.setRmTools(null);
-                            break;
-                    }
-                    break;
-                case "show":
-                    System.out.println(diff.toString());
-                    break;
-                case "back":
-                    return;
-                default:
-                    System.out.println("Befehl nicht gefunden");
-                    break;
-            }
-        }
-    }
-    private static void editExitDiff(ExitDiff diff){
 
-    }
-    private static void editLocationDiff(LocationDiff diff){
-
-    }
-    private static void editNPCDiff(NPCDiff diff){
-
-    }
-    private static void editRoomDiff(RoomDiff diff){
-
-    }
-    private static void editToolDiff(ToolDiff diff){
-
-    }
 
 }
