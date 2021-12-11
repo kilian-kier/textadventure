@@ -43,9 +43,14 @@ public class EventEditor {
             commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
+                case "cmd":
+                    commands.removeFirst();
+                    event.storeEvent(commands);
+                    System.out.println("Befehl wurde geändert");
+                    break;
                 case "needs": //Abhängigkeiten
                     commands.removeFirst();
-                    event.setDependent(commands);
+                    event.setDependent(commands.isEmpty()?null:commands);
                     System.out.println("Abhängigkeiten gesetzt");
                     break;
                 case "info": //Erzähler Text

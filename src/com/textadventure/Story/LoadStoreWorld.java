@@ -32,6 +32,7 @@ public class LoadStoreWorld {
             HashMap<String, Object> map= (HashMap<String, Object>) in.readObject();
             in.close();
 
+
             World.roomMap=(HashMap<String, Room>) map.get("rooms");
             World.locationMap=(HashMap<String, Location>) map.get("locations");
             World.toolMap=(HashMap<String, Tool>) map.get("tools");
@@ -43,14 +44,60 @@ public class LoadStoreWorld {
 
             System.out.println("Welt wurde geladen");
             fileIn.close();
-
-
         } catch (IOException i) {
-            i.printStackTrace();
+            System.out.println("Speicherstand nicht kompatibel mit aktueller Version");
         } catch (ClassNotFoundException c) {
             System.out.println("Klassen nicht gefunden");
             c.printStackTrace();
         }
+    }
+
+    /**
+     * Fügt alle Elemente eines Speicherstand in die aktuelle Welt hinzu
+     * @param path Datei mit gespeicherter Welt
+     */
+    protected static void include(String path){
+        try {
+            FileInputStream fileIn;
+            ObjectInputStream in;
+
+            fileIn = new FileInputStream( path);
+            in = new ObjectInputStream(fileIn);
+            HashMap<String, Object> map= (HashMap<String, Object>) in.readObject();
+            in.close();
+
+            World.roomMap.putAll((HashMap<String, Room>) map.get("rooms"));
+            World.locationMap.putAll((HashMap<String, Location>) map.get("locations"));
+            World.toolMap.putAll((HashMap<String, Tool>) map.get("tools"));
+            World.exitMap.putAll((HashMap<String, Exit>) map.get("exits"));
+            World.npcMap.putAll((HashMap<String, NPC>) map.get("npcs"));
+            World.containerMap.putAll((HashMap<String, Container>) map.get("container"));
+            World.eventMap.putAll((HashMap<String, Event>)map.get("events"));
+            World.eventKeyMap.putAll((HashMap<String, String>) map.get("eventkeys"));
+
+            System.out.println("Welt wurde hinzugefügt");
+            fileIn.close();
+        } catch (IOException i) {
+            System.out.println("Speicherstand nicht kompatibel mit aktueller Version");
+        } catch (ClassNotFoundException c) {
+            System.out.println("Klassen nicht gefunden");
+            c.printStackTrace();
+        }
+    }
+
+    /**
+     * Schließt alle Elemente der Welt
+     */
+    protected static void close(){
+        World.roomMap.clear();
+        World.locationMap.clear();
+        World.toolMap.clear();
+        World.exitMap.clear();
+        World.npcMap.clear();
+        World.containerMap.clear();
+        World.eventKeyMap.clear();
+        World.eventMap.clear();
+        System.out.println("Welt wurde geschlossen");
     }
 
     /**
