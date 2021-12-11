@@ -2,20 +2,17 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
-import com.textadventure.exeptions.TypeDoesNotExistException;
-import com.textadventure.exeptions.TypeNotValidException;
-import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class LocationDiff extends Diff implements Serializable {
     public LocationDiff(String name) {
         super(name);
     }
-
+    private Collection<String> addRooms =null;
+    private Collection <String> rmRooms =null;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException  {
         Location location ;
@@ -24,21 +21,24 @@ public class LocationDiff extends Diff implements Serializable {
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"location");
         }
-        try{ //Description
+        if(description!=null){ //Description
             location.setDescription(getDescription());
-        }catch(Exception e){}
-        try{ //AddRooms
-            Collection<String> addrooms= getAddRooms();
-            for (String i:addrooms) {
-                location.addRoom(i);
+        }
+        try {
+            if (addRooms != null) {
+                    for (String i : addRooms) {
+                        location.addRoom(i);
+                    }
+
             }
-        }catch(Exception e){}
-        try{ //Remove Rooms
-            Collection<String> rmrooms= getRmRooms();
-            for (String i:rmrooms) {
-                location.getRooms().remove(i);
+            if (rmRooms != null) {
+                    for (String i : rmRooms) {
+                        location.getRooms().remove(i);
+                    }
             }
-        }catch(Exception e){}
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -75,15 +75,15 @@ public class LocationDiff extends Diff implements Serializable {
         return string;
     }
     public void setAddRooms(Collection<String> rooms){
-        differences.put("addrooms",rooms);
+        this.addRooms =rooms;
     }
     public Collection<String> getAddRooms(){
-        return (Collection<String>) differences.get("addrooms");
+        return addRooms;
     }
     public void setRmRooms(Collection<String> rooms){
-        differences.put("rmrooms",rooms);
+        this.rmRooms =rooms;
     }
     public Collection<String> getRmRooms(){
-        return (Collection<String>) differences.get("rmrooms");
+        return rmRooms;
     }
 }

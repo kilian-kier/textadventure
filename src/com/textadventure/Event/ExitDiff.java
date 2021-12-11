@@ -11,23 +11,30 @@ public class ExitDiff extends Diff implements Serializable {
         super(name);
     }
 
+    private String destination1=null;
+    private String destination2= null;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
-        Exit exit ;
+        Exit exit;
         try {
-            exit= World.exitMap.get(name);
-        }catch(Exception e){
-            throw new GameElementNotFoundException(name,"exit");
+            exit = World.exitMap.get(name);
+        } catch (Exception e) {
+            throw new GameElementNotFoundException(name, "exit");
         }
-        try{ //Description
-            exit.setDescription(getDescription());
-        }catch(Exception e){}
-        try{ //Destination1
-            exit.changeDestination(getDestination1(),false);
-        }catch(Exception e){}
-        try{ //Destination1
-            exit.changeDestination(getDestination2(),true);
-        }catch(Exception e){}
+        if (description != null) { //Description
+            exit.setDescription(description);
+        }
+        try {
+            if (destination1 != null) {//Destination1
+                    exit.changeDestination(getDestination1(), false);
+
+            }
+            if (destination2 != null) {//Destination2
+                    exit.changeDestination(getDestination2(), true);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -60,15 +67,15 @@ public class ExitDiff extends Diff implements Serializable {
         return string;
     }
     public void setDestination1(String destination1)  {
-        differences.put("destination1",destination1);
+        this.destination1=destination1;
     }
     public String getDestination1()  {
-        return (String)differences.get("destination1");
+        return destination1;
     }
     public void setDestination2(String destination2)  {
-        differences.put("destination2",destination2);
+        this.destination2=destination2;
     }
     public String getDestination2()  {
-        return (String)differences.get("destination2");
+        return destination2;
     }
 }
