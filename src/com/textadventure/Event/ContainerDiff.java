@@ -2,10 +2,13 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
+import com.textadventure.input.Input;
 import com.textadventure.things.Container;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class ContainerDiff extends Diff implements Serializable {
     public ContainerDiff(String name){
@@ -83,6 +86,97 @@ public class ContainerDiff extends Diff implements Serializable {
             }
         }
         return ret;
+    }
+
+    @Override
+    public void edit() {
+            boolean exit = false;
+            Scanner scanner = new Scanner(System.in);
+            LinkedList<String> commands;
+            String input;
+            while(!exit) {
+                System.out.print("Diff " + getName()  + ">> ");
+                input = scanner.nextLine();
+                commands = Input.splitInput(input);
+                if (commands == null) continue;
+                switch (commands.get(0)) {
+                    case "add":
+                        switch(commands.get(1)){
+                            case "description":
+                                if (Input.getEditor() != null) {
+                                    setDescription(Input.edit(getDescription()));
+                                } else {
+                                    setDescription(Input.input("Beschreibung"));
+                                }
+                                System.out.println("Beschreibung hinzugefügt");
+                                break;
+                            case "room":
+                                if(commands.size()>2){
+                                    setRoom(commands.get(2));
+                                }else {
+                                    setRoom(Input.input("Raum"));
+                                }
+                                System.out.println("Raum hinzugefügt");
+                                break;
+                            case "addtools":
+                                commands.removeFirst();
+                                if(commands.isEmpty()){
+                                    System.out.println("Zu wenig Parameter");
+                                    break;
+                                }
+                                setAddTools(commands);
+                                System.out.println("Addtools hinzugefügt");
+                                break;
+                            case "rmtools":
+                                commands.removeFirst();
+                                if(commands.isEmpty()){
+                                    System.out.println("Zu wenig Parameter");
+                                    break;
+                                }
+                                setRmTools(commands);
+                                System.out.println("Rmtools hinzugefügt");
+                                break;
+                            default:
+                                System.out.println("Parameter ungültig");
+                                break;
+                        }
+                        break;
+                    case "rm":
+                        switch(commands.get(1)){
+                            case "description":
+                                setDescription(null);
+                                System.out.println("Beschreibung entfernt");
+                                break;
+                            case "room":
+                                setRoom(null);
+                                System.out.println("Raum entfernt");
+                                break;
+                            case "addtools":
+                                setAddTools(null);
+                                System.out.println("Addtools entfernt");
+                                break;
+                            case "rmtools":
+                                setRmTools(null);
+                                System.out.println("Rmtools entfernt");
+                                break;
+                            default:
+                                System.out.println("Parameter ungültig");
+                                break;
+                        }
+                        break;
+                    case "show":
+                        System.out.println(this.toString());
+                        break;
+                    case "back":
+                        return;
+                    case "help":
+                        //TODO help
+                    default:
+                        System.out.println("Befehl nicht gefunden");
+                        break;
+                }
+            }
+
     }
 
     @Override

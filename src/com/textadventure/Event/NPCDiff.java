@@ -1,21 +1,25 @@
 package com.textadventure.Event;
 
 import com.textadventure.Story.World;
+import com.textadventure.characters.Dialog;
 import com.textadventure.characters.NPC;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.TypeDoesNotExistException;
 import com.textadventure.exeptions.TypeNotValidException;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Location;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class NPCDiff extends Diff implements Serializable {
     public NPCDiff(String name) {
         super(name);
     }
-    private Collection<String[]>  dialog=null;
+    private Dialog dialog=new Dialog();
     private String room=null;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
@@ -33,7 +37,7 @@ public class NPCDiff extends Diff implements Serializable {
                     npc.changeContainer(room);
             }
             if (dialog != null) {
-                    npc.setDialog((ArrayList<String[]>) getDialog());
+                    npc.setDialog(getDialog());
 
             }
         }catch(Exception e){
@@ -61,16 +65,7 @@ public class NPCDiff extends Diff implements Serializable {
         string+=String.format("Beschreibung: %s\n",getDescription());
         string+=String.format("Raum: %s\n",getRoom());
         string+="Dialog:\n";
-        if(getDialog()!=null){
-            for (String[] i: getDialog()) {
-                try {
-                    string += String.format("Frage: %s; Antwort: %s; Event: %s\n", i[0], i[1], i[2]);
-                }catch(IndexOutOfBoundsException e){
-                    System.err.println("Ungültiger Dialog\n");
-                    e.printStackTrace();
-                }
-            }
-        }
+        System.out.println(getDialog().toString());
         return string;
     }
     public void setRoom(String room)  {
@@ -79,10 +74,88 @@ public class NPCDiff extends Diff implements Serializable {
     public String getRoom()  {
         return room;
     }
-    public void setDialog(Collection<String[]> dialog){
+    public void setDialog(Dialog dialog){
         this.dialog=dialog;
     }
-    public Collection<String[]> getDialog(){
+    public Dialog getDialog(){
        return dialog;
+    }
+
+    @Override
+    public void edit() {
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Diff " + getName()  + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "add":
+                    switch(commands.get(1)){
+                        case "description":
+                            if (Input.getEditor() != null) {
+                                setDescription(Input.edit(getDescription()));
+                            } else {
+                                setDescription(Input.input("Beschreibung"));
+                            }
+                            System.out.println("Beschreibung hinzugefügt");
+                            break;
+                        case "room":
+                            if(commands.size()>2){
+                                setRoom(commands.get(2));
+                            }else {
+                                setRoom(Input.input("Raum"));
+                            }
+                            System.out.println("Raum hinzugefügt");
+                            break;
+                        case "dialog":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setDialog(null);
+                            System.out.println("Dialog hinzugefügt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    switch(commands.get(1)){
+                        case "description":
+                            setDescription(null);
+                            System.out.println("Beschreibung entfernt");
+                            break;
+                        case "room":
+                            setRoom(null);
+                            System.out.println("Raum entfernt");
+                            break;
+                        case "dialog":
+                            setDialog(null);
+                            System.out.println("Dialog entfernt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
+
     }
 }

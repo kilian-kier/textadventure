@@ -1,6 +1,7 @@
 package com.textadventure.Event;
 
 import com.textadventure.Story.World;
+import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.EventExistsException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,11 +65,15 @@ public class Event implements Serializable {
     public void addDiff(Diff diff){
         differences.put(diff.getName(),diff);
     }
-    public Diff getDiff(String diff){
-        return differences.get(diff);
+    public Diff getDiff(String diffstring) {
+            return differences.get(diffstring);
     }
-    public void rmDiff(String diff){
-        differences.remove(diff);
+    public void rmDiff(String diffstring) throws  ElementNotFoundException{
+        Diff diff = differences.get(diffstring);
+        if(diff==null){
+            throw new ElementNotFoundException(diffstring);
+        }
+        differences.remove(diffstring);
     }
     private boolean applyDiffsToWorld(){
         for (String i:dependent) {

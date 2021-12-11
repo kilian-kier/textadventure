@@ -47,6 +47,12 @@ public class ToolDiff extends Diff implements Serializable {
         }
         return ret;
     }
+
+    @Override
+    public void edit() {
+
+    }
+
     @Override
     public String toString() {
         String string="";

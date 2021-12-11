@@ -2,10 +2,13 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Location;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class LocationDiff extends Diff implements Serializable {
     public LocationDiff(String name) {
@@ -85,5 +88,86 @@ public class LocationDiff extends Diff implements Serializable {
     }
     public Collection<String> getRmRooms(){
         return rmRooms;
+    }
+
+
+
+    @Override
+    public void edit() {
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Diff " + getName()  + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "add":
+                    switch(commands.get(1)){
+                        case "description":
+                            if (Input.getEditor() != null) {
+                                setDescription(Input.edit(getDescription()));
+                            } else {
+                                setDescription(Input.input("Beschreibung"));
+                            }
+                            System.out.println("Beschreibung hinzugefügt");
+                            break;
+                        case "addrooms":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddRooms(commands);
+                            System.out.println("Addrooms hinzugefügt");
+                            break;
+                        case "rmrooms":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmRooms(commands);
+                            System.out.println("Rmrooms hinzugefügt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    switch(commands.get(1)){
+                        case "description":
+                            setDescription(null);
+                            System.out.println("Beschreibung entfernt");
+                            break;
+                        case "addrooms":
+                            setAddRooms(null);
+                            System.out.println("Addrooms entfernt");
+                            break;
+                        case "rmrooms":
+                            setRmRooms(null);
+                            System.out.println("Rmrooms entfernt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
+
     }
 }
