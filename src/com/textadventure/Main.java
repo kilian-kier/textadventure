@@ -9,6 +9,8 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.util.Map;
+
 public class Main {
 
     public static void main(java.lang.String[] args) {
@@ -19,7 +21,9 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
-        World.worldEditor("world.world");
+        //World.worldEditor("world.world");
+
+        Map map = World.containerMap;
 
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten");

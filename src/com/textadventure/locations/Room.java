@@ -59,8 +59,9 @@ public class Room extends GameElement implements Serializable {
     }
 
     public void addTool(String tool) {
-        if(!tools.getTools().contains(tool)){
-            tools.addTool(tool);
+        String str = tool.toLowerCase();
+        if(!tools.getTools().contains(str)){
+            tools.addTool(str);
         }
     }
 
