@@ -71,7 +71,7 @@ public class Event implements Serializable {
     public void rmDiff(String diffstring) throws  ElementNotFoundException{
         Diff diff = differences.get(diffstring);
         if(diff==null){
-            throw new ElementNotFoundException(diffstring);
+            throw new ElementNotFoundException(diffstring, "Diff");
         }
         differences.remove(diffstring);
     }

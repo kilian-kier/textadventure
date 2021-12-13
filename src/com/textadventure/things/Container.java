@@ -58,7 +58,9 @@ public class Container extends Item implements Serializable {
     }
 
     public void addTool(String tool) {
-        tools.add(tool);
+        String str = tool.toLowerCase();
+        if (!tools.contains(str))
+            tools.add(str);
     }
 
     public ArrayList<String> getTools() {
