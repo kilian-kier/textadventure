@@ -39,7 +39,7 @@ public class World {
         while (!exit) {
             System.out.print(">> ");
             input = scanner.nextLine();
-            commands = splitInput(input);
+            commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
                 case "new":
@@ -105,7 +105,7 @@ public class World {
 
     static private void editTool(Tool temp) {
         while (true) {
-            LinkedList<String> command = getCommand();
+            LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "exit":
                     return;
@@ -129,9 +129,10 @@ public class World {
 
     static private void editContainer(Container temp) {
         while (true) {
-            LinkedList<String> command = getCommand();
+            LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit": return;
+                case "exit":
+                    return;
                 case "add":
                     if (toolMap.containsKey(command.get(1))) temp.addTool(command.get(1));
                     else System.out.println("Tool nicht gefunden");
@@ -144,7 +145,7 @@ public class World {
                         case "description" -> temp.setDescription(Input.input("description"));
                         case "room" -> {
                             String input = Input.input("raum");
-                            if (roomMap.containsKey(input)) temp.setContainer(input); //TODO Richtig ??
+                            if (roomMap.containsKey(input)) temp.setContainer(input);
                             else System.out.println("Raum nicht gefunden");
                         }
                         default -> System.out.println("command not found");
@@ -159,9 +160,10 @@ public class World {
 
     static private void editLocation(Location temp) {
         while (true) {
-            LinkedList<String> command = getCommand();
+            LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit": return;
+                case "exit":
+                    return;
                 case "add":
                     if (roomMap.containsKey(command.get(1))) temp.addRoom(command.get(2));
                     else System.out.println("Raum nicht gefunden");
@@ -184,8 +186,8 @@ public class World {
     }
 
     private static void editExit(Exit temp) {
-        while(true) {
-            LinkedList<String> command = getCommand();
+        while (true) {
+            LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "exit":
                     return;
@@ -216,10 +218,11 @@ public class World {
     }
 
     private static void editNpc(NPC temp) {
-        while(true) {
-            LinkedList<String> command = getCommand();
+        while (true) {
+            LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit": return;
+                case "exit":
+                    return;
                 case "add":
                     String[] dialog = new String[3];
                     dialog[0] = Input.input("Frage");
@@ -249,7 +252,26 @@ public class World {
     }
 
     private static void editRoom(Room temp) {
+        while (true) {
+            LinkedList<String> command = Input.getCommand();
+            switch (command.get(0)) {
+                case "exit":
+                    return;
+                case "set":
+                    switch (command.get(1)) {
+                        case "description" -> temp.setDescription(Input.input("description"));
+                        case "location" -> temp.setLocation(Input.input("location"));
+                        default -> System.out.println("command not found");
+                    }
 
+                    //Location Items Exits NPC Tools Container
+
+
+                default:
+                    System.out.println("command not found");
+                    break;
+            }
+        }
     }
 
 
@@ -257,29 +279,16 @@ public class World {
     }
 
 
-    static private LinkedList<String> getCommand() {
-        Scanner scanner = new Scanner(System.in);
-        LinkedList<String> command;
-        String input;
-        do {
-            input = scanner.nextLine();
-            command = splitInput(input);
-        } while (command == null);
-        return command;
-    }
-
     static private void editGameElement(LinkedList<String> args) throws ElementNotFoundException {
-        if(toolMap.containsKey(args.get(1))) editTool(toolMap.get(args.get(1)));
-        else if(exitMap.containsKey(args.get(1))) editExit(exitMap.get(args.get(1)));
-        else if(locationMap.containsKey(args.get(1))) editLocation(locationMap.get(args.get(1)));
-        else if(containerMap.containsKey(args.get(1))) editContainer(containerMap.get(args.get(1)));
-        else if(roomMap.containsKey(args.get(1))) editRoom(roomMap.get(args.get(1)));
-        else if(npcMap.containsKey(args.get(1))) editNpc(npcMap.get(args.get(1)));
-        //else if //TODO Event
+        if (toolMap.containsKey(args.get(1))) editTool(toolMap.get(args.get(1)));
+        else if (exitMap.containsKey(args.get(1))) editExit(exitMap.get(args.get(1)));
+        else if (locationMap.containsKey(args.get(1))) editLocation(locationMap.get(args.get(1)));
+        else if (containerMap.containsKey(args.get(1))) editContainer(containerMap.get(args.get(1)));
+        else if (roomMap.containsKey(args.get(1))) editRoom(roomMap.get(args.get(1)));
+        else if (npcMap.containsKey(args.get(1))) editNpc(npcMap.get(args.get(1)));
+            //else if //TODO Event
         else System.out.println("element not found");
     }
-
-
 
 
     //TODO Input
@@ -341,7 +350,6 @@ public class World {
 
 
         //For Specific features
-        //TODO Extra Options
         switch (args.get(1)) {
             case "npc":
                 NPC npc = new NPC(element.getName(), element.getDescription());
@@ -415,15 +423,6 @@ public class World {
         }
         throw new ElementNotFoundException(name);
     }
+}
 
     //TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn
-
-
-    static private LinkedList<String> splitInput(String input) {
-        input = input.toLowerCase();
-        if (input.equals("")) return null;
-        LinkedList<String> command = new LinkedList<>(Arrays.asList(input.split("[ \n]")));
-        command.removeIf(s -> s.equals(""));
-        return command;
-    }
-}
