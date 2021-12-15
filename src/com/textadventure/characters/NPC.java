@@ -13,7 +13,7 @@ import java.util.Collection;
  *  Nicht Spieler Charakter im Spiel verfügt über Dialoge (dialog) und befindet sich in einem Raum (room).
  */
 public class NPC extends GameElement implements Serializable {
-    private ArrayList<String[]> dialog = new ArrayList<>(); // Array[3]: An index 0 die Froge, an index 1 die Antwort und an index 2 a event (string ) oder null
+    private Dialog dialog = new Dialog();
     private String room;
 
     public NPC(String name, String description) {
@@ -29,27 +29,24 @@ public class NPC extends GameElement implements Serializable {
         this.room = room;
     }
 
-    public void removeAllDialog() {
-        dialog.clear();
-    }
 
     public void addDialog(String[] dialog) {
-        this.dialog.add(dialog);
+        this.dialog.getDialog().add(dialog);
     }
-    public void setDialog(ArrayList<String[]> dialog){
+    public void setDialog(Dialog dialog){
         this.dialog=dialog;
     }
 
-    public ArrayList<String[]> getDialog() {
+    public Dialog getDialog() {
         return this.dialog;
     }
 
     public void removeDialogIndex(int index) throws IndexOutOfBoundsException {
-        dialog.remove(index);
+        dialog.getDialog().remove(index);
     }
 
     public String[] getDialogIndex(int index) throws IndexOutOfBoundsException {
-        return dialog.get(index);
+        return dialog.getDialog().get(index);
     }
 
     @Override
@@ -93,17 +90,8 @@ public class NPC extends GameElement implements Serializable {
         string+=String.format("NPC %s\n",name);
         string+=String.format("Beschreibung: %s\n",description);
         string+=String.format("Raum: %s\n",room);
-        string+="Dialog:\n";
-        if(getDialog()!=null){
-            for (String[] i: getDialog()) {
-                try {
-                    string += String.format("Frage: %s; Antwort: %s; Event: %s", i[0], i[1], i[2]);
-                }catch(IndexOutOfBoundsException e){
-                    System.err.println("Ungültiger Dialog");
-                    e.printStackTrace();
-                }
-            }
-        }
+        string+="Dialog:";
+        string+=dialog.toString();
         return string;
     }
 }

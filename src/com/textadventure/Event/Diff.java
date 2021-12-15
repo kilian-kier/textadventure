@@ -7,19 +7,21 @@ import java.util.HashMap;
 
 public abstract class Diff implements Serializable  {
     protected String name;
-    protected HashMap<String,Object> differences= new HashMap<>();
+    protected String description;
     public Diff(String name)  {
         this.name=name;
     }
     public void setDescription(String description){
-        differences.put("description",description);
+        this.description=description;
     }
     public String getDescription(){
-        return (String)differences.get("description");
+        return description;
     }
+
 
     public abstract void applyDiffToWorld() throws GameElementNotFoundException;
     public abstract boolean check();
+    public abstract void edit();
     public String getName() {
         return name;
     }

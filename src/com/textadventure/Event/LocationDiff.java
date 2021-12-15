@@ -2,20 +2,20 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
-import com.textadventure.exeptions.TypeDoesNotExistException;
-import com.textadventure.exeptions.TypeNotValidException;
-import com.textadventure.locations.Exit;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Location;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class LocationDiff extends Diff implements Serializable {
     public LocationDiff(String name) {
         super(name);
     }
-
+    private Collection<String> addRooms =null;
+    private Collection <String> rmRooms =null;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException  {
         Location location ;
@@ -24,21 +24,24 @@ public class LocationDiff extends Diff implements Serializable {
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"location");
         }
-        try{ //Description
+        if(description!=null){ //Description
             location.setDescription(getDescription());
-        }catch(Exception e){}
-        try{ //AddRooms
-            Collection<String> addrooms= getAddRooms();
-            for (String i:addrooms) {
-                location.addRoom(i);
+        }
+        try {
+            if (addRooms != null) {
+                    for (String i : addRooms) {
+                        location.addRoom(i);
+                    }
+
             }
-        }catch(Exception e){}
-        try{ //Remove Rooms
-            Collection<String> rmrooms= getRmRooms();
-            for (String i:rmrooms) {
-                location.getRooms().remove(i);
+            if (rmRooms != null) {
+                    for (String i : rmRooms) {
+                        location.getRooms().remove(i);
+                    }
             }
-        }catch(Exception e){}
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -75,15 +78,96 @@ public class LocationDiff extends Diff implements Serializable {
         return string;
     }
     public void setAddRooms(Collection<String> rooms){
-        differences.put("addrooms",rooms);
+        this.addRooms =rooms;
     }
     public Collection<String> getAddRooms(){
-        return (Collection<String>) differences.get("addrooms");
+        return addRooms;
     }
     public void setRmRooms(Collection<String> rooms){
-        differences.put("rmrooms",rooms);
+        this.rmRooms =rooms;
     }
     public Collection<String> getRmRooms(){
-        return (Collection<String>) differences.get("rmrooms");
+        return rmRooms;
+    }
+
+
+
+    @Override
+    public void edit() {
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Location Diff " + getName()  + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "add":
+                    switch(commands.get(1)){
+                        case "description":
+                            if (Input.getEditor() != null) {
+                                setDescription(Input.edit(getDescription()));
+                            } else {
+                                setDescription(Input.input("Beschreibung"));
+                            }
+                            System.out.println("Beschreibung hinzugefügt");
+                            break;
+                        case "addrooms":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddRooms(commands);
+                            System.out.println("Addrooms hinzugefügt");
+                            break;
+                        case "rmrooms":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmRooms(commands);
+                            System.out.println("Rmrooms hinzugefügt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    switch(commands.get(1)){
+                        case "description":
+                            setDescription(null);
+                            System.out.println("Beschreibung entfernt");
+                            break;
+                        case "addrooms":
+                            setAddRooms(null);
+                            System.out.println("Addrooms entfernt");
+                            break;
+                        case "rmrooms":
+                            setRmRooms(null);
+                            System.out.println("Rmrooms entfernt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
+
     }
 }

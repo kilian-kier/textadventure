@@ -1,6 +1,7 @@
 package com.textadventure.Event;
 
 import com.textadventure.Story.World;
+import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.EventExistsException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,6 +15,16 @@ public class Event implements Serializable {
     private Collection<String> dependent;
     private boolean happened=false;
     private String info=null;
+    private String room;
+
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
     public Event(String name) throws EventExistsException {
         setName(name);
     }
@@ -54,11 +65,15 @@ public class Event implements Serializable {
     public void addDiff(Diff diff){
         differences.put(diff.getName(),diff);
     }
-    public Diff getDiff(String diff){
-        return differences.get(diff);
+    public Diff getDiff(String diffstring) {
+            return differences.get(diffstring);
     }
-    public void rmDiff(String diff){
-        differences.remove(diff);
+    public void rmDiff(String diffstring) throws  ElementNotFoundException{
+        Diff diff = differences.get(diffstring);
+        if(diff==null){
+            throw new ElementNotFoundException(diffstring, "Diff");
+        }
+        differences.remove(diffstring);
     }
     private boolean applyDiffsToWorld(){
         for (String i:dependent) {
@@ -80,6 +95,10 @@ public class Event implements Serializable {
         }
         setHappened(true);
         return true;
+    }
+
+    public boolean exec() {
+        return applyDiffsToWorld();
     }
 
     public static boolean execEvent(Collection<String> args){
@@ -138,12 +157,13 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         String string="";
-        string+=String.format("Element %s\n",name);
+        string+=String.format("Event Name: %s\n",name);
         string+=String.format("Info: %s\n",info);
         string+=String.format("Befehl: %s\n",cmd.toString());
         string+=String.format("Abhängig von: %s\n",dependent);
         string+="Diffs:";
         for (Diff i: differences.values()) {
+            string+="\n";
             string+=i.toString();
         }
         return string;

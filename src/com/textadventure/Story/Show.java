@@ -108,7 +108,7 @@ public class Show {
                 try {
                     System.out.println(World.eventMap.get(World.eventKeyMap.get(name)).toString());
                 }catch(NullPointerException ex ){
-                    throw new ElementNotFoundException(name);
+                    throw new ElementNotFoundException(name, "Name");
                 }
             }
         }else if(name==null){
@@ -135,14 +135,14 @@ public class Show {
                     showTools();
                     break;
                 default:
-                    throw new ElementNotFoundException(type);
+                    throw new ElementNotFoundException(type, "Type");
             }
         }else{
             if(type.equals("event")){
                 try {
                     System.out.println(World.eventMap.get(World.eventKeyMap.get(name)).toString());
                 }catch(Exception e){
-                    throw new ElementNotFoundException(name);
+                    throw new ElementNotFoundException(name, "Name");
                 }
                 return;
             }

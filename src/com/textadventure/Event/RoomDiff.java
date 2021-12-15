@@ -4,67 +4,83 @@ import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.TypeDoesNotExistException;
 import com.textadventure.exeptions.TypeNotValidException;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class RoomDiff extends Diff implements Serializable {
     public RoomDiff(String name)  {
         super(name);
     }
+    String location=null;
+    Collection<String> addTools =null;
+    Collection<String> rmTools =null;
+    Collection<String> addContainer =null;
+    Collection<String> rmContainer =null;
+    Collection<String> addNPCs =null;
+    Collection<String> rmNPCs =null;
+
+
 
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
-        Room room ;
+        Room room;
         try {
-            room= World.roomMap.get(name);
-        }catch(Exception e){
-            throw new GameElementNotFoundException(name,"room");
+            room = World.roomMap.get(name);
+        } catch (Exception e) {
+            throw new GameElementNotFoundException(name, "room");
         }
-        try{ //Description
+        if (description != null) { //Description
             room.setDescription(getDescription());
-        }catch(Exception e){}
-        try{ //AddTool
-            for (String i:getAddTools()) {
-                World.toolMap.get(i).changeContainer(this.name);
-                room.addTool(i);
+        }
+        try{
+            if (addTools != null) {
+                for (String i : addTools) {
+                    World.toolMap.get(i).changeContainer(this.name);
+                    room.addTool(i);
+                }
             }
-        }catch(Exception e){}
-        try{  //RemoveTool
-            for (String i:getRmTools()) {
-                World.toolMap.get(i).setContainer(null);
-                room.getTools().remove(i);
+            if (rmTools != null) {
+                for (String i : rmTools) {
+                    World.toolMap.get(i).setContainer(null);
+                    room.getToolsContainer().removeTool(i);
+                }
             }
-        }catch(Exception e){}
-        try{ //AddContainer
-            for (String i:getAddContainer()) {
-                World.containerMap.get(i).changeContainer(this.name);
-                room.addContainer(i);
+            if (addContainer != null) {
+                for (String i : addContainer) {
+                    World.containerMap.get(i).changeContainer(this.name);
+                    room.addContainer(i);
+                }
             }
-        }catch(Exception e){}
-        try{  //RemoveContainer
-            for (String i:getRmContainer()) {
-                World.containerMap.get(i).changeContainer(null);
-                room.getContainers().remove(i);
+            if (rmContainer!=null){
+                    for (String i : rmContainer) {
+                        World.containerMap.get(i).changeContainer(null);
+                        room.getContainers().remove(i);
+                    }
+                }
+           if(addNPCs!=null){
+                for (String i : addNPCs) {
+                    World.npcMap.get(i).changeContainer(this.name);
+                    room.addNpcs(i);
+                }
             }
-        }catch(Exception e){}
-        try{ //AddNpcs
-            for (String i:getAddNpcs()) {
-                World.npcMap.get(i).changeContainer(this.name);
-                room.addNpcs(i);
+            if(rmNPCs!=null){
+                for (String i : rmNPCs) {
+                    World.containerMap.get(i).changeContainer(null);
+                    room.getNpcs().remove(i);
+                }
             }
-        }catch(Exception e){}
-        try{  //RemoveNpcs
-            for (String i:getRmNpcs()) {
-                World.containerMap.get(i).changeContainer(null);
-                room.getNpcs().remove(i);
+            if(location!=null){
+                room.changeLocation(getLocation());
             }
-        }catch(Exception e){}
-        try{ //Change Location
-            room.changeLocation(getLocation());
-        }catch(Exception e){}
+    }catch(Exception e){
+        e.printStackTrace();
+    }
     }
 
     @Override
@@ -137,6 +153,148 @@ public class RoomDiff extends Diff implements Serializable {
     }
 
     @Override
+    public void edit() {
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Raum Diff " + getName()  + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "add":
+                    switch(commands.get(1)){
+                        case "description":
+                            if (Input.getEditor() != null) {
+                                setDescription(Input.edit(getDescription()));
+                            } else {
+                                setDescription(Input.input("Beschreibung"));
+                            }
+                            System.out.println("Beschreibung hinzugefügt");
+                            break;
+                        case "location":
+                            if(commands.size()>2){
+                                setLocation(commands.get(2));
+                            }else {
+                                setLocation(Input.input("Ort"));
+                            }
+                            System.out.println("Ort hinzugefügt");
+                            break;
+                        case "addtools":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddTools(commands);
+                            System.out.println("Addtools hinzugefügt");
+                            break;
+                        case "rmtools":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmTools(commands);
+                            System.out.println("Rmtools hinzugefügt");
+                            break;
+                        case "addcontainer":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddContainer(commands);
+                            System.out.println("Addcontainer hinzugefügt");
+                            break;
+                        case "rmcontainer":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmContainer(commands);
+                            System.out.println("Rmcontainer hinzugefügt");
+                            break;
+                        case "addnpcs":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setAddNpcs(commands);
+                            System.out.println("AddNPCs hinzugefügt");
+                            break;
+                        case "rmnpcs":
+                            commands.removeFirst();
+                            if(commands.isEmpty()){
+                                System.out.println("Zu wenig Parameter");
+                                break;
+                            }
+                            setRmNpcs(commands);
+                            System.out.println("RmNPCs hinzugefügt");
+                            break;    
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    switch(commands.get(1)){
+                        case "description":
+                            setDescription(null);
+                            System.out.println("Beschreibung entfernt");
+                            break;
+                        case "location":
+                            setLocation(null);
+                            System.out.println("Ort entfernt");
+                            break;
+                        case "addtools":
+                            setAddTools(null);
+                            System.out.println("Addtools entfernt");
+                            break;
+                        case "rmtools":
+                            setRmTools(null);
+                            System.out.println("Rmtools entfernt");
+                            break;
+                        case "addcontainer":
+                            setAddContainer(null);
+                            System.out.println("Addcontainer entfernt");
+                            break;
+                        case "rmcontainer":
+                            setRmContainer(null);
+                            System.out.println("Rmcontainer entfernt");
+                            break;
+                        case "addnpcs":
+                            setAddNpcs(null);
+                            System.out.println("AddNPCs entfernt");
+                            break;
+                        case "rmnpcs":
+                            setRmNpcs(null);
+                            System.out.println("RmNPCs entfernt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
+    }
+
+    @Override
     public String toString() {
         String string="";
         string+=String.format("Diff von %s\n",name);
@@ -151,45 +309,45 @@ public class RoomDiff extends Diff implements Serializable {
         return string;
     }
     public void setLocation(String location)  {
-        differences.put("location",location);
+        this.location=location;
     }
     public String getLocation() {
-        return (String)differences.get("location");
+        return location;
     }
     public void setAddTools(Collection <String> tools){
-        differences.put("addtools",tools);
+        this.addTools=tools;
     }
     public Collection<String> getAddTools(){
-        return (Collection<String>) differences.get("addtools");
+        return addTools;
     }
     public void setRmTools(Collection <String> tools){
-        differences.put("romtools",tools);
+        this.rmTools=tools;
     }
     public Collection<String> getRmTools(){
-        return (Collection<String>) differences.get("rmtools");
+       return rmTools;
     }
     public void setAddContainer(Collection<String> container){
-        differences.put("addcontainer",container);
+        this.addContainer=container;
     }
     public Collection<String> getAddContainer(){
-        return (Collection<String>) differences.get("addcontainer");
+        return addContainer;
     }
     public void setRmContainer(Collection<String> container){
-        differences.put("rmcontainer",container);
+        this.rmContainer=container;
     }
     public Collection<String> getRmContainer(){
-        return (Collection<String>) differences.get("rmcontainer");
+        return rmContainer;
     }
     public void setAddNpcs(Collection<String> npcs){
-        differences.put("addnpcs",npcs);
+        this.addNPCs=npcs;
     }
     public Collection<String> getAddNpcs(){
-        return (Collection<String>) differences.get("addnpcs");
+        return addNPCs;
     }
     public void setRmNpcs(Collection<String> npcs){
-        differences.put("rmnpcs",npcs);
+       this.rmNPCs=npcs;
     }
     public Collection<String> getRmNpcs(){
-        return (Collection<String>) differences.get("rmnpcs");
+        return rmNPCs;
     }
 }

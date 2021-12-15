@@ -2,15 +2,21 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
+import com.textadventure.input.Input;
 import com.textadventure.things.Container;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class ContainerDiff extends Diff implements Serializable {
     public ContainerDiff(String name){
         super(name);
     }
+    private String room=null;
+    private Collection<String> addTools =null;
+    private Collection<String> rmTools =null;
 
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
@@ -20,26 +26,34 @@ public class ContainerDiff extends Diff implements Serializable {
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"container");
         }
+        if(description!=null) { //Description
+            container.setDescription(description);
+        }
+       if(room!=null){ //Current Room
+           try {
+               container.changeContainer(room);
+           }catch(Exception e){
+               System.out.println(e.getMessage());
+           }
+       }
+       try{
+       if(addTools!=null){
+               for (String i:addTools) {
+                   World.toolMap.get(i).changeContainer(this.name);
+                   container.addTool(i);
+               }
+       }
+        if(rmTools!=null){
+                for (String i:rmTools) {
+                    World.toolMap.get(i).setContainer(null);
+                    container.removeTool(i);
+                }
+        }}
+        catch(Exception e){
+           e.printStackTrace();
+        }
+       }
 
-        try{ //Description
-            container.setDescription(getDescription());
-        }catch(Exception e){}
-        try{  //CurrentContainer
-           container.changeContainer(getRoom());
-        }catch(Exception e){}
-        try{ //AddTool
-            for (String i:getAddTools()) {
-                World.toolMap.get(i).changeContainer(this.name);
-                container.addTool(i);
-            }
-        }catch(Exception e){}
-        try{  //RemoveTool
-            for (String i:getRmTools()) {
-                World.toolMap.get(i).setContainer(null);
-                container.removeTool(i);
-            }
-        }catch(Exception e){}
-    }
 
     @Override
     public boolean check() {
@@ -75,6 +89,97 @@ public class ContainerDiff extends Diff implements Serializable {
     }
 
     @Override
+    public void edit() {
+            boolean exit = false;
+            Scanner scanner = new Scanner(System.in);
+            LinkedList<String> commands;
+            String input;
+            while(!exit) {
+                System.out.print("Container Diff " + getName()  + ">> ");
+                input = scanner.nextLine();
+                commands = Input.splitInput(input);
+                if (commands == null) continue;
+                switch (commands.get(0)) {
+                    case "add":
+                        switch(commands.get(1)){
+                            case "description":
+                                if (Input.getEditor() != null) {
+                                    setDescription(Input.edit(getDescription()));
+                                } else {
+                                    setDescription(Input.input("Beschreibung"));
+                                }
+                                System.out.println("Beschreibung hinzugefügt");
+                                break;
+                            case "room":
+                                if(commands.size()>2){
+                                    setRoom(commands.get(2));
+                                }else {
+                                    setRoom(Input.input("Raum"));
+                                }
+                                System.out.println("Raum hinzugefügt");
+                                break;
+                            case "addtools":
+                                commands.removeFirst();
+                                if(commands.isEmpty()){
+                                    System.out.println("Zu wenig Parameter");
+                                    break;
+                                }
+                                setAddTools(commands);
+                                System.out.println("Addtools hinzugefügt");
+                                break;
+                            case "rmtools":
+                                commands.removeFirst();
+                                if(commands.isEmpty()){
+                                    System.out.println("Zu wenig Parameter");
+                                    break;
+                                }
+                                setRmTools(commands);
+                                System.out.println("Rmtools hinzugefügt");
+                                break;
+                            default:
+                                System.out.println("Parameter ungültig");
+                                break;
+                        }
+                        break;
+                    case "rm":
+                        switch(commands.get(1)){
+                            case "description":
+                                setDescription(null);
+                                System.out.println("Beschreibung entfernt");
+                                break;
+                            case "room":
+                                setRoom(null);
+                                System.out.println("Raum entfernt");
+                                break;
+                            case "addtools":
+                                setAddTools(null);
+                                System.out.println("Addtools entfernt");
+                                break;
+                            case "rmtools":
+                                setRmTools(null);
+                                System.out.println("Rmtools entfernt");
+                                break;
+                            default:
+                                System.out.println("Parameter ungültig");
+                                break;
+                        }
+                        break;
+                    case "show":
+                        System.out.println(this.toString());
+                        break;
+                    case "back":
+                        return;
+                    case "help":
+                        //TODO help
+                    default:
+                        System.out.println("Befehl nicht gefunden");
+                        break;
+                }
+            }
+
+    }
+
+    @Override
     public String toString() {
         String string="";
         string+=String.format("Diff von %s\n",name);
@@ -86,21 +191,23 @@ public class ContainerDiff extends Diff implements Serializable {
     }
 
     public void setRoom(String room)  {
-        differences.put("room",room);
+        this.room=room;
     }
     public String getRoom()  {
-        return (String)differences.get("room");
+        return room;
     }
+
     public void setAddTools(Collection<String> tools){
-        differences.put("addtools",tools);
+        this.addTools =tools;
     }
     public Collection<String> getAddTools(){
-        return (Collection<String>) differences.get("addtools");
+        return addTools;
     }
+
     public void setRmTools(Collection <String> tools){
-        differences.put("romtools",tools);
+        this.rmTools =tools;
     }
     public Collection<String> getRmTools(){
-        return (Collection<String>) differences.get("rmtools");
+        return rmTools;
     }
 }

@@ -1,22 +1,15 @@
 package com.textadventure;
 
-import com.textadventure.Event.ContainerDiff;
 import com.textadventure.Story.World;
 import com.textadventure.characters.Player;
-import com.textadventure.exeptions.ExitNotFoundException;
-import com.textadventure.exeptions.ItemNotFoundException;
-import com.textadventure.exeptions.ItemNotFoundInContainerException;
-import com.textadventure.exeptions.NoBackException;
+import com.textadventure.input.Game;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
@@ -28,16 +21,24 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
-        World.worldEditor("world.world");
+        //World.worldEditor("world.world");
+
+        Map map = World.containerMap;
+
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
         Room house = new Room("Haus", "Ein kleines Haus mit Garten");
         Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus");
         Exit door = new Exit("Tür", "Hier geht es zum Garten");
-        Container chest = new Container("Truhe", "Eine alte Trueh in der Ecke");
+        Container chest = new Container("Truhe", "Eine alte Truhe in der Ecke");
+        chest.setContainer("Haus");
+        house.addContainer("Truhe");
         Tool hammer = new Tool("Hammer", "Ein alter rostiger Hammer");
-        hammer.setContainer("Haus");
-        house.addTool("Hammer");
+        //TODO: de nächsten 2 Zeilen kannt man woll irgendwia zommfossen
+        hammer.setContainer("Truhe");
+        chest.addTool("Hammer");
         Tool apple = new Tool("Apfel", "Ein reifer roter Apfel");
+        apple.setContainer("Garten");
+        yard.addTool("Apfel");
 
         World.locationMap.put(village.getName(), village);
         World.roomMap.put(house.getName(), house);
@@ -58,7 +59,13 @@ public class Main {
 
         village.addRoom(house.name);
         village.addRoom(yard.name);
+        house.setLocation(village.getName());
+        yard.setLocation(village.getName());
 
+        World.player = new Player("Stefe", "Ein junger Mann", house);
+
+        Game.start("");
+        /*
         //Github Copilot hot mo de description vorgschlog, obo de isch et letz
         World.player = new Player("Stefe", "Manchmal frage ich mich, wer bin ich überhaupt?", house);
 
@@ -69,7 +76,7 @@ public class Main {
             System.out.println("Du hast nun einen " + World.player.getTools().toString() + " in deinem Rucksack\n");
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 /*
         try {
             World.player.changeRoom("Tür");

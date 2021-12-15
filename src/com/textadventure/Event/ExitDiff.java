@@ -2,32 +2,42 @@ package com.textadventure.Event;
 
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class ExitDiff extends Diff implements Serializable {
     public ExitDiff(String name){
         super(name);
     }
 
+    private String destination1=null;
+    private String destination2= null;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
-        Exit exit ;
+        Exit exit;
         try {
-            exit= World.exitMap.get(name);
-        }catch(Exception e){
-            throw new GameElementNotFoundException(name,"exit");
+            exit = World.exitMap.get(name);
+        } catch (Exception e) {
+            throw new GameElementNotFoundException(name, "exit");
         }
-        try{ //Description
-            exit.setDescription(getDescription());
-        }catch(Exception e){}
-        try{ //Destination1
-            exit.changeDestination(getDestination1(),false);
-        }catch(Exception e){}
-        try{ //Destination1
-            exit.changeDestination(getDestination2(),true);
-        }catch(Exception e){}
+        if (description != null) { //Description
+            exit.setDescription(description);
+        }
+        try {
+            if (destination1 != null) {//Destination1
+                    exit.changeDestination(getDestination1(), false);
+
+            }
+            if (destination2 != null) {//Destination2
+                    exit.changeDestination(getDestination2(), true);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -60,15 +70,93 @@ public class ExitDiff extends Diff implements Serializable {
         return string;
     }
     public void setDestination1(String destination1)  {
-        differences.put("destination1",destination1);
+        this.destination1=destination1;
     }
     public String getDestination1()  {
-        return (String)differences.get("destination1");
+        return destination1;
     }
     public void setDestination2(String destination2)  {
-        differences.put("destination2",destination2);
+        this.destination2=destination2;
     }
     public String getDestination2()  {
-        return (String)differences.get("destination2");
+        return destination2;
+    }
+
+
+    @Override
+    public void edit() {
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Exit Diff " + getName()  + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "add":
+                    switch(commands.get(1)){
+                        case "description":
+                            if (Input.getEditor() != null) {
+                                setDescription(Input.edit(getDescription()));
+                            } else {
+                                setDescription(Input.input("Beschreibung"));
+                            }
+                            System.out.println("Beschreibung hinzugefügt");
+                            break;
+                        case "destination1":
+                            if(commands.size()>2){
+                                setDestination1(commands.get(2));
+                            }else {
+                                setDestination1(Input.input("Destination1"));
+                            }
+                            System.out.println("Destination1 hinzugefügt");
+                            break;
+                        case "destination2":
+                            if(commands.size()>2){
+                                setDestination2(commands.get(2));
+                            }else {
+                                setDestination2(Input.input("Destination2"));
+                            }
+                            System.out.println("Destination2 hinzugefügt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    switch(commands.get(1)){
+                        case "description":
+                            setDescription(null);
+                            System.out.println("Beschreibung entfernt");
+                            break;
+                        case "destination1":
+                            setDestination1(null);
+                            System.out.println("Raum entfernt");
+                            break;
+                        case "destination2":
+                            setDestination2(null);
+                            System.out.println("Raum entfernt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
+
     }
 }

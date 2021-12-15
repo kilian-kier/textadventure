@@ -3,17 +3,20 @@ package com.textadventure.Event;
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.TypeDoesNotExistException;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Room;
 import com.textadventure.things.Tool;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class ToolDiff extends Diff implements Serializable {
     public ToolDiff(String name){
         super(name);
     }
-
+    private String container;
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
         Tool tool ;
@@ -22,12 +25,16 @@ public class ToolDiff extends Diff implements Serializable {
         }catch(Exception e){
             throw new GameElementNotFoundException(name,"tool");
         }
-        try{ //Description
+        if(description!=null){
             tool.setDescription(getDescription());
-        }catch(Exception e){}
-        try{
-            tool.changeContainer(getContainer());
-        }catch(Exception e){}
+        }
+        if(container!=null){
+            try {
+                tool.changeContainer(getContainer());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -43,6 +50,74 @@ public class ToolDiff extends Diff implements Serializable {
         }
         return ret;
     }
+
+    @Override
+    public void edit() {
+        boolean exit = false;
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> commands;
+        String input;
+        while(!exit) {
+            System.out.print("Tool Diff " + getName()  + ">> ");
+            input = scanner.nextLine();
+            commands = Input.splitInput(input);
+            if (commands == null) continue;
+            switch (commands.get(0)) {
+                case "add":
+                    switch(commands.get(1)){
+                        case "description":
+                            if (Input.getEditor() != null) {
+                                setDescription(Input.edit(getDescription()));
+                            } else {
+                                setDescription(Input.input("Beschreibung"));
+                            }
+                            System.out.println("Beschreibung hinzugefügt");
+                            break;
+                        case "container":
+                            if(commands.size()>2){
+                                setContainer(commands.get(2));
+                            }else {
+                                setContainer(Input.input("Container"));
+                            }
+                            System.out.println("Container hinzugefügt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    switch(commands.get(1)){
+                        case "description":
+                            setDescription(null);
+                            System.out.println("Beschreibung entfernt");
+                            break;
+                        case "container":
+                            setContainer(null);
+                            System.out.println("Container entfernt");
+                            break;
+                        default:
+                            System.out.println("Parameter ungültig");
+                            break;
+                    }
+                    break;
+                case "show":
+                    System.out.println(this.toString());
+                    break;
+                case "back":
+                    return;
+                case "help":
+                    //TODO help
+                default:
+                    System.out.println("Befehl nicht gefunden");
+                    break;
+            }
+        }
+
+    }
+
+
+
     @Override
     public String toString() {
         String string="";
@@ -52,9 +127,9 @@ public class ToolDiff extends Diff implements Serializable {
         return string;
     }
     public void setContainer(String container)  {
-        differences.put("container",container);
+        this.container=container;
     }
     public String getContainer()  {
-        return (String)differences.get("container");
+        return container;
     }
 }
