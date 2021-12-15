@@ -29,7 +29,7 @@ public class Main {
         Room house = new Room("Haus", "Ein kleines Haus mit Garten");
         Room yard = new Room("Garten", "Ein Garten mit hinter dem Haus");
         Exit door = new Exit("Tür", "Hier geht es zum Garten");
-        Container chest = new Container("Truhe", "Eine alte Trueh in der Ecke");
+        Container chest = new Container("Truhe", "Eine alte Truhe in der Ecke");
         chest.setContainer("Haus");
         house.addContainer("Truhe");
         Tool hammer = new Tool("Hammer", "Ein alter rostiger Hammer");
@@ -59,6 +59,8 @@ public class Main {
 
         village.addRoom(house.name);
         village.addRoom(yard.name);
+        house.setLocation(village.getName());
+        yard.setLocation(village.getName());
 
         World.player = new Player("Stefe", "Ein junger Mann", house);
 
