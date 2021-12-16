@@ -58,11 +58,14 @@ public class Help {
     /**
      * Die Funktion gibt einen String mit einer Hilfe zu einem bestimmten Thema zurück
      * @param type Name der Help Datei in der gesucht werden soll (Ohne Dateiendung)
-     * @param parameter Der String nach dem gesucht werden soll
+     * @param parameter Der String nach dem gesucht werden soll, ist der Parameter null wird nach std (Standard Ausgabe) gesucht
      * @return Gibt String mit Hilfe zurück
      * @throws NoHelpFoundException Wird keine Hilfe gefunden wird dies Exception geworfen
      */
     public static String help(String type, String parameter) throws NoHelpFoundException {
+        if(parameter==null){
+            parameter="std";
+        }
         try {
             String temp;
             temp=hilfe.get(type).getProperty(parameter);

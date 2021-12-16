@@ -41,7 +41,7 @@ public class Game {
         while (true) {
             System.out.printf("%s@%s >>> ", firstCap(World.player.getName()), firstCap(World.player.getCurrentRoom().getName()));
             input = scanner.nextLine();
-            cmd = World.splitInput(input);
+            cmd = Input.splitInput(input);
             if (cmd == null)
                 continue;
             if (cmd.get(0).equals("exit"))

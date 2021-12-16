@@ -1,13 +1,15 @@
 package com.textadventure.characters;
 
+import com.textadventure.Story.Help;
 import com.textadventure.input.Input;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Dialog {
+public class Dialog implements Serializable {
     private ArrayList<String[]> dialog=new ArrayList<>();
 
     public ArrayList<String[]> getDialog() {
@@ -74,7 +76,7 @@ public class Dialog {
                     if(commands.size()>1){
                         try {
                             dialog.add(Integer.parseInt(commands.get(1)),inputQA());
-                        }catch(NumberFormatException e){
+                        }catch(Exception e){
                             System.out.println("Ungültiger Parameter");
                         }
                         System.out.println("Dialog bei Index " + Integer.valueOf(commands.get(1)) + " hinzugefügt");
@@ -87,7 +89,7 @@ public class Dialog {
                     if(commands.size()>1){
                         try {
                             dialog.remove(Integer.parseInt(commands.get(1)));
-                        }catch(NumberFormatException e){
+                        }catch(Exception e){
                             System.out.println("Ungültiger Parameter");
                         }
                         System.out.println("Dialog bei Index " + Integer.valueOf(commands.get(1)) + " entfernt");
@@ -101,7 +103,16 @@ public class Dialog {
                 case "back":
                     return;
                 case "help":
-                    //TODO help
+                    try{
+                        if(commands.size()>1) {
+                            System.out.println(Help.help("DialogEditor", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("DialogEditor", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 default:
                     System.out.println("Befehl nicht gefunden");
                     break;
@@ -129,6 +140,9 @@ public class Dialog {
                     e.printStackTrace();
                 }
             }
+            if (string.equals("")){
+                return null;
+        }
         return string;
     }
 }

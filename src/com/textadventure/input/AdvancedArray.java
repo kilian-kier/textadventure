@@ -1,8 +1,9 @@
 package com.textadventure.input;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class AdvancedArray <T> {
+public class AdvancedArray <T> implements Serializable {
     private final T[] array;
     AdvancedArray(T[] elements) {
         array = elements;
