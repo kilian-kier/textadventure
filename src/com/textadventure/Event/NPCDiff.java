@@ -94,55 +94,63 @@ public class NPCDiff extends Diff implements Serializable {
             if (commands == null) continue;
             switch (commands.get(0)) {
                 case "add":
-                    switch(commands.get(1)){
-                        case "description":
-                            if (Input.getEditor() != null) {
-                                setDescription(Input.edit(getDescription()));
-                            } else {
-                                setDescription(Input.input("Beschreibung"));
-                            }
-                            System.out.println("Beschreibung hinzugefügt");
-                            break;
-                        case "room":
-                            if(commands.size()>2){
-                                setRoom(commands.get(2));
-                            }else {
-                                setRoom(Input.input("Raum"));
-                            }
-                            System.out.println("Raum hinzugefügt");
-                            break;
-                        case "dialog":
-                            commands.removeFirst();
-                            if(commands.isEmpty()){
-                                System.out.println("Zu wenig Parameter");
+                    try {
+                        switch (commands.get(1)) {
+                            case "description":
+                                if (Input.getEditor() != null) {
+                                    setDescription(Input.edit(getDescription()));
+                                } else {
+                                    setDescription(Input.input("Beschreibung"));
+                                }
+                                System.out.println("Beschreibung hinzugefügt");
                                 break;
-                            }
-                            dialog=new Dialog();
-                            dialog.edit();
-                            System.out.println("Dialog hinzugefügt");
-                            break;
-                        default:
-                            System.out.println("Parameter ungültig");
-                            break;
+                            case "room":
+                                if (commands.size() > 2) {
+                                    setRoom(commands.get(2));
+                                } else {
+                                    setRoom(Input.input("Raum"));
+                                }
+                                System.out.println("Raum hinzugefügt");
+                                break;
+                            case "dialog":
+                                commands.removeFirst();
+                                if (commands.isEmpty()) {
+                                    System.out.println("Zu wenig Parameter");
+                                    break;
+                                }
+                                dialog = new Dialog();
+                                dialog.edit();
+                                System.out.println("Dialog hinzugefügt");
+                                break;
+                            default:
+                                System.out.println("Parameter ungültig");
+                                break;
+                        }
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Prameter");
                     }
                     break;
                 case "rm":
-                    switch(commands.get(1)){
-                        case "description":
-                            setDescription(null);
-                            System.out.println("Beschreibung entfernt");
-                            break;
-                        case "room":
-                            setRoom(null);
-                            System.out.println("Raum entfernt");
-                            break;
-                        case "dialog":
-                            dialog=null;
-                            System.out.println("Dialog entfernt");
-                            break;
-                        default:
-                            System.out.println("Parameter ungültig");
-                            break;
+                    try {
+                        switch (commands.get(1)) {
+                            case "description":
+                                setDescription(null);
+                                System.out.println("Beschreibung entfernt");
+                                break;
+                            case "room":
+                                setRoom(null);
+                                System.out.println("Raum entfernt");
+                                break;
+                            case "dialog":
+                                dialog = null;
+                                System.out.println("Dialog entfernt");
+                                break;
+                            default:
+                                System.out.println("Parameter ungültig");
+                                break;
+                        }
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Parameter");
                     }
                     break;
                 case "show":

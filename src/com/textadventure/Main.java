@@ -24,18 +24,18 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
-        //World.worldEditor("world.world");
 
         Help.load("help");
         String currentDirectory = System.getProperty("user.dir");
         System.out.println("The current working directory is " + currentDirectory);
 
         try{
-            System.out.println(Help.help("TestHelp", "test"));
+            System.out.println(Help.help("DialogEditor", "set"));
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
 
+        World.worldEditor("world.world");
         Map map = World.containerMap;
 
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
