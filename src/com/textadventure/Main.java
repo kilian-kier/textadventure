@@ -1,5 +1,6 @@
 package com.textadventure;
 
+import com.textadventure.Story.Help;
 import com.textadventure.Story.World;
 import com.textadventure.characters.Player;
 import com.textadventure.input.Game;
@@ -9,7 +10,9 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.io.*;
 import java.util.Map;
+import java.util.Properties;
 
 public class Main {
 
@@ -22,6 +25,16 @@ public class Main {
         System.out.println(diff);*/
 
         //World.worldEditor("world.world");
+
+        Help.load("help");
+        String currentDirectory = System.getProperty("user.dir");
+        System.out.println("The current working directory is " + currentDirectory);
+
+        try{
+            System.out.println(Help.help("TestHelp", "test"));
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
 
         Map map = World.containerMap;
 

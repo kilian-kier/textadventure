@@ -4,7 +4,6 @@ import com.textadventure.GameElement;
 import com.textadventure.Story.World;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -34,6 +33,9 @@ public class Location extends GameElement implements Serializable {
         return rooms.get(index);
     }
 
+    public boolean removeRoom (String name){
+        return rooms.remove(name);
+    }
     public void removeAllRooms() {
         rooms.clear();
     }

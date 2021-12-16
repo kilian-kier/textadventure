@@ -70,8 +70,8 @@ public class Container extends Item implements Serializable {
     public void removeAllTools() {
         tools.clear();
     }
-    public String removeTool(String name) {
-        tools.remove(name);
-        return name;
+    public boolean removeTool(String name) {
+        return tools.remove(name);
     }
+
 }

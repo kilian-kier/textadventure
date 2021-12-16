@@ -93,13 +93,24 @@ public class Input {
         return input;
     }
 
+    static public LinkedList<String> getCommand() {
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<String> command;
+        String input;
+        do {
+            input = scanner.nextLine();
+            command = splitInput(input);
+        } while (command == null);
+        return command;
+    }
+
     static public String input(String string) {
         Scanner scanner = new Scanner(System.in);
         String input = "";
         System.out.print(string+": ");
         while (input.length() == 0)
             input = scanner.nextLine();
-        return input;
+        return input.toLowerCase();
     }
 
     static public LinkedList<String> splitInput (String input){
