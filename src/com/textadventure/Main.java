@@ -1,5 +1,6 @@
 package com.textadventure;
 
+import com.textadventure.Story.Help;
 import com.textadventure.Story.World;
 import com.textadventure.characters.Player;
 import com.textadventure.input.Game;
@@ -9,7 +10,9 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.io.*;
 import java.util.Map;
+import java.util.Properties;
 
 public class Main {
 
@@ -21,8 +24,17 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
+
+        Help.load("help");
         World.worldEditor("world.world");
 
+        try{
+            System.out.println(Help.help("DialogEditor", "set"));
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        World.worldEditor("world.world");
         Map map = World.containerMap;
 
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
