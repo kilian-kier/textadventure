@@ -67,9 +67,6 @@ public class Container extends Item implements Serializable {
         return this.tools;
     }
 
-    public void removeAllTools() {
-        tools.clear();
-    }
     public boolean removeTool(String name) {
         return tools.remove(name);
     }

@@ -26,8 +26,7 @@ public class Main {
 
 
         Help.load("help");
-        String currentDirectory = System.getProperty("user.dir");
-        System.out.println("The current working directory is " + currentDirectory);
+        World.worldEditor("world.world");
 
         try{
             System.out.println(Help.help("DialogEditor", "set"));
