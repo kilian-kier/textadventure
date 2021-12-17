@@ -21,7 +21,7 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
-        //World.worldEditor("world.world");
+        World.worldEditor("world.world");
 
         Map map = World.containerMap;
 

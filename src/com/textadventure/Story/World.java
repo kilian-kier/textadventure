@@ -3,9 +3,11 @@ package com.textadventure.Story;
 
 import com.textadventure.Event.Event;
 import com.textadventure.GameElement;
+import com.textadventure.characters.Dialog;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
+import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
@@ -52,8 +54,10 @@ public class World {
                 case "edit":
                     try {
                         editGameElement(commands);
-                    } catch (IndexOutOfBoundsException | ElementNotFoundException e) {
+                    } catch (IndexOutOfBoundsException e) {
                         System.out.println("Zu wenig Argumente");
+                    }catch (ElementNotFoundException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "show":
@@ -91,7 +95,7 @@ public class World {
                 case "include":
                     try {
                         LoadStoreWorld.include(commands.get(1));
-                    }catch(IndexOutOfBoundsException e){
+                    } catch (IndexOutOfBoundsException e) {
                         System.out.println("Zu wenig Parameter");
                     }
                     break;
@@ -112,20 +116,18 @@ public class World {
         }
     }
 
-
-    static private void editTool(Tool temp) {
+    static private boolean editTool(Tool temp) {
         while (true) {
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit":
-                    return;
+                case "back":
+                    return true;
                 case "set":
                     switch (command.get(1)) {
                         case "description" -> temp.setDescription(Input.input("description"));
                         case "room" -> {
-                            String input = Input.input("raum");
-                            if (roomMap.containsKey(input)) temp.setContainer(input);
-                            else System.out.println("Raum nicht gefunden");
+                            if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
+                            else System.out.println(command.get(2) + "nicht gefunden");
                         }
                         default -> System.out.println("command not found");
                     }
@@ -136,27 +138,34 @@ public class World {
             }
         }
     }
-
-    static private void editContainer(Container temp) {
+    static private boolean editContainer(Container temp) {
         while (true) {
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit":
-                    return;
-                case "add":
-                    if (toolMap.containsKey(command.get(1))) temp.addTool(command.get(1));
-                    else System.out.println("Tool nicht gefunden");
+                case "back":
+                    return true;
+                case"show":
+                    System.out.println(temp.toString());
                     break;
-                case "remove":
-                    if (!temp.removeTool(Input.input(command.get(1)))) System.out.println("Element nicht gefunden!");
+                case "add":
+                    command.removeFirst();
+                    for (String x : command) {
+                        if (toolMap.containsKey(x)) temp.addTool(x);
+                        else System.out.println(x + " nicht gefunden");
+                    }
+                    break;
+                case "rm":
+                    command.removeFirst();
+                    for (String x : command) {
+                        if (!temp.removeTool(x)) System.out.println(" nicht gefunden!");
+                    }
                     break;
                 case "set":
                     switch (command.get(1)) {
                         case "description" -> temp.setDescription(Input.input("description"));
                         case "room" -> {
-                            String input = Input.input("raum");
-                            if (roomMap.containsKey(input)) temp.setContainer(input);
-                            else System.out.println("Raum nicht gefunden");
+                            if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
+                            else System.out.println(command.get(2) + "nicht gefunden");
                         }
                         default -> System.out.println("command not found");
                     }
@@ -167,20 +176,29 @@ public class World {
             }
         }
     }
-
-    static private void editLocation(Location temp) {
+    static private boolean editLocation(Location temp) {
         while (true) {
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit":
-                    return;
+                case "back":
+                    return true;
+                case"show":
+                    System.out.println(temp.toString());
+                    break;
                 case "add":
-                    if (roomMap.containsKey(command.get(1))) temp.addRoom(command.get(2));
-                    else System.out.println("Raum nicht gefunden");
+                    command.removeFirst();
+                    for (String x : command) {
+                        if (roomMap.containsKey(x)) temp.addRoom(x);
+                        else System.out.println(x + " nicht gefunden");
+                    }
                     break;
-                case "remove":
-                    if (!temp.removeRoom(Input.input(command.get(1)))) System.out.println("Element nicht gefunden!");
+                case "rm":
+                    command.removeFirst();
+                    for (String x : command) {
+                        if (!temp.removeRoom(x)) System.out.println(x+ " nicht gefunden!");
+                    }
                     break;
+
                 case "set":
                     if ("description".equals(command.get(1))) {
                         temp.setDescription(Input.input("description"));
@@ -194,27 +212,24 @@ public class World {
             }
         }
     }
-
-    private static void editExit(Exit temp) {
+    private static boolean editExit(Exit temp) {
         while (true) {
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit":
-                    return;
-                case "info":
-                    System.out.println("Destination1: " + temp.getDestination1() + "\nDestination2: " + temp.getDestination2());
+                case "back":
+                    return true;
+                case"show":
+                    System.out.println(temp.toString());
                     break;
                 case "set":
                     switch (command.get(1)) {
                         case "destination1" -> {
-                            String input = Input.input("destination");
-                            if (roomMap.containsKey(input)) temp.setDestination1(input);
-                            else System.out.println("Raum nicht gefunden");
+                            if (roomMap.containsKey(command.get(2))) temp.setDestination1(command.get(2));
+                            else System.out.println(command.get(2)+" nicht gefunden");
                         }
                         case "destination2" -> {
-                            String input = Input.input("destination");
-                            if (roomMap.containsKey(input)) temp.setDestination2(input);
-                            else System.out.println("Raum nicht gefunden");
+                            if (roomMap.containsKey(command.get(2))) temp.setDestination2(command.get(2));
+                            else System.out.println(command.get(2)+" nicht gefunden");
                         }
                         case "description" -> temp.setDescription(Input.input("description"));
                         default -> System.out.println("command not found");
@@ -226,30 +241,25 @@ public class World {
             }
         }
     }
-
-    private static void editNpc(NPC temp) {
+    private static boolean editNpc(NPC temp) {
         while (true) {
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit":
-                    return;
-                case "add":
-                    String[] dialog = new String[3];
-                    dialog[0] = Input.input("Frage");
-                    dialog[1] = Input.input("Antwort");
-                    dialog[2] = Input.input("Event");
-                    temp.addDialog(dialog);
+                case "back":
+                    return true;
+                case"show":
+                    System.out.println(temp.toString());
                     break;
-                case "remove":
-                    //TODO Wie soll Dialog gelöscht werden
+                case "add":
+                case "rm":
+                    temp.getDialog().edit();
                     break;
                 case "set":
                     switch (command.get(1)) {
                         case "description" -> temp.setDescription(Input.input("description"));
                         case "room" -> {
-                            String input = Input.input("raum");
-                            if (roomMap.containsKey(input)) temp.setRoom(input);
-                            else System.out.println("Raum nicht gefunden");
+                            if (roomMap.containsKey(command.get(2))) temp.setRoom(command.get(2));
+                            else System.out.println(command.get(2)+" nicht gefunden");
                         }
                         default -> System.out.println("command not found");
                     }
@@ -260,23 +270,84 @@ public class World {
             }
         }
     }
-
-    private static void editRoom(Room temp) {
+    private static boolean editRoom(Room temp) {
         while (true) {
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
-                case "exit":
-                    return;
+                case "back":
+                    return true;
+                case"show":
+                    System.out.println(temp.toString());
+                    break;
                 case "set":
                     switch (command.get(1)) {
                         case "description" -> temp.setDescription(Input.input("description"));
-                        case "location" -> temp.setLocation(Input.input("location"));
+                        case "location" -> {
+                            if (locationMap.containsKey(command.get(2))) temp.setLocation(command.get(2));
+                            else System.out.println(command.get(2) + " nicht gefunden");
+                        }
                         default -> System.out.println("command not found");
                     }
-
-                    //Location Items Exits NPC Tools Container
-
-
+                case "add":
+                    command.removeFirst();
+                    switch (command.get(1)) {
+                        case "exit":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (exitMap.containsKey(x)) temp.addExit(x);
+                                else System.out.println(x + " nicht gefunden");
+                            }
+                        case "npc":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (npcMap.containsKey(x)) temp.addNpcs(x);
+                                else System.out.println(x + " nicht gefunden");
+                            }
+                        case "tool":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (toolMap.containsKey(x)) temp.addTool(x);
+                                else System.out.println(x + " nicht gefunden");
+                            }
+                        case "container":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (containerMap.containsKey(x)) temp.addContainer(x);
+                                else System.out.println(x + " nicht gefunden");
+                            }
+                        default:
+                            System.out.println("command not found");
+                            break;
+                    }
+                    break;
+                case "rm":
+                    command.removeFirst();
+                    switch (command.get(1)) {
+                        case "exit":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (! temp.removeExit(x)) System.out.println(x + " nicht gefunden");
+                            }
+                        case "npc":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (! temp.removeNpc(x)) System.out.println(x + " nicht gefunden");
+                            }
+                        case "tool":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (! temp.removeToolsKey(x)) System.out.println(x + " nicht gefunden");
+                            }
+                        case "container":
+                            command.removeFirst();
+                            for (String x : command) {
+                                if (! temp.removeContainer(x)) System.out.println(x + " nicht gefunden");
+                            }
+                        default:
+                            System.out.println("command not found");
+                            break;
+                    }
+                    break;
                 default:
                     System.out.println("command not found");
                     break;
@@ -285,19 +356,16 @@ public class World {
     }
 
 
-    static private void editEvent(LinkedList<String> args) {
-    }
-
-
     static private void editGameElement(LinkedList<String> args) throws ElementNotFoundException {
-        if (toolMap.containsKey(args.get(1))) editTool(toolMap.get(args.get(1)));
-        else if (exitMap.containsKey(args.get(1))) editExit(exitMap.get(args.get(1)));
-        else if (locationMap.containsKey(args.get(1))) editLocation(locationMap.get(args.get(1)));
-        else if (containerMap.containsKey(args.get(1))) editContainer(containerMap.get(args.get(1)));
-        else if (roomMap.containsKey(args.get(1))) editRoom(roomMap.get(args.get(1)));
-        else if (npcMap.containsKey(args.get(1))) editNpc(npcMap.get(args.get(1)));
-            //else if //TODO Event
-        else System.out.println("element not found");
+        //TODO Auf Funktion unbauen
+        if (editTool((Tool) getElement(args.get(1), "tool"))) return;
+        if (editContainer((Container) getElement(args.get(1), "container"))) return;
+        if (editExit((Exit) getElement(args.get(1), "exit"))) return;
+        if (editRoom((Room) getElement(args.get(1), "room"))) return;
+        if (editNpc((NPC) getElement(args.get(1), "npc"))) return;
+        if (editLocation((Location) getElement(args.get(1), "location"))) return;
+        if (EventEditor.edit(args.get(1))) return;
+        throw new ElementNotFoundException(args.get(1),"Game Element");
     }
 
 
@@ -435,4 +503,4 @@ public class World {
     }
 }
 
-    //TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn
+//TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn
