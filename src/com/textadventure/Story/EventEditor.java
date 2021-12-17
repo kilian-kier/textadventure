@@ -15,7 +15,7 @@ import java.util.Scanner;
  * Event Editor zum bearbeiten von Events
  */
 public class EventEditor {
-    public static void edit(String name) {
+    public static boolean edit(String name) {
         Event event=null;
         if (name == null) {
             name = Input.input("Name");
@@ -27,7 +27,7 @@ public class EventEditor {
                 event = new Event(name);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                return;
+                return false;
             }
             String access = Input.input("Auslöser");
             event.storeEvent(Input.splitInput(access));
@@ -117,7 +117,7 @@ public class EventEditor {
                     }
                     break;
                 case "back":
-                    return;
+                    return true;
                 case "help" :
                     //TODO help
                     break;
@@ -126,7 +126,7 @@ public class EventEditor {
                     break;
             }
         }
-        return;
+        return false;
     }
     private static Diff newDiff(LinkedList<String> args,Event event) throws IndexOutOfBoundsException, ElementExistsException {
         String name ;
