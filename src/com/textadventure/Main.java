@@ -1,7 +1,6 @@
 package com.textadventure;
 
-import com.textadventure.Story.Help;
-import com.textadventure.Story.World;
+import com.textadventure.Story.*;
 import com.textadventure.characters.Player;
 import com.textadventure.input.Game;
 import com.textadventure.locations.Exit;
@@ -34,7 +33,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        World.worldEditor("world.world");
+        /*World.worldEditor("world.world");
         Map map = World.containerMap;
 
         Location village = new Location("Dorf", "Ein Dorf in Lusina");
@@ -74,9 +73,9 @@ public class Main {
         house.setLocation(village.getName());
         yard.setLocation(village.getName());
 
-        World.player = new Player("Stefe", "Ein junger Mann", house);
+        World.player = new Player("Stefe", "Ein junger Mann", house);*/
 
-        Game.start("");
+        Game.start("world.world");
         /*
         //Github Copilot hot mo de description vorgschlog, obo de isch et letz
         World.player = new Player("Stefe", "Manchmal frage ich mich, wer bin ich überhaupt?", house);
