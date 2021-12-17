@@ -1,7 +1,7 @@
 package com.textadventure.input;
 
 import com.textadventure.Event.Event;
-import com.textadventure.Story.World;
+import com.textadventure.Story.*;
 import com.textadventure.characters.NPC;
 import com.textadventure.exeptions.*;
 import com.textadventure.locations.Exit;
@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Game {
+
     public static AdvancedArray<String> commands = new AdvancedArray<>(new String[]{
             "nehme",
             "gehe",
