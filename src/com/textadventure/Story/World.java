@@ -56,7 +56,7 @@ public class World {
                         editGameElement(commands);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Zu wenig Argumente");
-                    }catch (ElementNotFoundException e){
+                    } catch (ElementNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -118,6 +118,7 @@ public class World {
 
     static private boolean editTool(Tool temp) {
         while (true) {
+            System.out.print("Tool " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "back":
@@ -138,13 +139,15 @@ public class World {
             }
         }
     }
+
     static private boolean editContainer(Container temp) {
         while (true) {
+            System.out.print("Container " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "back":
                     return true;
-                case"show":
+                case "show":
                     System.out.println(temp.toString());
                     break;
                 case "add":
@@ -176,13 +179,15 @@ public class World {
             }
         }
     }
+
     static private boolean editLocation(Location temp) {
         while (true) {
+            System.out.print("Location " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "back":
                     return true;
-                case"show":
+                case "show":
                     System.out.println(temp.toString());
                     break;
                 case "add":
@@ -195,7 +200,7 @@ public class World {
                 case "rm":
                     command.removeFirst();
                     for (String x : command) {
-                        if (!temp.removeRoom(x)) System.out.println(x+ " nicht gefunden!");
+                        if (!temp.removeRoom(x)) System.out.println(x + " nicht gefunden!");
                     }
                     break;
 
@@ -212,24 +217,26 @@ public class World {
             }
         }
     }
+
     private static boolean editExit(Exit temp) {
         while (true) {
+            System.out.print("Exit " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "back":
                     return true;
-                case"show":
+                case "show":
                     System.out.println(temp.toString());
                     break;
                 case "set":
                     switch (command.get(1)) {
                         case "destination1" -> {
                             if (roomMap.containsKey(command.get(2))) temp.setDestination1(command.get(2));
-                            else System.out.println(command.get(2)+" nicht gefunden");
+                            else System.out.println(command.get(2) + " nicht gefunden");
                         }
                         case "destination2" -> {
                             if (roomMap.containsKey(command.get(2))) temp.setDestination2(command.get(2));
-                            else System.out.println(command.get(2)+" nicht gefunden");
+                            else System.out.println(command.get(2) + " nicht gefunden");
                         }
                         case "description" -> temp.setDescription(Input.input("description"));
                         default -> System.out.println("command not found");
@@ -241,13 +248,15 @@ public class World {
             }
         }
     }
+
     private static boolean editNpc(NPC temp) {
         while (true) {
+            System.out.print("NPC " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "back":
                     return true;
-                case"show":
+                case "show":
                     System.out.println(temp.toString());
                     break;
                 case "add":
@@ -259,7 +268,7 @@ public class World {
                         case "description" -> temp.setDescription(Input.input("description"));
                         case "room" -> {
                             if (roomMap.containsKey(command.get(2))) temp.setRoom(command.get(2));
-                            else System.out.println(command.get(2)+" nicht gefunden");
+                            else System.out.println(command.get(2) + " nicht gefunden");
                         }
                         default -> System.out.println("command not found");
                     }
@@ -270,13 +279,15 @@ public class World {
             }
         }
     }
+
     private static boolean editRoom(Room temp) {
         while (true) {
+            System.out.print("Room " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
             switch (command.get(0)) {
                 case "back":
                     return true;
-                case"show":
+                case "show":
                     System.out.println(temp.toString());
                     break;
                 case "set":
@@ -326,22 +337,22 @@ public class World {
                         case "exit":
                             command.removeFirst();
                             for (String x : command) {
-                                if (! temp.removeExit(x)) System.out.println(x + " nicht gefunden");
+                                if (!temp.removeExit(x)) System.out.println(x + " nicht gefunden");
                             }
                         case "npc":
                             command.removeFirst();
                             for (String x : command) {
-                                if (! temp.removeNpc(x)) System.out.println(x + " nicht gefunden");
+                                if (!temp.removeNpc(x)) System.out.println(x + " nicht gefunden");
                             }
                         case "tool":
                             command.removeFirst();
                             for (String x : command) {
-                                if (! temp.removeToolsKey(x)) System.out.println(x + " nicht gefunden");
+                                if (!temp.removeToolsKey(x)) System.out.println(x + " nicht gefunden");
                             }
                         case "container":
                             command.removeFirst();
                             for (String x : command) {
-                                if (! temp.removeContainer(x)) System.out.println(x + " nicht gefunden");
+                                if (!temp.removeContainer(x)) System.out.println(x + " nicht gefunden");
                             }
                         default:
                             System.out.println("command not found");
@@ -357,19 +368,41 @@ public class World {
 
 
     static private void editGameElement(LinkedList<String> args) throws ElementNotFoundException {
-        //TODO Auf Funktion unbauen
-        if (editTool((Tool) getElement(args.get(1), "tool"))) return;
-        if (editContainer((Container) getElement(args.get(1), "container"))) return;
-        if (editExit((Exit) getElement(args.get(1), "exit"))) return;
-        if (editRoom((Room) getElement(args.get(1), "room"))) return;
-        if (editNpc((NPC) getElement(args.get(1), "npc"))) return;
-        if (editLocation((Location) getElement(args.get(1), "location"))) return;
+        try {
+            if (editTool((Tool) getElement(args.get(1), "tool"))) return;
+        } catch (ElementNotFoundException e) {
+            //Tutto bene
+        }
+        try {
+            if (editRoom((Room) getElement(args.get(1), "room"))) return; //Muss oben bleiben wegen container
+        } catch (ElementNotFoundException e) {
+            //Tutto bene
+        }
+        try {
+            if (editContainer((Container) getElement(args.get(1), "container"))) return;
+        } catch (ElementNotFoundException e) {
+            //Tutto bene
+        }
+        try {
+            if (editExit((Exit) getElement(args.get(1), "exit"))) return;
+        } catch (ElementNotFoundException e) {
+            //Tutto bene
+        }
+        try {
+            if (editNpc((NPC) getElement(args.get(1), "npc"))) return;
+        } catch (ElementNotFoundException e) {
+            //Tutto bene
+        }
+        try {
+            if (editLocation((Location) getElement(args.get(1), "location"))) return;
+        } catch (ElementNotFoundException e) {
+            //Tutto bene
+        }
         if (EventEditor.edit(args.get(1))) return;
-        throw new ElementNotFoundException(args.get(1),"Game Element");
+        throw new ElementNotFoundException(args.get(1), "Game Element");
     }
 
 
-    //TODO Input
     static private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = null;
@@ -452,10 +485,6 @@ public class World {
             case "container":
                 Container container = new Container(element.getName(), element.getDescription());
                 containerMap.put(container.getName(), container);
-                break;
-            case "event":
-                //TODO Add Event
-                //Which Action, Which Items, in Which Room cause Which Changes to a GameElement
                 break;
         }
     }
