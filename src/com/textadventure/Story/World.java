@@ -301,31 +301,35 @@ public class World {
                     }
                 case "add":
                     command.removeFirst();
-                    switch (command.get(1)) {
+                    switch (command.get(0)) {
                         case "exit":
                             command.removeFirst();
                             for (String x : command) {
                                 if (exitMap.containsKey(x)) temp.addExit(x);
                                 else System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         case "npc":
                             command.removeFirst();
                             for (String x : command) {
                                 if (npcMap.containsKey(x)) temp.addNpcs(x);
                                 else System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         case "tool":
                             command.removeFirst();
                             for (String x : command) {
                                 if (toolMap.containsKey(x)) temp.addTool(x);
                                 else System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         case "container":
                             command.removeFirst();
                             for (String x : command) {
                                 if (containerMap.containsKey(x)) temp.addContainer(x);
                                 else System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         default:
                             System.out.println("command not found");
                             break;
@@ -333,27 +337,31 @@ public class World {
                     break;
                 case "rm":
                     command.removeFirst();
-                    switch (command.get(1)) {
+                    switch (command.get(0)) {
                         case "exit":
                             command.removeFirst();
                             for (String x : command) {
                                 if (!temp.removeExit(x)) System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         case "npc":
                             command.removeFirst();
                             for (String x : command) {
                                 if (!temp.removeNpc(x)) System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         case "tool":
                             command.removeFirst();
                             for (String x : command) {
                                 if (!temp.removeToolsKey(x)) System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         case "container":
                             command.removeFirst();
                             for (String x : command) {
                                 if (!temp.removeContainer(x)) System.out.println(x + " nicht gefunden");
                             }
+                            break;
                         default:
                             System.out.println("command not found");
                             break;
