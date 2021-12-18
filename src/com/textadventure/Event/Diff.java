@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public abstract class Diff implements Serializable  {
+    private static final long serialVersionUID = 6806889103294573466L;
     protected String name;
     protected String description;
     public Diff(String name)  {

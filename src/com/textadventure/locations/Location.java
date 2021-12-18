@@ -10,6 +10,7 @@ import java.util.ArrayList;
  * Enthält eine Liste mit Räumen, die sich an diesem Ort befinden
  */
 public class Location extends GameElement implements Serializable {
+    private static final long serialVersionUID = -6064497007961119893L;
     private ArrayList<String> rooms = new ArrayList<>();
 
     public Location(String name, String description) {

@@ -11,6 +11,7 @@ import java.io.Serializable;
  * Ein item enthält den Container in dem es sich befindet.
  */
 abstract public class Item  extends GameElement implements Serializable {
+    private static final long serialVersionUID = 6229304006313634505L;
     protected String currentContainer;
 
 
@@ -51,19 +52,7 @@ abstract public class Item  extends GameElement implements Serializable {
     }
     abstract Container findItemContainer(String container) throws ItemNotFoundException;
 
-    public boolean check(){
-        boolean ret=true;
-        if(World.roomMap.get(currentContainer)==null){
-            System.out.printf("Raum %s von Item %s existiert nicht\n",currentContainer,name);
-            ret=false;
-        }else{
-            if(!World.roomMap.get(currentContainer).getTools().contains(name)){
-                System.out.printf("Raum %s wird von Item %s referenziert aber nicht umgekehrt\n",currentContainer,name);
-                ret=false;
-            }
-        }
-        return ret;
-    }
+    public abstract boolean check();
 
     @Override
     public void investigate() {

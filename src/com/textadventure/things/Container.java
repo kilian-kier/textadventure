@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Ein Item welches es ermöglicht Tools zu speichern. Tools befinden sich in einer Liste (tools).
  */
 public class Container extends Item implements Serializable {
+    private static final long serialVersionUID = 7218620408718730599L;
     private final ArrayList<String> tools = new ArrayList<>();
 
 
@@ -29,7 +30,16 @@ public class Container extends Item implements Serializable {
 
     @Override
     public boolean check() {
-        boolean ret= super.check();
+        boolean ret=true;
+        if(World.roomMap.get(currentContainer)==null){
+            System.out.printf("Raum %s von Container %s existiert nicht\n",currentContainer,name);
+            ret=false;
+        }else{
+            if(!World.roomMap.get(currentContainer).getContainers().contains(name)){
+                System.out.printf("Raum %s wird von Container %s referenziert aber nicht umgekehrt\n",currentContainer,name);
+                ret=false;
+            }
+        }
         for (String tool:tools) {
             if(World.toolMap.get(tool)==null){
                 System.out.printf("Tool %s von Container %s existiert nicht\n",tool,name);

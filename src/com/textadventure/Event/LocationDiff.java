@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class LocationDiff extends Diff implements Serializable {
+    private static final long serialVersionUID = 9672883399970462L;
     public LocationDiff(String name) {
         super(name);
     }

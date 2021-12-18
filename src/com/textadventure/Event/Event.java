@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class Event implements Serializable {
+    private static final long serialVersionUID = 2552220530382600393L;
     //TODO Eingobe va Events und die Diffs de sebm drin san
     private String name;
     private Collection<String> cmd;

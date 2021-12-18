@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Dialog implements Serializable {
+    private static final long serialVersionUID = -7386853779740424554L;
     private ArrayList<String[]> dialog=new ArrayList<>();
 
     public ArrayList<String[]> getDialog() {

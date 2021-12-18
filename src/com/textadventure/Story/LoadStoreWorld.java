@@ -46,6 +46,7 @@ public class LoadStoreWorld {
             fileIn.close();
         } catch (IOException i) {
             System.out.println("Speicherstand nicht kompatibel mit aktueller Version");
+            System.out.println(i.getMessage());
         } catch (ClassNotFoundException c) {
             System.out.println("Klassen nicht gefunden");
             c.printStackTrace();

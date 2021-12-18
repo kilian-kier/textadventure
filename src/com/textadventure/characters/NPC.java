@@ -13,6 +13,7 @@ import java.util.Collection;
  *  Nicht Spieler Charakter im Spiel verfügt über Dialoge (dialog) und befindet sich in einem Raum (room).
  */
 public class NPC extends GameElement implements Serializable {
+    private static final long serialVersionUID = 9672883399970462L;
     private Dialog dialog = new Dialog();
     private String room;
 

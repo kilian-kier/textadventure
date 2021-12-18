@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @ getrennt wird.
  */
 public class Exit extends GameElement implements Serializable {
+    private static final long serialVersionUID = -5624726393622315238L;
     private String destination1;
     private String destination2;
 
