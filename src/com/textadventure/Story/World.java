@@ -106,6 +106,17 @@ public class World {
                         System.out.println("Alles in Ordnung");
                     }
                     break;
+                case "help":
+                    try{
+                        if(commands.size()>1) {
+                            System.out.println(Help.help("WorldEditor", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("WorldEditor", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 case "exit":
                     exit = true;
                     break;
