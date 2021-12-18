@@ -1,0 +1,24 @@
+std=\
+Befehle zum Editieren von LocationDiffs: add, rm, show back
+
+add=\
+Befehl fuegt Aenderung hinzu.\n\
+Benuetzung: add [description/addrooms/rmrooms]\n\
+Mit Eingabeaufforderung:\n\
+description - Setzt Beschreibung\n\
+Ohne Eingabeaufforderung:\n\
+addrooms [|room1|] [|room2|] ... - Setzt Raeume, die hinzugefuegt werden sollen\n\
+rmtools [|room1|] [|room2|] ... - Setzt Raeume, die entfernt werden sollen
+
+rm=\
+Befehl entfernt Aenderung.\n\
+Benuetzung: rm [description/addrooms/rmrooms]\n\
+description - Entfernt Beschreibung\n\
+addrooms - Entfernt Raeume, die hinzugefuegt werden sollen\n\
+rmrooms - Entfernt Raeume, die entfernt werden sollen
+
+show=\
+Befehl zeigt die Eigenschaften des LocationDiffs.
+
+back=\
+Befehl zum verlassen des Editors.

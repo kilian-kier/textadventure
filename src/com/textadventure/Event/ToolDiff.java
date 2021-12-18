@@ -1,5 +1,6 @@
 package com.textadventure.Event;
 
+import com.textadventure.Story.Help;
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.TypeDoesNotExistException;
@@ -107,7 +108,16 @@ public class ToolDiff extends Diff implements Serializable {
                 case "back":
                     return;
                 case "help":
-                    //TODO help
+                    try{
+                        if(commands.size()>1) {
+                            System.out.println(Help.help("ToolDiffEditor", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("ToolDiffEditor", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 default:
                     System.out.println("Befehl nicht gefunden");
                     break;

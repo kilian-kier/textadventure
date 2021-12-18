@@ -67,11 +67,16 @@ public class EventEditor {
                     System.out.println("Info hinzugefügt");
                     break;
                 case "room": //Raum in dem das Event funktioniert
+                    String input2;
                     try{
-                        event.setRoom(commands.get(1));
+                         input2=commands.get(1);
                     }catch(IndexOutOfBoundsException e){
-                        event.setRoom(Input.input("Raum"));
+                         input2= Input.input("Raum");
                     }
+                    if(input2.equals("none")){
+                        input2=null;
+                    }
+                    event.setRoom(input2);
                     System.out.println("Raum hinzugefügt");
                 case "add": //Diff hinzufügen und editieren, wenn es existiert
                     try{
@@ -118,8 +123,16 @@ public class EventEditor {
                     break;
                 case "back":
                     return true;
-                case "help" :
-                    //TODO help
+                case "help":
+                    try{
+                        if(commands.size()>1) {
+                            System.out.println(Help.help("EventEditor", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("EventEditor", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
                 default:
                     System.out.println("Befehl nicht gefunden");

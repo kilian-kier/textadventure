@@ -1,5 +1,6 @@
 package com.textadventure.Event;
 
+import com.textadventure.Story.Help;
 import com.textadventure.Story.World;
 import com.textadventure.characters.Dialog;
 import com.textadventure.characters.NPC;
@@ -118,7 +119,9 @@ public class NPCDiff extends Diff implements Serializable {
                                     System.out.println("Zu wenig Parameter");
                                     break;
                                 }
-                                dialog = new Dialog();
+                                if(dialog==null){
+                                    dialog = new Dialog();
+                                }
                                 dialog.edit();
                                 System.out.println("Dialog hinzugefügt");
                                 break;
@@ -159,7 +162,16 @@ public class NPCDiff extends Diff implements Serializable {
                 case "back":
                     return;
                 case "help":
-                    //TODO help
+                    try{
+                        if(commands.size()>1) {
+                            System.out.println(Help.help("NPCDiffEditor", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("NPCDiffEditor", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 default:
                     System.out.println("Befehl nicht gefunden");
                     break;
