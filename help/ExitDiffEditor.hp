@@ -1,0 +1,27 @@
+std=\
+Befehle zum Editieren von ExitDiffs: add, rm, show, back
+
+
+add=\
+Befehl fuegt Aenderung hinzu.\n\
+Benuetzung: add [description/destination1/destination2]\n\
+Mit Eingabeaufforderung:\n\
+description - Setzt Beschreibung. In ihrer Mitte befindet sich ein at \n\
+Zeichen, welches die Beschreibung fuer den 1. Raum, mit der vom zweiten Raum trennt\n\
+destination1 [|room|(optional)]- Setzt den 1. Raum\n\
+destination2 [|room|(optional)]- Setzt den 2.Raum
+
+rm=\
+Befehl entfernt Aenderung.\n\
+Benuetzung: rm [description/destination1/destination2]\n\
+description - Entfernt Beschreibung\n\
+destination1 - Entfernt den 1. Raum\n\
+destination2 - Entfernt den 2. Raum
+
+
+show=\
+Befehl zeigt die Eigenschaften des ExitDiffs.
+
+back=\
+Befehl zum verlassen des Editors.
+

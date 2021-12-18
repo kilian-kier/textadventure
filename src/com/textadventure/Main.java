@@ -27,12 +27,6 @@ public class Main {
         Help.load("help");
         World.worldEditor("world.world");
 
-        try{
-            System.out.println(Help.help("DialogEditor", "set"));
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-
         /*World.worldEditor("world.world");
         Map map = World.containerMap;
 

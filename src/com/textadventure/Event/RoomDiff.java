@@ -1,5 +1,6 @@
 package com.textadventure.Event;
 
+import com.textadventure.Story.Help;
 import com.textadventure.Story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.TypeDoesNotExistException;
@@ -14,6 +15,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 
 public class RoomDiff extends Diff implements Serializable {
+    private static final long serialVersionUID = 9672883399970462L;
     public RoomDiff(String name)  {
         super(name);
     }
@@ -286,7 +288,16 @@ public class RoomDiff extends Diff implements Serializable {
                 case "back":
                     return;
                 case "help":
-                    //TODO help
+                    try{
+                        if(commands.size()>1) {
+                            System.out.println(Help.help("RoomDiffEditor", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("RoomDiffEditor", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 default:
                     System.out.println("Befehl nicht gefunden");
                     break;

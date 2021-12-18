@@ -1,0 +1,24 @@
+std=\
+Dies ist ein Welten Editor\n\
+Der Welten Editor ermoeglicht es Welten zu bearbeiten, \n\
+zu speichern und zu laden.\n\n\
+Es gibt folgende Elemente im Spiel:\n\
+Ausgaenge (exits), Raeume (rooms), Ortschaften (locations)\n\
+Container (container), Werkzeuge/Dinge (tools) und Events\n\
+Fuer genauere Beschreibung eines Elements: help [|element|]\n\
+\n\
+Der Welten Editor untersuetzt folgende Befehle: \n\
+new, edit, show, load, store, close, include, check, exit\n\
+Fuer genauere Beschreibung eines Befehls: help [|command|]
+
+
+new=\
+Der Befehl erstellt ein neues Spiel Element. Es koennen\n\
+folgende Elemente erstellt werden:\n\
+exit, room, location, container, tool, event\n\
+Benuetzung: new [|elementtype|] [|elementname|(optional)]\n\
+Es folgt eine Eingabeaufforderung
+
+edit=\
+Der Befehl oeffnet einen Editor zum Bearbeiten eines Elements.\n\
+//TODO irgendwenn amo weitabmochn

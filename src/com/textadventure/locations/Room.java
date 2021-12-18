@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * Enthält eine Liste mit Ausgängen, Tools, Containern, NPCs und Orten.
  */
 public class Room extends GameElement implements Serializable {
+    private static final long serialVersionUID = -4799777339562754102L;
 
     private final ArrayList<String> exits = new ArrayList<>();
     private final Container tools = new Container(this.name, "Dinge, die sich in diesem Raum (" + this.name + ") befinden");

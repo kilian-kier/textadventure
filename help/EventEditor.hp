@@ -1,0 +1,44 @@
+std=\
+Dies ist der Event Editor\n\
+Befehle zum Editieren von Events: cmd, needs, info, room, add, edit, rm, show, back
+
+cmd=\
+Befehl setzt den Befehl, welcher das Event im Spiel ausloest.\n\
+Benuetzung: cmd [|cmd1|] [|cmd2|] ...
+
+needs=\
+Befehl setzt die Events, vor deren Ausfuehrung dieses Event nicht ausgefuehrt wird\n\
+Bneutzung: needs [||event1] [|event2|] ...
+
+info=\
+Befehl setzt einen Erzaehlertext, der bei Aufruf des Events ausgegeben wird.\n\
+Bnuetzung: info\n\
+Es folgt eine Eingabeaufforderung
+
+room=\
+Befehl setzt den Raum in dem das Event ausgefuehrt werden kann\n\
+Benuetzung: room [|room|(optional)]\n\
+Wird none angegeben, wird der Raum entfernt.
+
+add=\
+Befehl fuegt Diff hinzu. Es oeffnet sich der Diff Editor\n\
+Benuetzung: add [|type|] [|name|(optional)]\n\
+Type ist der Typ des Elements, von dem ein Diff erstellt werden soll.\n\
+Es gibt folgende Diffs:\n\
+container, room, location, exit, npc, tool
+
+rm=\
+Befehl entfernt Diff.
+Benuetzung: rm [|Diffname|]
+
+edit=\
+Befehl zum Editieren von Diff. Es oeffnet sich der Diff Editor
+Benuetzung: edit [|Diffname|]
+
+
+
+show=\
+Befehl zeigt die Eigenschaften des Events, welches bearbeitet wird.
+
+back=\
+Befehl zum verlassen des Editors.

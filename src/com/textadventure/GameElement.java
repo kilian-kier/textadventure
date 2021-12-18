@@ -9,6 +9,7 @@ import java.util.Locale;
  * Ein GameElement ist ein Element welches eine Beschreibung und einen Namen besitzt. Röume, Orte, Items, Exits und NPCs sind Spiel Elemente
  */
 public class GameElement implements Serializable, Interactable {
+    private static final long serialVersionUID = 7977434406346025468L;
     protected String description;
     protected String name;
 
