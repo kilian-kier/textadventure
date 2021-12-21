@@ -10,8 +10,10 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Game {
@@ -31,10 +33,13 @@ public class Game {
     }
 
     public static void start(String path) {
-        //TODO: Welt laden
-        //World.load(path);
-        //TODO schauen ob start gibt
-        //World.eventMap.get(World.eventKeyMap.get("start"));
+        try {
+            LoadStoreWorld.load(path);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        Event.execSingleEvent("start");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> cmd;
         String input;
@@ -58,6 +63,9 @@ public class Game {
             Exit exit;
             Room room;
             switch (cmd.get(0)) {
+                case "check":
+                    Checker.check();
+                    break;
                 case "nehme":
                     if (cmd.size() != 2 && cmd.size() != 3) {
                         try {
@@ -163,7 +171,15 @@ public class Game {
                 case "lege":
                     // NO BREAK
                 case "gebe":
-                    if (cmd.size() != 2 && cmd.size() != 3) {
+                    Map<String, Room> r = World.roomMap;
+                    Map<String, Container> co = World.containerMap;
+
+                    World.containerMap.get(cmd.get(2)).addTool(cmd.get(1));
+                    World.containerMap.get(World.toolMap.get(cmd.get(1)).getCurrentContainer()).removeTool(cmd.get(1));
+                    World.toolMap.get(cmd.get(1)).setContainer(cmd.get(2));
+
+                    break;
+                    /*if (cmd.size() != 2 && cmd.size() != 3) {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
                         } catch (CommandSyntaxException e) {
@@ -206,7 +222,7 @@ public class Game {
                             continue;
                         }
                     }
-                    break;
+                    break;*/
                 case "spreche":
                     if (cmd.size() != 2) {
                         try {
