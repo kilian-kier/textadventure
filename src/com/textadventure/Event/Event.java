@@ -25,7 +25,6 @@ public class Event implements Serializable {
         this.once = once;
     }
 
-    //TODO events kennen oefter ausgfiehrt werden
     private String info=null;
     private String room;
 
@@ -91,7 +90,7 @@ public class Event implements Serializable {
         try {
             for (String i : dependent) {
                 try {
-                    if (!World.eventMap.get(i).isHappened()) {
+                    if (!World.eventMap.get(i).isHappened() || (happened && once)) {
                         return false;
                     }
                 } catch (Exception e) {
@@ -101,6 +100,7 @@ public class Event implements Serializable {
         } catch (NullPointerException e) {
 
         }
+        System.out.println(info);
         for (Diff diff:differences.values()) {
             try {
                 diff.applyDiffToWorld();
@@ -120,8 +120,6 @@ public class Event implements Serializable {
     public static boolean execEvent(Collection<String> args){
         String hash = stringForHash(args);
         if(World.eventMap.containsKey(hash)){
-            //Story
-            System.out.println(World.eventMap.get(hash).getInfo());
             return World.eventMap.get(hash).applyDiffsToWorld();
         }
         return false;
