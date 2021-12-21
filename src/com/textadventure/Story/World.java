@@ -657,5 +657,3 @@ public class World {
         throw new ElementNotFoundException(name, "Name");
     }
 }
-
-//TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn

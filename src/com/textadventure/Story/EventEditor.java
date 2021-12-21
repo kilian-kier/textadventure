@@ -15,6 +15,11 @@ import java.util.Scanner;
  * Event Editor zum bearbeiten von Events
  */
 public class EventEditor {
+    /**
+     * Event Editor zum editieren oder erstellen von Events
+     * @param name Der name des Events. Existiert er bereits, wird das Event editiert, ansonsten ein neues erstellt.
+     * @return Gibt false zurück, wenn nicht erfolgreich
+     */
     public static boolean edit(String name) {
         Event event=null;
         if (name == null) {
