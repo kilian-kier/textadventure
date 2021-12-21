@@ -8,6 +8,7 @@ import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.GameElementNotFoundException;
+import com.textadventure.input.Game;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
@@ -146,6 +147,15 @@ public class World {
                         System.out.println(e.getMessage());
                     }
                     break;
+                case "start":
+                    if (!Checker.check()) {
+                        System.out.println("Es gibt Fehler in der Welt");
+                        break;
+                    }
+                    World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
+                    LoadStoreWorld.store(path);
+                    Game.start(path);
+                    break;
                 case "exit":
                     exit = true;
                     break;
@@ -194,7 +204,7 @@ public class World {
                         switch (command.get(1)) {
                             case "description" -> temp.setDescription(Input.input("description"));
                             case "container" -> {
-                                if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
+                                if (containerMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
                                 else System.out.println(command.get(2) + "nicht gefunden");
                             }
                             default -> System.out.println("command not found");

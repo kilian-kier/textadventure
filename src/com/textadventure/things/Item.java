@@ -50,7 +50,25 @@ abstract public class Item  extends GameElement implements Serializable {
         }
         this.currentContainer=newContainerString;
     }
-    abstract Container findItemContainer(String container) throws ItemNotFoundException;
+
+    /**
+     * Sucht ein Container in der container-Map oder falls nach "player" gesucht wird das Inventar des Spielers
+     * @param container Name des Containers
+     * @return Objekt des Containers
+     * @throws ItemNotFoundException wenn der Container nicht gefunden wurde
+     */
+    Container findItemContainer(String container) throws ItemNotFoundException {
+        Container newContainer;
+        if (container.equals("player")) {
+            newContainer = World.player.getToolsContainer();
+        } else {
+            newContainer = World.containerMap.get(container);
+            if (newContainer == null) {
+                throw new ItemNotFoundException(container);
+            }
+        }
+        return newContainer;
+    }
 
     public abstract boolean check();
 
