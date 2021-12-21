@@ -54,6 +54,13 @@ public class World {
             commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
+                case "rm":
+                    try{
+                        rmGameElement(commands.get(1));
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zun wenig Argumente");
+                    }
+                    break;
                 case "new":
                     try {
                         newGameElement(commands);
@@ -137,6 +144,20 @@ public class World {
         }
     }
 
+    private static void rmGameElement(String name) {
+
+            if(World.eventMap.remove(World.eventKeyMap.get(name))!=null){
+                World.eventKeyMap.remove(name);
+                return;
+            }
+            if(World.roomMap.remove(name)!=null) return;
+                        World.locationMap.remove(name);
+            World.containerMap.remove(name);
+            World.npcMap.remove(name);
+            World.toolMap.remove(name);
+            World.exitMap.remove(name);
+
+    }
     /**
      * Mit dieser Methode können Beschreibung und Raum eines Tools geändert werden
      *
@@ -475,7 +496,9 @@ public class World {
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
-        if (EventEditor.edit(args.get(1))) return;
+        if(eventKeyMap.containsKey(args.get(1))){
+            EventEditor.edit(args.get(1));
+        }
         throw new ElementNotFoundException(args.get(1), "Game Element");
     }
 

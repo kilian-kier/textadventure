@@ -59,6 +59,9 @@ public class Checker {
             System.out.println("Start Event nicht gefunden");
             ret=false;
         }
+        if(World.player==null){
+            System.out.println("Player nicht gefunden");
+        }
         return ret;
     }
 

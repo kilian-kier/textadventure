@@ -21,4 +21,15 @@ Es folgt eine Eingabeaufforderung
 
 edit=\
 Der Befehl oeffnet einen Editor zum Bearbeiten eines Elements.\n\
-//TODO irgendwenn amo weitabmochn
+Es koenen folgende Elemente bearbeitet werden:\n\
+exit, room, location, container, tool, event\n\
+Benuetzung: edit [|elementname|]\n\
+Es oeffnet sich ein Editor fuer das jeweilige Element
+
+show=\
+Der Befehl zeigt die Elemente der Spielwelt\n\
+Benuetzung 1: show [|elementname|]\n\
+Die Eigenschaften des angegebenen Elements werden angezeigt.\n\
+Benuetzung 2: show\n\
+Alle Elemente werden in einer Uebersicht angezeigt.\n\
+
