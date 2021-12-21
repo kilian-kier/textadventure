@@ -1,111 +1,111 @@
 std=\
 Dies ist ein Welten Editor\n\
-Der Welten Editor ermoeglicht es Welten zu bearbeiten, \n\
+Der Welten Editor ermöglicht es Welten zu bearbeiten, \n\
 zu speichern und zu laden.\n\n\
 Es gibt folgende Elemente im Spiel:\n\
-Ausgaenge (exits), Raeume (rooms), Ortschaften (locations)\n\
+Ausgänge (exits), Räume (rooms), Ortschaften (locations)\n\
 Container (container), Werkzeuge/Dinge (tools) und Events (events)\n\
-Fuer genauere Beschreibung eines Elements: help [|element|]\n\
+Für genauere Beschreibung eines Elements: help [|element|]\n\
 \n\
-Der Welten Editor unterstuetzt folgende Befehle: \n\
+Der Welten Editor unterstützt folgende Befehle: \n\
 new, edit, show, load, store, close, include, check, back\n\
-Fuer genauere Beschreibung eines Befehls: help [|command|]
+Für genauere Beschreibung eines Befehls: help [|command|]
 
 
 rooms=\
-In der Spielwelt gibt es Raeume.\n\
-Raeume koennen Container (container; Dinge, die Sachen enthalten koennen) und\n\
-Dinge (tools) beinhalten. Auch NPCs koennen sich in ihnen aufhalten.\n\
+In der Spielwelt gibt es Räume.\n\
+Räume können Container (container; Dinge, die Sachen enthalten können) und\n\
+Dinge (tools) beinhalten. Auch NPCs können sich in ihnen aufhalten.\n\
 Ein Raum befinden sich sich ausserdem an einem Ort einer location und sie\n\
-enthalten Ausgaenge (exits) welche zu anderen Raeumen zeigen.
+enthalten Ausgänge (exits) welche zu anderen Räumen zeigen.
 
 exits=\
-In der Spielwelt gibt es Ausgaenge.\n\
-Ausgaenge zeigen auf zwei Raeume, welche dieser verbindet.\n\
-Ausserdem enthaelt er eine spezielle Beschreibung\n\
+In der Spielwelt gibt es Ausgänge.\n\
+Ausgänge zeigen auf zwei Räume, welche dieser verbindet.\n\
+Außerdem enthält er eine spezielle Beschreibung\n\
 Da ein Ausgang von zwei Seiten verschieden aussehen kann,\n\
 besteht die Beschreibung aus zwei Teilen. Der linke Teil \n\
-steht fuer den ersten Ausgang, der rechte Teil fuer den zweiten.\n\
+steht für den ersten Ausgang, der rechte Teil für den zweiten.\n\
 Die Beschreibungen werden mit dem At Zeichen voneinander getrennt.
 
 locations=\
 In der Spielwelt gibt es Ortschaften.\n\
-Ortschaften gibt es hauptsaechlich um dem Spieler eine kurzer\n\
+Ortschaften gibt es hauptsächlich um dem Spieler eine kurzer\n\
 Beschreibung des Ortes zu liefern in dem er sich befindet. Eine\n\
-Ortschaft beinhaltet mehrere Raeume.
+Ortschaft beinhaltet mehrere Räume.
 
 container=\
 In der Spielwelt gibt es Container.\n\
-Container sind Dinge, welche andere Dinge beinhalten koennen.\n\
-Container koennen aber keine Container beinhalten. Container\n\
-befinden sich in Raeumen und koennen vom Spieler nicht aufgehoben\n\
+Container sind Dinge, welche andere Dinge beinhalten können.\n\
+Container können aber keine Container beinhalten. Container\n\
+befinden sich in Räumen und können vom Spieler nicht aufgehoben\n\
 werden.
 
 tools=\
 In der Spielwelt gibt es Dinge.\n\
-Dinge koennen sich in Raeumen oder in Containern befinden.\n\
-Sie koennen spaeter vom Spieler aufgehoben werden.
+Dinge können sich in Räumen oder in Containern befinden.\n\
+Sie können später vom Spieler aufgehoben werden.
 
 events=\
-Events bieten die Moeglichkeit, die Spielwelt, waehrend des Spiels\n\
-zu veraendern. Ausloeser fuer Events werden mit dem Befehl angegeben,\n\
-welchen der Spieler eingeben muss, sodass es ausgeloest wird. Ausserdem\n\
-koennen Dialoge Events ausloesen\n\
-Es kann festgelegt werden in welchem Raum ein Event ausgeloest werden kann\n\
-Wurde ein Event einmal ausgeloest oder mehrfach ausgeloest werden je nach Einstellung\n\
-Es ist moeglich Events abhaengig von anderen Events zu machen, sodass\n\
-sie nur dann ausgeloest werden, wenn alle vorherigen ausgeloest wurden\n\
+Events bieten die Möglichkeit, die Spielwelt, während des Spiels\n\
+zu verändern. Auslöser für Events werden mit dem Befehl angegeben,\n\
+welchen der Spieler eingeben muss, sodass es ausgelöst wird. Außerdem\n\
+können Dialoge Events auslösen\n\
+Es kann festgelegt werden in welchem Raum ein Event ausgelöst werden kann\n\
+Wurde ein Event einmal ausgelöst oder mehrfach ausgelöst werden je nach Einstellung\n\
+Es ist möglich Events abhängig von anderen Events zu machen, sodass\n\
+sie nur dann ausgelöst werden, wenn alle vorherigen ausgelöst wurden\n\
 \n\
-Alle Aenderungen in den Events werden mit Diffs angegeben.\n\
-Es gibt Diffs fuer container, exits, locations, npcs, rooms, tools\n\
-Die Diffs beinhalten die Aenderungen gegenueber, den echten Elementen.\n\
+Alle Änderungen in den Events werden mit Diffs angegeben.\n\
+Es gibt Diffs für container, exits, locations, npcs, rooms, tools\n\
+Die Diffs beinhalten die Änderungen gegenüber, den echten Elementen.\n\
 So kann z.B. ein NPC Diff einen anderen Dialog enthalten\n\
-Diffs koennen im Event editor mit add erstellt werden
+Diffs können im Event editor mit add erstellt werden
 
 new=\
-Der Befehl erstellt ein neues Spiel Element. Es koennen\n\
+Der Befehl erstellt ein neues Spiel Element. Es können\n\
 folgende Elemente erstellt werden:\n\
 exit, room, location, container, tool, event\n\
-Benuetzung: new [|elementtype|] [|elementname|(optional)]\n\
+Benutzung: new [|elementtype|] [|elementname|(optional)]\n\
 Es folgt eine Eingabeaufforderung
 
 edit=\
-Der Befehl oeffnet einen Editor zum Bearbeiten eines Elements.\n\
-Es koenen folgende Elemente bearbeitet werden:\n\
+Der Befehl öffnet einen Editor zum Bearbeiten eines Elements.\n\
+Es können folgende Elemente bearbeitet werden:\n\
 exit, room, location, container, tool, event\n\
-Benuetzung: edit [|elementname|]\n\
-Es oeffnet sich ein Editor fuer das jeweilige Element
+Benutzung: edit [|elementname|]\n\
+Es öffnet sich ein Editor für das jeweilige Element
 
 show=\
 Der Befehl zeigt die Elemente der Spielwelt\n\
-Benuetzung 1: show\n\
-Alle Elemente werden in einer Uebersicht angezeigt.\n\
-Benuetzung 2:  show [|elementname|]\n\
+Benutzung 1: show\n\
+Alle Elemente werden in einer Übersicht angezeigt.\n\
+Benutzung 2:  show [|elementname|]\n\
 Die Eigenschaften des angegebenen Elements werden angezeigt.\n\
-Benuetzung 3: show [|elementtyp|]\n\
+Benutzung 3: show [|elementtyp|]\n\
 Alle Elemente dieses Typs werden angezeigt
 
 load=\
-Der Befehl laedt eine Spielwelt.\n\
-Benuetzung: load [|path|(optional)]\n\
+Der Befehl lädt eine Spielwelt.\n\
+Benutzung: load [|path|(optional)]\n\
 Wird kein Pfad angegeben wird von der Datei world.world  geladen
 
 store=\
 Der Befehl speichert eine Spielwelt.\n\
-Benuetzng: store [|path|(optional)]\n\
+Benutzung: store [|path|(optional)]\n\
 Wird kein Pfad angegeben wird zur Datei world.world gespeichert
 
 close=\
-Der Befehl schliesst eine Spielwelt.
+Der Befehl schließt eine Spielwelt.
 
 include=\
-Der Befehl fuegt eine Spielwelt von einer Datei in die aktuelle ein.\n\
-Benuetzung: include [|path|]
+Der Befehl fügt eine Spielwelt von einer Datei in die aktuelle ein.\n\
+Benutzung: include [|path|]
 
 check=\
-Ueberprueft die Welt auf Fehler und informiert, falls\n\
-welche gefunden werden, darueber.
+Überprüft die Welt auf Fehler und informiert, falls\n\
+welche gefunden werden, darüber.
 
 back=\
-Befehl zum verlassen  des Welteneditors.
+Befehl zum verlassen  des Welten-Editors.
 

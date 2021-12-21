@@ -5,6 +5,7 @@ import com.textadventure.exeptions.NoHelpFoundException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -18,7 +19,7 @@ public class Help {
         for(int i=file.length()-1;i>=0;i--){
             if(file.charAt(i)=='.'){
                 if(type) {
-                    return file.substring(i + 1, file.length());
+                    return file.substring(i + 1);
                 }else{
                     return file.substring(0,i);
                 }
@@ -72,7 +73,7 @@ public class Help {
             if (temp == null) {
                 throw new NoHelpFoundException(type,parameter);
             }
-            return temp;
+            return new String(temp.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
         }catch (Exception e){
             throw new NoHelpFoundException(type,parameter);
         }

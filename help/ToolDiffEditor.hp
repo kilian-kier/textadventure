@@ -2,15 +2,15 @@ std=\
 Befehle zum Editieren von Tool Diffs: add, rm, show, back
 
 add=\
-Befehl fuegt Aenderung hinzu.\n\
-Benuetzung: add [description/container]\n\
+Befehl fügt Änderung hinzu.\n\
+Benützung: add [description/container]\n\
 Mit Eingabeaufforderung:\n\
 description  - Setzt Beschreibung \n\
 container - Setzt Raum oder Container
 
 rm=\
-Befehl entfernt Aenderung.\n\
-Benuetzung: rm [description/container]\n\
+Befehl entfernt Änderung.\n\
+Benutzung: rm [description/container]\n\
 description - Entfernt Beschreibung\n\
 container - Entfernt Raum oder Container
 
