@@ -60,6 +60,12 @@ public class Room extends GameElement implements Serializable {
         return this.tools;
     }
 
+    /**
+     *
+     * @param name der Name des gesuchten Tools
+     * @return das Objekt des Tools
+     * @throws ItemNotFoundException wenn sich das Tool nicht in diesem Raum befindet
+     */
     public Tool getTool(String name) throws ItemNotFoundException {
         if (tools.getTools().contains(name)) {
             return tools.getTool(name);
@@ -67,6 +73,10 @@ public class Room extends GameElement implements Serializable {
             throw new ItemNotFoundException(name);
     }
 
+    /**
+     * speichert das Tool in kleingeschiebener Form in diesem Raum
+     * @param tool der Name des zu speichernden Tools
+     */
     public void addTool(String tool) {
         String str = tool.toLowerCase();
         if (!tools.getTools().contains(str)) {
@@ -74,11 +84,20 @@ public class Room extends GameElement implements Serializable {
         }
     }
 
-
+    /**
+     *
+     * @return die Liste der Containern zurück, die sich in diesem Raum befinden
+     */
     public ArrayList<String> getContainers() {
         return this.container;
     }
 
+    /**
+     *
+     * @param name der Name des gesuchten Containers
+     * @return das Objekt des Containers
+     * @throws ItemNotFoundException wenn der Container sich nicht in diesem Raum befindet oder es ihn nicht gibt
+     */
     public Container getContainer(String name) throws ItemNotFoundException {
         if (!container.contains(name))
             throw new ItemNotFoundException(name);
@@ -127,7 +146,7 @@ public class Room extends GameElement implements Serializable {
     }
 
     /**
-     * Ändert den ort des Raumes
+     * Ändert den Ort des Raumes
      *
      * @param newLocationString Neuer Ort
      * @throws ItemNotFoundException Wenn neuer Ort nicht existiert

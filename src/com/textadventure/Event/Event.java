@@ -4,6 +4,7 @@ import com.textadventure.Story.World;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.EventExistsException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -77,14 +78,18 @@ public class Event implements Serializable {
         differences.remove(diffstring);
     }
     private boolean applyDiffsToWorld(){
-        for (String i:dependent) {
-            try{
-                if(!World.eventMap.get(i).isHappened()){
-                    return false;
+        try {
+            for (String i : dependent) {
+                try {
+                    if (!World.eventMap.get(i).isHappened()) {
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }catch(Exception e){
-                e.printStackTrace();
             }
+        } catch (NullPointerException e) {
+
         }
         for (Diff diff:differences.values()) {
             try {
@@ -110,6 +115,12 @@ public class Event implements Serializable {
             return World.eventMap.get(hash).applyDiffsToWorld();
         }
         return false;
+    }
+
+    public static boolean execSingleEvent(String eventName){
+        ArrayList<String> args = new ArrayList<>();
+        args.add(World.eventKeyMap.get("start"));
+        return execEvent(args);
     }
 
 

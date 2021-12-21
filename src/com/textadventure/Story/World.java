@@ -8,6 +8,7 @@ import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.GameElementNotFoundException;
+import com.textadventure.input.Game;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
@@ -116,6 +117,15 @@ public class World {
                     }catch(Exception e){
                         System.out.println(e.getMessage());
                     }
+                    break;
+                case "start":
+                    if (!Checker.check()) {
+                        System.out.println("Es gibt Fehler in der Welt");
+                        break;
+                    }
+                    World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
+                    LoadStoreWorld.store(path);
+                    Game.start(path);
                     break;
                 case "exit":
                     exit = true;
