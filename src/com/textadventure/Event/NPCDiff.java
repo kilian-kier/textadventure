@@ -67,7 +67,7 @@ public class NPCDiff extends Diff implements Serializable {
         string+=String.format("Beschreibung: %s\n",getDescription());
         string+=String.format("Raum: %s\n",getRoom());
         string+="Dialog:\n";
-        System.out.println(getDialog().toString());
+        string+=((getDialog().toString()));
         return string;
     }
     public void setRoom(String room)  {

@@ -7,7 +7,6 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -151,15 +150,17 @@ public class Room extends GameElement implements Serializable {
 
     public boolean check() {
         boolean ret = true;
-        if (World.locationMap.get(location) == null) {
-            System.out.printf("Location %s von Raum %s existiert nicht oder ist noch nicht gesetzt\n", location, name);
-            ret = false;
-        } else {
-            if (!World.locationMap.get(location).getRooms().contains(name)) {
-                System.out.printf("Location %s wird von Raum %s referenziert aber nicht umgekehrt\n", location, name);
+        try {
+            if (World.locationMap.get(location) == null) {
+                System.out.printf("Location %s von Raum %s existiert nicht oder ist noch nicht gesetzt\n", location, name);
                 ret = false;
+            } else {
+                if (!World.locationMap.get(location).getRooms().contains(name)) {
+                    System.out.printf("Location %s wird von Raum %s referenziert aber nicht umgekehrt\n", location, name);
+                    ret = false;
+                }
             }
-        }
+        }catch(NullPointerException ignored){}
         for (String tool : tools.getTools()) {
             if (World.toolMap.get(tool) == null) {
                 System.out.printf("Tool %s von Raum %s existiert nicht\n", tool, name);
@@ -215,9 +216,9 @@ public class Room extends GameElement implements Serializable {
         string += String.format("Beschreibung: %s\n", getDescription());
         string += String.format("Location: %s\n", getLocation());
         string += String.format("Tools: %s\n", tools.getTools() != null ? tools.getTools().toString() : null);
-        string += String.format("Npcs: %s\n", npcs.toString());
-        string += String.format("Container: %s\n", container.toString());
-        string += String.format("Exits: %s", exits.toString());
+        string += String.format("Npcs: %s\n", npcs);
+        string += String.format("Container: %s\n", container);
+        string += String.format("Exits: %s", exits);
         return string;
     }
 }

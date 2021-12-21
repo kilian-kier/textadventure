@@ -9,12 +9,22 @@ import java.util.HashMap;
 
 public class Event implements Serializable {
     private static final long serialVersionUID = 2552220530382600393L;
-    //TODO Eingobe va Events und die Diffs de sebm drin san
     private String name;
     private Collection<String> cmd;
     private final HashMap<String,Diff> differences=new HashMap<>();
     private Collection<String> dependent;
     private boolean happened=false;
+    private boolean once=true;
+
+    public boolean isOnce() {
+        return once;
+    }
+
+    public void setOnce(boolean once) {
+        this.once = once;
+    }
+
+    //TODO events kennen oefter ausgfiehrt werden
     private String info=null;
     private String room;
 
@@ -162,6 +172,7 @@ public class Event implements Serializable {
         string+=String.format("Info: %s\n",info);
         string+=String.format("Befehl: %s\n",cmd.toString());
         string+=String.format("Abhängig von: %s\n",dependent);
+        string+=String.format("Einmalig? %b\n",once);
         string+="Diffs:";
         for (Diff i: differences.values()) {
             string+="\n";
