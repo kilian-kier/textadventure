@@ -20,6 +20,11 @@ import javax.print.attribute.standard.Destination;
 import javax.swing.text.Element;
 import java.util.*;
 
+/**
+ * Die World Klasse hat 7 HashMaps und ein Objekt der Klasse Player
+ * In der World Klasse findet man Methoden zum Erstellen und bearbeiten der Spielwelt.
+ */
+
 public class World {
     static public HashMap<String, Room> roomMap = new HashMap<>();
     static public HashMap<String, Exit> exitMap = new HashMap<>();
@@ -32,6 +37,11 @@ public class World {
     //TODO new Player
     static public Player player;
 
+    /**
+     * Im weltEditor kann die Speilwelt gespeichert/geladen und bearbeitet werden.
+     *
+     * @param path Pfad zum einlesen der Spielewelt
+     */
     public static void worldEditor(String path) {
 
         System.out.println("Willkommen im Welten Editor");
@@ -45,6 +55,13 @@ public class World {
             commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
+                case "rm":
+                    try{
+                        rmGameElement(commands.get(1));
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zun wenig Argumente");
+                    }
+                    break;
                 case "new":
                     try {
                         newGameElement(commands);
@@ -137,30 +154,67 @@ public class World {
         }
     }
 
+    private static void rmGameElement(String name) {
+
+            if(World.eventMap.remove(World.eventKeyMap.get(name))!=null){
+                World.eventKeyMap.remove(name);
+                return;
+            }
+            if(World.roomMap.remove(name)!=null) return;
+                        World.locationMap.remove(name);
+            World.containerMap.remove(name);
+            World.npcMap.remove(name);
+            World.toolMap.remove(name);
+            World.exitMap.remove(name);
+
+    }
+    /**
+     * Mit dieser Methode können Beschreibung und Raum eines Tools geändert werden
+     *
+     * @param temp Ist das temporäre Objekt der Klasse Tool welches überarbeitet werden soll
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
     static private boolean editTool(Tool temp) {
         while (true) {
             System.out.print("Tool " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
-            switch (command.get(0)) {
-                case "back":
-                    return true;
-                case "set":
-                    switch (command.get(1)) {
-                        case "description" -> temp.setDescription(Input.input("description"));
-                        case "room" -> {
-                            if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
-                            else System.out.println(command.get(2) + "nicht gefunden");
+            try {
+                switch (command.get(0)) {
+                    case "back":
+                        return true;
+                    case "show":
+                        System.out.println(temp.toString());
+                        break;
+                    case "set":
+                        switch (command.get(1)) {
+                            case "description" -> temp.setDescription(Input.input("description"));
+                            case "container" -> {
+                                if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
+                                else System.out.println(command.get(2) + "nicht gefunden");
+                            }
+                            default -> System.out.println("command not found");
                         }
-                        default -> System.out.println("command not found");
-                    }
-                    break;
-                default:
-                    System.out.println("command not found");
-                    break;
+                        break;
+                    default:
+                        System.out.println("command not found");
+                        break;
+                }
+            }catch (IndexOutOfBoundsException e){
+                System.out.printf("");
+                /*
+                try {
+                    Help.help("EditTool", command.get(1));
+                }catch (*/
             }
         }
     }
 
+    /**
+     * Mit dieser Methode können Beschreibung und Raum eines Containers geändert werden. Zudem können Objekte der Klasse Tools zum Container hinzugefügt bzw. entfernt werden
+     *
+     * @param temp Ist das temporäre Objekt der Klasse Container welches überarbeitet werden soll
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
     static private boolean editContainer(Container temp) {
         while (true) {
             System.out.print("Container " + temp.getName() + ">>");
@@ -201,6 +255,12 @@ public class World {
         }
     }
 
+    /**
+     * Mit dieser Methode kann die Beschreibung einer Location geändert werden. Zudem können Objekte der Klasse Room zur Location hinzugefügt bzw. entfernt werden
+     *
+     * @param temp Ist das temporäre Objekt der Klasse Location welches überarbeitet werden soll
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
     static private boolean editLocation(Location temp) {
         while (true) {
             System.out.print("Location " + temp.getName() + ">>");
@@ -239,6 +299,12 @@ public class World {
         }
     }
 
+    /**
+     * Mit dieser Methode kann die Beschreibung eines Exits geändert werden. Zudem können die beiden Rooms des Exits gesetzt werden.
+     *
+     * @param temp Ist das temporäre Objekt der Klasse Exit welches überarbeitet werden soll
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
     private static boolean editExit(Exit temp) {
         while (true) {
             System.out.print("Exit " + temp.getName() + ">>");
@@ -270,6 +336,12 @@ public class World {
         }
     }
 
+    /**
+     * Mit dieser Methode können Beschreibung und Room eines NPCs geändert werden. Zudem können Dialoge hinzugefügt bzw. gelöscht werden
+     *
+     * @param temp Ist das temporäre Objekt der Klasse NPC welches überarbeitet werden soll
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
     private static boolean editNpc(NPC temp) {
         while (true) {
             System.out.print("NPC " + temp.getName() + ">>");
@@ -301,6 +373,12 @@ public class World {
         }
     }
 
+    /**
+     * Mit dieser Methode können Beschreibung und Location eines Rooms geändert werden. Zudem können Container, Tools, NOCs und Exits ninzugefügt bzw. entfernt werden.
+     *
+     * @param temp Ist das temporäre Objekt der Klasse Room welches überarbeitet werden soll
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
     private static boolean editRoom(Room temp) {
         while (true) {
             System.out.print("Room " + temp.getName() + ">>");
@@ -320,6 +398,7 @@ public class World {
                         }
                         default -> System.out.println("command not found");
                     }
+                    break;
                 case "add":
                     command.removeFirst();
                     switch (command.get(0)) {
@@ -427,7 +506,9 @@ public class World {
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
-        if (EventEditor.edit(args.get(1))) return;
+        if(eventKeyMap.containsKey(args.get(1))){
+            EventEditor.edit(args.get(1));
+        }
         throw new ElementNotFoundException(args.get(1), "Game Element");
     }
 

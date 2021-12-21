@@ -7,8 +7,8 @@ Benuetzung: add [description/addrooms/rmrooms]\n\
 Mit Eingabeaufforderung:\n\
 description - Setzt Beschreibung\n\
 Ohne Eingabeaufforderung:\n\
-addrooms [|room1|] [|room2|] ... - Setzt Raeume, die hinzugefuegt werden sollen\n\
-rmtools [|room1|] [|room2|] ... - Setzt Raeume, die entfernt werden sollen
+addrooms [|room1|] [|room2|] ... - Setzt Räume, die hinzugefuegt werden sollen\n\
+rmtools [|room1|] [|room2|] ... - Setzt Räume, die entfernt werden sollen
 
 rm=\
 Befehl entfernt Aenderung.\n\
