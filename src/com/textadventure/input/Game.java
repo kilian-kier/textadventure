@@ -11,6 +11,7 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
@@ -25,7 +26,9 @@ public class Game {
             "schaue",
             "untersuche",
             "gebe",
-            "aktion"
+            "aktion",
+            "hilfe",
+            "clear"
     });
 
     private static String firstCap(String s) {
@@ -387,6 +390,21 @@ public class Game {
                                 continue;
                             }
                         }
+                    }
+                    break;
+                case "clear":
+                    System.out.println("\033[2J");
+                    System.out.println("\033[H");
+                    break;
+                case "hilfe":
+                    try{
+                        if(cmd.size()>1) {
+                            System.out.println(Help.help("GameHelp", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("GameHelp", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 default:
