@@ -3,21 +3,21 @@ Befehle zum Editieren des Dialogs: set, add, rm, show, back
 
 set=\
 Befehl setzt eine Frage, Antwort oder Event bei einem bereits existierenden Dialog\n\
-Benuetzung: set [|index|] [question/answer/event]\n\
+Benutzung: set [|index|] [question/answer/event]\n\
 question - Setzt Frage\n\
 answer - Setzt Antwort\n\
 event - Setzt Event\n\
 Es folgt eine Eingabeaufforderung
 
 add=\
-Befehl fuegt Frage, Antwort und Event hinzu.\n\
-Benuetzung: add [|index(optional)|]\n\
+Befehl fügt Frage, Antwort und Event hinzu.\n\
+Benutzung: add [|index(optional)|]\n\
 Es folgt eine Eingabeaufforderung\n\
-Benoetigt man kein Event, kann none eingegeben werd
+Benötigt man kein Event, kann none eingegeben werd
 
 rm=\
 Befehl entfernt eine Frage von einem bestimmten Index.\n\
-Benuetzung: rm [|index|]
+Benutzung: rm [|index|]
 
 show=\
 Befehl zeigt die Eigenschaften des Dialogs, der bearbeitet wird

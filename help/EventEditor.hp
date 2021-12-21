@@ -4,40 +4,40 @@ Befehle zum Editieren von Events: cmd, needs, once,  info, room, add, edit, rm, 
 
 once=\
 Mit dem Befehl, kann ein Event, so eingestellt werden, dass es \n\
-einmalig oder haeufiger ausgefuehrt werden kann.
+einmalig oder häufiger ausgeführt werden kann.
 
 cmd=\
-Befehl setzt den Befehl, welcher das Event im Spiel ausloest.\n\
-Benuetzung: cmd [|cmd1|] [|cmd2|] ...
+Befehl setzt den Befehl, welcher das Event im Spiel auslöst.\n\
+Benutzung: cmd [|cmd1|] [|cmd2|] ...
 
 needs=\
-Befehl setzt die Events, vor deren Ausfuehrung dieses Event nicht ausgefuehrt wird\n\
-Bneutzung: needs [||event1] [|event2|] ...
+Befehl setzt die Events, vor deren Ausführung dieses Event nicht ausgeführt wird\n\
+Benutzung: needs [||event1] [|event2|] ...
 
 info=\
-Befehl setzt einen Erzaehlertext, der bei Aufruf des Events ausgegeben wird.\n\
-Bnuetzung: info\n\
+Befehl setzt einen Erzählertext, der bei Aufruf des Events ausgegeben wird.\n\
+Benutzung: info\n\
 Es folgt eine Eingabeaufforderung
 
 room=\
-Befehl setzt den Raum in dem das Event ausgefuehrt werden kann\n\
-Benuetzung: room [|room|(optional)]\n\
+Befehl setzt den Raum in dem das Event ausgeführt werden kann\n\
+Benutzung: room [|room|(optional)]\n\
 Wird none angegeben, wird der Raum entfernt.
 
 add=\
-Befehl fuegt Diff hinzu. Es oeffnet sich der Diff Editor\n\
-Benuetzung: add [|type|] [|name|(optional)]\n\
+Befehl fügt Diff hinzu. Es öffnet sich der Diff Editor\n\
+Benutzung: add [|type|] [|name|(optional)]\n\
 Type ist der Typ des Elements, von dem ein Diff erstellt werden soll.\n\
 Es gibt folgende Diffs:\n\
 container, room, location, exit, npc, tool
 
 rm=\
 Befehl entfernt Diff.
-Benuetzung: rm [|Diffname|]
+Benutzung: rm [|Diffname|]
 
 edit=\
-Befehl zum Editieren von Diff. Es oeffnet sich der Diff Editor
-Benuetzung: edit [|Diffname|]
+Befehl zum Editieren von Diff. Es öffnet sich der Diff Editor
+Benutzung: edit [|Diffname|]
 
 
 

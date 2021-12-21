@@ -2,21 +2,21 @@ std=\
 Befehle zum Editieren von Container Diffs: add, rm, show, back
 
 add=\
-Befehl fuegt Aenderung hinzu.\n\
-Benuetzung: add [description/room/addtools/rmtools]\n\
+Befehl fügt Änderung hinzu.\n\
+Benutzung: add [description/room/addtools/rmtools]\n\
 Mit Eingabeaufforderung:\n\
 description  - Setzt Beschreibung \n\
 room - Setzt Raum\n\
 Ohne Eingabeaufforderung:\n\
-addtools [|tool1|] [|tool2|] ... - Setzt Tools, die hinzugefuegt werden sollen\n\
+addtools [|tool1|] [|tool2|] ... - Setzt Tools, die hinzugefügt werden sollen\n\
 rmtools [|tool1|] [|tool2|] ... - Setzt Tools, die entfernt werden sollen
 
 rm=\
-Befehl entfernt Aenderung.\n\
-Benuetzung: rm [description/room/addtools/rmtools]\n\
+Befehl entfernt Änderung.\n\
+Benutzung: rm [description/room/addtools/rmtools]\n\
 description - Entfernt Beschreibung\n\
 room - Entfernt Raum\n\
-addtools - Entfernt Tools, die hinzugefuegt werden sollen\n\
+addtools - Entfernt Tools, die hinzugefügt werden sollen\n\
 rmtools - Entfernt Tools, die entfernt werden sollen.
 
 
