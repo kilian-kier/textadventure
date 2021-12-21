@@ -52,10 +52,18 @@ public class Room extends GameElement implements Serializable {
         return tools.removeTool(name);
     }
 
+    /**
+     *
+     * @return die Liste der Tools, die sich in diesem Raum befinden
+     */
     public ArrayList<String> getTools() {
         return this.tools.getTools();
     }
 
+    /**
+     *
+     * @return das Objekt des Containers, in dem die Tools von diesem Raum sind
+     */
     public Container getToolsContainer() {
         return this.tools;
     }

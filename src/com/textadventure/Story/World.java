@@ -189,7 +189,7 @@ public class World {
                         switch (command.get(1)) {
                             case "description" -> temp.setDescription(Input.input("description"));
                             case "container" -> {
-                                if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
+                                if (containerMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
                                 else System.out.println(command.get(2) + "nicht gefunden");
                             }
                             default -> System.out.println("command not found");

@@ -18,11 +18,11 @@ public class Tool extends Item implements Serializable {
     @Override
     public boolean check() {
         boolean ret = true;
-        if (World.roomMap.get(currentContainer) == null) {
+        if (World.containerMap.get(currentContainer) == null) {
             System.out.printf("Raum %s von Tool %s existiert nicht\n", currentContainer, name);
             ret = false;
         } else {
-            if (!World.roomMap.get(currentContainer).getTools().contains(name)) {
+            if (!World.containerMap.get(currentContainer).getTools().contains(name)) {
                 System.out.printf("Raum %s wird von Tool %s referenziert aber nicht umgekehrt\n", currentContainer, name);
                 ret = false;
             }
