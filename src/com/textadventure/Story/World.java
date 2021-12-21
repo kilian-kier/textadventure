@@ -136,22 +136,33 @@ public class World {
         while (true) {
             System.out.print("Tool " + temp.getName() + ">>");
             LinkedList<String> command = Input.getCommand();
-            switch (command.get(0)) {
-                case "back":
-                    return true;
-                case "set":
-                    switch (command.get(1)) {
-                        case "description" -> temp.setDescription(Input.input("description"));
-                        case "room" -> {
-                            if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
-                            else System.out.println(command.get(2) + "nicht gefunden");
+            try {
+                switch (command.get(0)) {
+                    case "back":
+                        return true;
+                    case "show":
+                        System.out.println(temp.toString());
+                        break;
+                    case "set":
+                        switch (command.get(1)) {
+                            case "description" -> temp.setDescription(Input.input("description"));
+                            case "container" -> {
+                                if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
+                                else System.out.println(command.get(2) + "nicht gefunden");
+                            }
+                            default -> System.out.println("command not found");
                         }
-                        default -> System.out.println("command not found");
-                    }
-                    break;
-                default:
-                    System.out.println("command not found");
-                    break;
+                        break;
+                    default:
+                        System.out.println("command not found");
+                        break;
+                }
+            }catch (IndexOutOfBoundsException e){
+                System.out.printf("");
+                /*
+                try {
+                    Help.help("EditTool", command.get(1));
+                }catch (*/
             }
         }
     }
