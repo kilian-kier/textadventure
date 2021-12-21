@@ -1,6 +1,10 @@
 std=\
 Dies ist der Event Editor\n\
-Befehle zum Editieren von Events: cmd, needs, info, room, add, edit, rm, show, back
+Befehle zum Editieren von Events: cmd, needs, once,  info, room, add, edit, rm, show, back
+
+once=\
+Mit dem Befehl, kann ein Event, so eingestellt werden, dass es \n\
+einmalig oder haeufiger ausgefuehrt werden kann.
 
 cmd=\
 Befehl setzt den Befehl, welcher das Event im Spiel ausloest.\n\

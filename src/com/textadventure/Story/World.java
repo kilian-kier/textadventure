@@ -58,7 +58,10 @@ public class World {
                 case "rm":
                     try{
                         rmGameElement(commands.get(1));
-                    }catch(IndexOutOfBoundsException e){
+                    }catch(ElementNotFoundException e){
+                        System.out.println(e.getMessage());
+                    }
+                    catch(IndexOutOfBoundsException e){
                         System.out.println("Zun wenig Argumente");
                     }
                     break;
@@ -98,12 +101,21 @@ public class World {
                     }
                     break;
                 case "store":
-                    LoadStoreWorld.store(path);
+                    if(commands.size()>1){
+                        LoadStoreWorld.store(commands.get(1));
+                    }else{
+                        LoadStoreWorld.store(path);
+                    }
                     break;
                 case "load":
-                    try {
+                    try{
+                    if(commands.size()<2){
                         LoadStoreWorld.load(path);
+                    }else {
+                        LoadStoreWorld.load(commands.get(1));
+                    }
                     } catch (Exception e) {
+                        System.out.println("Pfad nicht gefunden");
                         e.printStackTrace();
                     }
                     break;
@@ -154,19 +166,22 @@ public class World {
         }
     }
 
-    private static void rmGameElement(String name) {
+    private static void rmGameElement(String name) throws ElementNotFoundException {
 
             if(World.eventMap.remove(World.eventKeyMap.get(name))!=null){
                 World.eventKeyMap.remove(name);
                 return;
             }
-            if(World.roomMap.remove(name)!=null) return;
-                        World.locationMap.remove(name);
-            World.containerMap.remove(name);
-            World.npcMap.remove(name);
-            World.toolMap.remove(name);
-            World.exitMap.remove(name);
-
+            if(World.roomMap.remove(name)!=null){
+                World.containerMap.remove(name);
+                return;
+            }
+            if(World.containerMap.remove(name)!=null) return;
+            if(World.locationMap.remove(name)!=null) return;
+            if(World.npcMap.remove(name)!=null) return;
+            if(World.toolMap.remove(name)!=null) return;
+            if(World.exitMap.remove(name)!=null) return;
+            throw new ElementNotFoundException("Element",name);
     }
     /**
      * Mit dieser Methode können Beschreibung und Raum eines Tools geändert werden
@@ -508,6 +523,7 @@ public class World {
         }
         if(eventKeyMap.containsKey(args.get(1))){
             EventEditor.edit(args.get(1));
+            return;
         }
         throw new ElementNotFoundException(args.get(1), "Game Element");
     }

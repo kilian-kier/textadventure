@@ -141,8 +141,8 @@ public class Dialog implements Serializable {
                     e.printStackTrace();
                 }
             }
-            if (string.equals("")){
-                return null;
+        if(string.charAt(string.length()-1)=='\n') {
+            string=string.substring(0,string.length()-1);
         }
         return string;
     }

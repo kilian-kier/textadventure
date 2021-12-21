@@ -43,6 +43,15 @@ public class EventEditor {
             commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
+                case "once":
+                    if(event.isOnce()){
+                        event.setOnce(!event.isOnce());
+                        System.out.println("Event wird nun oefter ausgefuehrt");
+                    }else{
+                        event.setOnce(!event.isOnce());
+                        System.out.println("Event wird nun einmalig ausgefuehrt");
+                    }
+                    break;
                 case "cmd":
                     commands.removeFirst();
                     event.storeEvent(commands);
