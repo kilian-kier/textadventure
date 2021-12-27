@@ -19,18 +19,6 @@ import java.util.Scanner;
 
 public class Game {
 
-    public static AdvancedArray<String> commands = new AdvancedArray<>(new String[]{
-            "nehme",
-            "gehe",
-            "spreche",
-            "schaue",
-            "untersuche",
-            "gebe",
-            "aktion",
-            "hilfe",
-            "clear"
-    });
-
     private static String firstCap(String s) {
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
@@ -55,13 +43,6 @@ public class Game {
                 continue;
             if (cmd.get(0).equals("exit"))
                 break;
-            if (!commands.contains(cmd.get(0))) {
-                try {
-                    throw new CommandNotFoundException(cmd.get(0));
-                } catch (CommandNotFoundException e) {
-                    e.getMessage();
-                }
-            }
             Tool tool;
             Exit exit;
             Room room;
@@ -337,7 +318,7 @@ public class Game {
                         } else if (World.toolMap.containsKey(cmd.get(1))) {
                             Tool t = World.toolMap.get(cmd.get(1));
                             System.out.println(firstCap(t.getName()) + ": " + t.getDescription());
-                        } else {
+                        } else if (World.npcMap.containsKey(cmd.get(1))) {
                             //TODO: NPCs
                             try {
                                 throw new CommandSyntaxException(cmd.get(0));
@@ -399,7 +380,7 @@ public class Game {
                 case "hilfe":
                     try{
                         if(cmd.size()>1) {
-                            System.out.println(Help.help("GameHelp", commands.get(1)));
+                            System.out.println(Help.help("GameHelp", cmd.get(1)));
                         }else{
                             System.out.println(Help.help("GameHelp", null));
                         }

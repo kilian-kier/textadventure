@@ -1,2 +1,59 @@
 std=\
-//TODO Help
+Es gibt folgende Befehle\n\
+nehme, gehe, spreche, schaue, untersuche oder info, gebe oder lege, clear, hilfe
+
+nehme=\
+Der Spieler nimmt Dinge von einem Behälter oder \
+vom Boden und packt sie in den Rucksack.\n\
+Benutzung: nehme [|Ding|] [|Behälter|(optional)]\n\
+Wird kein Behälter angegeben, wird das Ding vom Boden aufgenommen\n\
+
+gehe=\
+Der Spieler geht zu einem benachbarten Raum oder durch einen Ausgang.\n\
+Benutzung: gehe [|Raum| / |Ausgang|]\n\
+
+spreche=\
+Der Spieler spricht mit einem anderen Charakter.\n\
+Benutzung: spreche [|Charakter|]\n\
+
+schaue=\
+Benutzung bei Räumen: schaue [|Raum|(optional)]\n\
+Man kann den aktuellen Raum angeben, aber wenn man keinen angibt, wird das Gleiche ausgegeben.\n\
+Zeigt welche Dinge, Behälter und Charaktere sich im Raum befinden und welche Ausgänge der Raum besitzt.\n\n\
+\
+Benutzung bei Behälter: schaue [|Behälter|]\n\
+Zeigt welche Dinge sich im Behälter befinden.\n\n\
+\
+Benutzung beim Spieler: schaue ["inventar" / "rucksack" / |Spielername|]\n\
+Zeigt welche Tools der Spieler besitzt.\n\n\
+\
+Benutzung bei Ausgängen: schaue [|Ausgang|]\n\
+Zeigt zu welchen Raum der Ausgang führt.\n\n\
+\
+Benutzung bei Dingen: schaue [|Ding|]\n\
+Gibt die Beschreibung des Dings aus.\n\n\
+\
+Benutzung bei Charakteren: schaue [|Charakter|]\n\
+TODO: schaue NPCs
+
+info=\
+Benutzung: info [|Spiel-Element|]\n\
+Gibt Informationen zu einem Spiel-Element aus.\n\
+
+untersuche=\
+Benutzung: untersuche [|Spiel-Element|]\n\
+Gibt Informationen zu einem Spiel-Element aus.\n\
+
+gebe=\
+Benutzung: gebe [|Ding|] [|Behälter|(optional)]\n\
+Der Befehl gibt ein Ding in einen Behälter.\n\
+Wird kein Behälter angegeben, wird das Ding auf den Boden gegeben.\n\
+
+lege=\
+Benutzung: gebe [|Ding|] [|Behälter|(optional)]\n\
+Der Befehl legt ein Ding in einen Behälter.\n\
+Wird kein Behälter angegeben, wird das Ding auf den Boden gelegt.\n\
+
+clear=\
+Benutzung: clear\n\
+Löscht den Text auf dem Bildschirm.\n\
