@@ -20,11 +20,20 @@ public class Room extends GameElement implements Serializable {
     private final ArrayList<String> container = new ArrayList<>();
     private final ArrayList<String> npcs = new ArrayList<>();
     private String location;
+    private String musicPath;
 
     public Room(String name, String description) {
         super(name);
         this.description = description;
         World.containerMap.put(this.name, tools);
+    }
+
+    public String getMusicPath() {
+        return musicPath;
+    }
+
+    public void setMusicPath(String musicPath) {
+        this.musicPath = musicPath;
     }
 
     public java.lang.String getName() {

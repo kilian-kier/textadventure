@@ -38,7 +38,6 @@ public class Main {
         chest.setContainer("Haus");
         house.addContainer("Truhe");
         Tool hammer = new Tool("Hammer", "Ein alter rostiger Hammer");
-        //TODO: de nächsten 2 Zeilen kannt man woll irgendwia zommfossen
         hammer.setContainer("Truhe");
         chest.addTool("Hammer");
         Tool apple = new Tool("Apfel", "Ein reifer roter Apfel");
