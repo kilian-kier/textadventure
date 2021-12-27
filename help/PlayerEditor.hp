@@ -1,0 +1,18 @@
+std=\
+Der Player Editor ermöglicht es den Player zu bearbeiten.\n\
+Es gibt folgende Parameter in Player:\n\
+Beschreibung (description) und einen Ort (Room)\n\
+Der Player Editor unterstützt folgende Befehle: \n\
+show, back, set, help\n\
+Für genauere Beschreibung eines Befehls: help [|command|]
+
+show=\
+Befehl zeigt die Eigenschaften des Players an.
+
+back=\
+Befehl zum verlassen des Editors.
+
+set=\
+Befehl ermöglicht das setzen (ändern) von:\n\
+Beschreibung: set description (Eingabe der Beschreibung wird abgefragt)\n\
+Ort: set room [Raum]

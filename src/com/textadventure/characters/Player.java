@@ -86,12 +86,24 @@ public class Player extends GameElement implements RoomChangeable {
         return this.inventory;
     }
 
-
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
+    }
 
     public void addTool(String tool) {
         inventory.addTool(tool);
     }
     public void removeTool(String tool) {
         inventory.removeTool(tool);
+    }
+
+    @Override
+    public String toString() {
+        String string="";
+        string+=String.format("Name %s\n",this.name);
+        string+=String.format("Beschreibung: %s\n",this.description);
+        if(this.currentRoom == null) string+=String.format("Raum: null");
+        else string+=String.format("Raum: %s",this.currentRoom.getName());
+        return string;
     }
 }

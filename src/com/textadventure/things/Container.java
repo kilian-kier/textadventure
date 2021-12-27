@@ -22,7 +22,8 @@ public class Container extends Item implements Serializable {
     @Override
     Container findItemContainer(String container) throws ItemNotFoundException{
         Container newContainer=World.roomMap.get(container).getToolsContainer();
-        if(newContainer==null){
+        if(
+                newContainer==null){
             throw new ItemNotFoundException(container);
         }
         return newContainer;

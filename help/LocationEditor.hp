@@ -1,0 +1,25 @@
+std=\
+Der Location Editor ermöglicht es Locations zu bearbeiten.\n\
+Es gibt folgende Parameter in Location:\n\
+Beschreibung (description) und eine Liste mit Rooms\n\
+Der Location Editor unterstützt folgende Befehle: \n\
+show, back, set, help, add, rm\n\
+Für genauere Beschreibung eines Befehls: help [|command|]
+
+show=\
+Befehl zeigt die Eigenschaften der Location an.
+
+back=\
+Befehl zum verlassen des Editors.
+
+add=\
+Befehl zum hinzufügen von Rooms zur Location\n\
+add [Tool] (Listeneingabe mit Leerzeichen möglich)
+
+rm=\
+Befehl zum löschen von Rooms aus Location\n\
+rm [Tool] (Listeneingabe mit Leerzeichen möglich)
+
+set=\
+Befehl ermöglicht das setzen (ändern) von:\n\
+Beschreibung: set description (Eingabe der Beschreibung wird abgefragt)\n\
