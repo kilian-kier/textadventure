@@ -1,9 +1,13 @@
 package com.textadventure.input;
 
 import com.textadventure.Event.Event;
-import com.textadventure.Story.*;
+import com.textadventure.Story.Checker;
+import com.textadventure.Story.Help;
+import com.textadventure.Story.LoadStoreWorld;
+import com.textadventure.Story.World;
 import com.textadventure.characters.NPC;
 import com.textadventure.exeptions.*;
+import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
@@ -11,7 +15,6 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.FileNotFoundException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
@@ -35,14 +38,19 @@ public class Game {
         LinkedList<String> cmd;
         String input;
 
+        World.musicPlayer = new MusicPlayer(World.player.getCurrentRoom().getMusicPath());
+        World.musicPlayer.play();
+
         while (true) {
             System.out.printf("%s@%s >>> ", firstCap(World.player.getName()), firstCap(World.player.getCurrentRoom().getName()));
             input = scanner.nextLine();
             cmd = Input.splitInput(input);
             if (cmd == null)
                 continue;
-            if (cmd.get(0).equals("exit"))
+            if (cmd.get(0).equals("exit")) {
+                World.musicPlayer.stop();
                 break;
+            }
             Tool tool;
             Exit exit;
             Room room;
@@ -150,6 +158,9 @@ public class Game {
                             continue;
                         }
                     }
+                    World.musicPlayer.stop();
+                    World.musicPlayer = new MusicPlayer(World.player.getCurrentRoom().getMusicPath());
+                    World.musicPlayer.play();
                     System.out.println(firstCap(World.player.getName()) + " befindet sich nun in: " + firstCap(World.player.getCurrentRoom().getName()));
                     break;
                 case "lege":
@@ -373,18 +384,28 @@ public class Game {
                         }
                     }
                     break;
+                case "music":
+                    if (cmd.size() != 1) {
+                        try {
+                            throw new CommandSyntaxException(cmd.get(0));
+                        } catch (CommandSyntaxException e) {
+                            System.out.println(e.getMessage());
+                            continue;
+                        }
+                    }
+                    break;
                 case "clear":
                     System.out.println("\033[2J");
                     System.out.println("\033[H");
                     break;
                 case "hilfe":
-                    try{
-                        if(cmd.size()>1) {
+                    try {
+                        if (cmd.size() > 1) {
                             System.out.println(Help.help("GameHelp", cmd.get(1)));
-                        }else{
+                        } else {
                             System.out.println(Help.help("GameHelp", null));
                         }
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;

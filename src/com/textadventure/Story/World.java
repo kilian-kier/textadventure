@@ -8,6 +8,7 @@ import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.GameElementNotFoundException;
+import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.exeptions.NoHelpFoundException;
 import com.textadventure.input.Game;
 import com.textadventure.input.Input;
@@ -22,7 +23,7 @@ import javax.swing.text.Element;
 import java.util.*;
 
 /**
- * Die World Klasse hat 7 HashMaps und ein Objekt der Klasse Player
+ * Die World Klasse hat 7 HashMaps und ein Objekt des Players und ein Objekt des MusicPlayers.
  * In der World Klasse findet man Methoden zum Erstellen und bearbeiten der Spielwelt.
  */
 
@@ -35,7 +36,9 @@ public class World {
     static public HashMap<String, NPC> npcMap = new HashMap<>();
     static public HashMap<String, Event> eventMap = new HashMap<>();
     static public HashMap<String, String> eventKeyMap = new HashMap<>();
-    static public Player player = null;
+    //TODO new Player
+    static public Player player;
+    static public MusicPlayer musicPlayer = new MusicPlayer(null);
 
     /**
      * Im weltEditor kann die Speilwelt gespeichert/geladen und bearbeitet werden.
@@ -152,6 +155,7 @@ public class World {
                         System.out.println("Es gibt Fehler in der Welt");
                         break;
                     }
+                    World.roomMap.get("haus").setMusicPath("music/test.mp3");
                     World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
                     LoadStoreWorld.store(path);
                     Game.start(path);
