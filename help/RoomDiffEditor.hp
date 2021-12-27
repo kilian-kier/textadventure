@@ -2,28 +2,28 @@ std=\
 Befehle zum Editieren von Raum Diffs: add, rom, show, back
 
 add=\
-Befehl fuegt Aenderung hinzu.\n\
-Benuetzung: add [description/location/addtools/rmtools/addcontainer/rmcontainer/addnpcs/rmnpcs]\n\
+Befehl fügt Änderung hinzu.\n\
+Benutzung: add [description/location/addtools/rmtools/addcontainer/rmcontainer/addnpcs/rmnpcs]\n\
 Mit Eingabeaufforderung:\n\
 description - Setzt Beschreibung\n\
 location - Setzt eine Ortschaft\n\
-addtools [|tool1|] [|tool2|] ... - Setzt Tools, die hinzugefuegt werden sollen\n\
+addtools [|tool1|] [|tool2|] ... - Setzt Tools, die hinzugefügt werden sollen\n\
 rmtools [|tool1|] [|tool2|] ... - Setzt Tools, die entfernt werden sollen\n\
-addcontainer [|cont1|] [|cont2|] ... - Setzt Container, die hinzugefuegt werden sollen\n\
+addcontainer [|cont1|] [|cont2|] ... - Setzt Container, die hinzugefügt werden sollen\n\
 rmcontainer [|cont1|] [|cont2|] ... - Setzt Container, die entfernt werden sollen\n\
-addnpcs [|npc1|] [|npc1|] ... - Setzt NPCs, die hinzugefuegt werden sollen\n\
+addnpcs [|npc1|] [|npc1|] ... - Setzt NPCs, die hinzugefügt werden sollen\n\
 rmnpcs [|npc1|] [|npc2|] ... - Setzt NPCs, die entfernt werden sollen
 
 rm=\
-Befehl entfernt Aenderung.\n\
-Bnuetzung: rm [description/location/addtools/rmtools/addcontainer/rmcontainer/addnpcs/rmnpcs]\n\
+Befehl entfernt Änderung.\n\
+Benutzung: rm [description/location/addtools/rmtools/addcontainer/rmcontainer/addnpcs/rmnpcs]\n\
 description - Entfernt Beschreibung\n\
 loacation - Entfernt Ortschaft.\n\
-addtools - Entfernt Tools, die hinzugefuegt werden sollen\n\
+addtools - Entfernt Tools, die hinzugefügt werden sollen\n\
 rmtools - Entfernt Tools, die entfernt werden sollen.\n\
-addcontainer [|cont1|] [|cont2|] ... - Entfernt Container, die hinzugefuegt werden sollen\n\
+addcontainer [|cont1|] [|cont2|] ... - Entfernt Container, die hinzugefügt werden sollen\n\
 rmcontainer [|cont1|] [|cont2|] ... - Entfernt Container, die entfernt werden sollen\n\
-addnpcs [|npc1|] [|npc1|] ... - Entfernt NPCs, die hinzugefuegt werden sollen\n\
+addnpcs [|npc1|] [|npc1|] ... - Entfernt NPCs, die hinzugefügt werden sollen\n\
 rmnpcs [|npc1|] [|npc2|] ... - Entfernt NPCs, die entfernt werden sollen
 
 show=\

@@ -7,7 +7,6 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -52,14 +51,28 @@ public class Room extends GameElement implements Serializable {
         return tools.removeTool(name);
     }
 
+    /**
+     *
+     * @return die Liste der Tools, die sich in diesem Raum befinden
+     */
     public ArrayList<String> getTools() {
         return this.tools.getTools();
     }
 
+    /**
+     *
+     * @return das Objekt des Containers, in dem die Tools von diesem Raum sind
+     */
     public Container getToolsContainer() {
         return this.tools;
     }
 
+    /**
+     *
+     * @param name der Name des gesuchten Tools
+     * @return das Objekt des Tools
+     * @throws ItemNotFoundException wenn sich das Tool nicht in diesem Raum befindet
+     */
     public Tool getTool(String name) throws ItemNotFoundException {
         if (tools.getTools().contains(name)) {
             return tools.getTool(name);
@@ -67,6 +80,10 @@ public class Room extends GameElement implements Serializable {
             throw new ItemNotFoundException(name);
     }
 
+    /**
+     * speichert das Tool in kleingeschiebener Form in diesem Raum
+     * @param tool der Name des zu speichernden Tools
+     */
     public void addTool(String tool) {
         String str = tool.toLowerCase();
         if (!tools.getTools().contains(str)) {
@@ -74,11 +91,20 @@ public class Room extends GameElement implements Serializable {
         }
     }
 
-
+    /**
+     *
+     * @return die Liste der Containern zurück, die sich in diesem Raum befinden
+     */
     public ArrayList<String> getContainers() {
         return this.container;
     }
 
+    /**
+     *
+     * @param name der Name des gesuchten Containers
+     * @return das Objekt des Containers
+     * @throws ItemNotFoundException wenn der Container sich nicht in diesem Raum befindet oder es ihn nicht gibt
+     */
     public Container getContainer(String name) throws ItemNotFoundException {
         if (!container.contains(name))
             throw new ItemNotFoundException(name);
@@ -127,7 +153,7 @@ public class Room extends GameElement implements Serializable {
     }
 
     /**
-     * Ändert den ort des Raumes
+     * Ändert den Ort des Raumes
      *
      * @param newLocationString Neuer Ort
      * @throws ItemNotFoundException Wenn neuer Ort nicht existiert
@@ -151,15 +177,17 @@ public class Room extends GameElement implements Serializable {
 
     public boolean check() {
         boolean ret = true;
-        if (World.locationMap.get(location) == null) {
-            System.out.printf("Location %s von Raum %s existiert nicht oder ist noch nicht gesetzt\n", location, name);
-            ret = false;
-        } else {
-            if (!World.locationMap.get(location).getRooms().contains(name)) {
-                System.out.printf("Location %s wird von Raum %s referenziert aber nicht umgekehrt\n", location, name);
+        try {
+            if (World.locationMap.get(location) == null) {
+                System.out.printf("Location %s von Raum %s existiert nicht oder ist noch nicht gesetzt\n", location, name);
                 ret = false;
+            } else {
+                if (!World.locationMap.get(location).getRooms().contains(name)) {
+                    System.out.printf("Location %s wird von Raum %s referenziert aber nicht umgekehrt\n", location, name);
+                    ret = false;
+                }
             }
-        }
+        }catch(NullPointerException ignored){}
         for (String tool : tools.getTools()) {
             if (World.toolMap.get(tool) == null) {
                 System.out.printf("Tool %s von Raum %s existiert nicht\n", tool, name);
@@ -215,9 +243,9 @@ public class Room extends GameElement implements Serializable {
         string += String.format("Beschreibung: %s\n", getDescription());
         string += String.format("Location: %s\n", getLocation());
         string += String.format("Tools: %s\n", tools.getTools() != null ? tools.getTools().toString() : null);
-        string += String.format("Npcs: %s\n", npcs.toString());
-        string += String.format("Container: %s\n", container.toString());
-        string += String.format("Exits: %s", exits.toString());
+        string += String.format("Npcs: %s\n", npcs);
+        string += String.format("Container: %s\n", container);
+        string += String.format("Exits: %s", exits);
         return string;
     }
 }

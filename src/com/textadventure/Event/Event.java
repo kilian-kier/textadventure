@@ -4,17 +4,27 @@ import com.textadventure.Story.World;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.EventExistsException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
 public class Event implements Serializable {
     private static final long serialVersionUID = 2552220530382600393L;
-    //TODO Eingobe va Events und die Diffs de sebm drin san
     private String name;
     private Collection<String> cmd;
     private final HashMap<String,Diff> differences=new HashMap<>();
     private Collection<String> dependent;
     private boolean happened=false;
+    private boolean once=true;
+
+    public boolean isOnce() {
+        return once;
+    }
+
+    public void setOnce(boolean once) {
+        this.once = once;
+    }
+
     private String info=null;
     private String room;
 
@@ -77,15 +87,20 @@ public class Event implements Serializable {
         differences.remove(diffstring);
     }
     private boolean applyDiffsToWorld(){
-        for (String i:dependent) {
-            try{
-                if(!World.eventMap.get(i).isHappened()){
-                    return false;
+        try {
+            for (String i : dependent) {
+                try {
+                    if (!World.eventMap.get(i).isHappened() || (happened && once)) {
+                        return false;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }catch(Exception e){
-                e.printStackTrace();
             }
+        } catch (NullPointerException e) {
+
         }
+        System.out.println(info);
         for (Diff diff:differences.values()) {
             try {
                 diff.applyDiffToWorld();
@@ -105,11 +120,15 @@ public class Event implements Serializable {
     public static boolean execEvent(Collection<String> args){
         String hash = stringForHash(args);
         if(World.eventMap.containsKey(hash)){
-            //Story
-            System.out.println(World.eventMap.get(hash).getInfo());
             return World.eventMap.get(hash).applyDiffsToWorld();
         }
         return false;
+    }
+
+    public static boolean execSingleEvent(String eventName){
+        ArrayList<String> args = new ArrayList<>();
+        args.add(World.eventKeyMap.get("start"));
+        return execEvent(args);
     }
 
 
@@ -162,6 +181,7 @@ public class Event implements Serializable {
         string+=String.format("Info: %s\n",info);
         string+=String.format("Befehl: %s\n",cmd.toString());
         string+=String.format("Abhängig von: %s\n",dependent);
+        string+=String.format("Einmalig? %b\n",once);
         string+="Diffs:";
         for (Diff i: differences.values()) {
             string+="\n";

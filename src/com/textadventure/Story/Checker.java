@@ -17,7 +17,7 @@ public class Checker {
      * Jedes Element der Welt besitzt eine eigene check Funktion, welche hier aufgerufen wird, sodass sich die Elemente selbst überprüfen.
      * @return true, wenn es keine Fehler gibt, ansonsten false
      */
-    protected static boolean check(){
+    public static boolean check(){
         boolean ret=true;
         for (Room room: World.roomMap.values() ) {
             if(!room.check()){
@@ -58,6 +58,9 @@ public class Checker {
         if(World.eventKeyMap.get("start")==null){
             System.out.println("Start Event nicht gefunden");
             ret=false;
+        }
+        if(World.player==null){
+            System.out.println("Player nicht gefunden");
         }
         return ret;
     }

@@ -20,16 +20,6 @@ public class Container extends Item implements Serializable {
     }
 
     @Override
-    Container findItemContainer(String container) throws ItemNotFoundException{
-        Container newContainer=World.roomMap.get(container).getToolsContainer();
-        if(
-                newContainer==null){
-            throw new ItemNotFoundException(container);
-        }
-        return newContainer;
-    }
-
-    @Override
     public boolean check() {
         boolean ret=true;
         if(World.roomMap.get(currentContainer)==null){
@@ -64,20 +54,38 @@ public class Container extends Item implements Serializable {
         return string;
     }
 
+    /**
+     *
+     * @param name Name des Tools
+     * @return das Objekt des Tools oder null falls es das Tool nicht in diesem Container befindet
+     */
     public Tool getTool(String name) {
         return World.toolMap.get(name);
     }
 
+    /**
+     * speichert das Tool in kleingeschiebener Form in diesem Container
+     * @param tool der Name des zu speichernden Tools
+     */
     public void addTool(String tool) {
         String str = tool.toLowerCase();
         if (!tools.contains(str))
             tools.add(str);
     }
 
+    /**
+     *
+     * @return die Liste aller Tools in diesem Container
+     */
     public ArrayList<String> getTools() {
         return this.tools;
     }
 
+    /**
+     *
+     * @param name Name des zu entfernenden Tools
+     * @return true falls das Tool entfernt wurde, false falls das Tool nicht in diesem Container gefunden wurde
+     */
     public boolean removeTool(String name) {
         return tools.remove(name);
     }

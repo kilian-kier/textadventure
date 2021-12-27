@@ -15,6 +15,11 @@ import java.util.Scanner;
  * Event Editor zum bearbeiten von Events
  */
 public class EventEditor {
+    /**
+     * Event Editor zum editieren oder erstellen von Events
+     * @param name Der name des Events. Existiert er bereits, wird das Event editiert, ansonsten ein neues erstellt.
+     * @return Gibt false zurück, wenn nicht erfolgreich
+     */
     public static boolean edit(String name) {
         Event event=null;
         if (name == null) {
@@ -43,6 +48,15 @@ public class EventEditor {
             commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
+                case "once":
+                    if(event.isOnce()){
+                        event.setOnce(!event.isOnce());
+                        System.out.println("Event wird nun oefter ausgefuehrt");
+                    }else{
+                        event.setOnce(!event.isOnce());
+                        System.out.println("Event wird nun einmalig ausgefuehrt");
+                    }
+                    break;
                 case "cmd":
                     commands.removeFirst();
                     event.storeEvent(commands);

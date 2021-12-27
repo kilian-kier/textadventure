@@ -69,7 +69,7 @@ public class Main {
 
         World.player = new Player("Stefe", "Ein junger Mann", house);*/
 
-        Game.start("world.world");
+        //Game.start("world.world");
         /*
         //Github Copilot hot mo de description vorgschlog, obo de isch et letz
         World.player = new Player("Stefe", "Manchmal frage ich mich, wer bin ich überhaupt?", house);

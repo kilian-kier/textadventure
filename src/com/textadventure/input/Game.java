@@ -10,8 +10,11 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Game {
@@ -23,7 +26,9 @@ public class Game {
             "schaue",
             "untersuche",
             "gebe",
-            "aktion"
+            "aktion",
+            "hilfe",
+            "clear"
     });
 
     private static String firstCap(String s) {
@@ -31,10 +36,13 @@ public class Game {
     }
 
     public static void start(String path) {
-        //TODO: Welt laden
-        //World.load(path);
-        //TODO schauen ob start gibt
-        //World.eventMap.get(World.eventKeyMap.get("start"));
+        try {
+            LoadStoreWorld.load(path);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        Event.execSingleEvent("start");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> cmd;
         String input;
@@ -58,6 +66,9 @@ public class Game {
             Exit exit;
             Room room;
             switch (cmd.get(0)) {
+                case "check":
+                    Checker.check();
+                    break;
                 case "nehme":
                     if (cmd.size() != 2 && cmd.size() != 3) {
                         try {
@@ -163,7 +174,15 @@ public class Game {
                 case "lege":
                     // NO BREAK
                 case "gebe":
-                    if (cmd.size() != 2 && cmd.size() != 3) {
+                    Map<String, Room> r = World.roomMap;
+                    Map<String, Container> co = World.containerMap;
+
+                    World.containerMap.get(cmd.get(2)).addTool(cmd.get(1));
+                    World.containerMap.get(World.toolMap.get(cmd.get(1)).getCurrentContainer()).removeTool(cmd.get(1));
+                    World.toolMap.get(cmd.get(1)).setContainer(cmd.get(2));
+
+                    break;
+                    /*if (cmd.size() != 2 && cmd.size() != 3) {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
                         } catch (CommandSyntaxException e) {
@@ -206,7 +225,7 @@ public class Game {
                             continue;
                         }
                     }
-                    break;
+                    break;*/
                 case "spreche":
                     if (cmd.size() != 2) {
                         try {
@@ -371,6 +390,21 @@ public class Game {
                                 continue;
                             }
                         }
+                    }
+                    break;
+                case "clear":
+                    System.out.println("\033[2J");
+                    System.out.println("\033[H");
+                    break;
+                case "hilfe":
+                    try{
+                        if(cmd.size()>1) {
+                            System.out.println(Help.help("GameHelp", commands.get(1)));
+                        }else{
+                            System.out.println(Help.help("GameHelp", null));
+                        }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 default:

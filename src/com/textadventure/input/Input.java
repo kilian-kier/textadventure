@@ -13,7 +13,7 @@ import java.util.Scanner;
  * Sammlung verschiedener Eingabe Funktionen
  */
 public class Input {
-    private static String editor = "gnome-text-editor";
+    private static String editor = "kate";
 
     /**
      * Öffnet einen String in einem Editor
@@ -50,6 +50,9 @@ public class Input {
         }
         if (!file.delete())
             throw new RuntimeException("Failed to delete temporary file: " + file.getAbsolutePath()); //TODO: vielleicht eigene Exception schreiben
+        if(string2.charAt(string2.length()-1)=='\n') {
+            string2=string2.substring(0,string2.length()-1);
+        }
         return string2;
     }
 

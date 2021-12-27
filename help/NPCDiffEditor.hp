@@ -2,17 +2,17 @@ std=\
 Befehle zum Editieren von NPCDiffs: add, rm, show, back
 
 add=\
-Befehl fuegt Aenderung hinzu.\n\
-Benuetzung: add [description/room/dialog]\n\
+Befehl fügt Änderung hinzu.\n\
+Benutzung: add [description/room/dialog]\n\
 Mit Eingabeaufforderung:\n\
 description - Setzt Beschreibung\n\
 room - Setzt Raum\n\
 Ohne Eingabeaufforderung:\n\
-dialog - Fuegt Dialog hinzu, wenn keiner existiert. Der Dialog Editor oeffnet sich.
+dialog - Fügt Dialog hinzu, wenn keiner existiert. Der Dialog Editor öffnet sich.
 
 rm=\
-Befehl entfernt Aenderung.\n\
-Benuetzung: rm [description/room/dialog]\n\
+Befehl entfernt Änderung.\n\
+Benutzung: rm [description/room/dialog]\n\
 description - Entfernt Beschreibung\n\
 room - Entfernt Raum\n\
 dialog - Entfernt Dialog

@@ -9,6 +9,7 @@ import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.input.Game;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
@@ -54,6 +55,16 @@ public class World {
             commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
+                case "rm":
+                    try{
+                        rmGameElement(commands.get(1));
+                    }catch(ElementNotFoundException e){
+                        System.out.println(e.getMessage());
+                    }
+                    catch(IndexOutOfBoundsException e){
+                        System.out.println("Zun wenig Argumente");
+                    }
+                    break;
                 case "new":
                     try {
                         newGameElement(commands);
@@ -90,12 +101,21 @@ public class World {
                     }
                     break;
                 case "store":
-                    LoadStoreWorld.store(path);
+                    if(commands.size()>1){
+                        LoadStoreWorld.store(commands.get(1));
+                    }else{
+                        LoadStoreWorld.store(path);
+                    }
                     break;
                 case "load":
-                    try {
+                    try{
+                    if(commands.size()<2){
                         LoadStoreWorld.load(path);
+                    }else {
+                        LoadStoreWorld.load(commands.get(1));
+                    }
                     } catch (Exception e) {
+                        System.out.println("Pfad nicht gefunden");
                         e.printStackTrace();
                     }
                     break;
@@ -127,6 +147,15 @@ public class World {
                         System.out.println(e.getMessage());
                     }
                     break;
+                case "start":
+                    if (!Checker.check()) {
+                        System.out.println("Es gibt Fehler in der Welt");
+                        break;
+                    }
+                    World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
+                    LoadStoreWorld.store(path);
+                    Game.start(path);
+                    break;
                 case "exit":
                     exit = true;
                     break;
@@ -137,6 +166,23 @@ public class World {
         }
     }
 
+    private static void rmGameElement(String name) throws ElementNotFoundException {
+
+            if(World.eventMap.remove(World.eventKeyMap.get(name))!=null){
+                World.eventKeyMap.remove(name);
+                return;
+            }
+            if(World.roomMap.remove(name)!=null){
+                World.containerMap.remove(name);
+                return;
+            }
+            if(World.containerMap.remove(name)!=null) return;
+            if(World.locationMap.remove(name)!=null) return;
+            if(World.npcMap.remove(name)!=null) return;
+            if(World.toolMap.remove(name)!=null) return;
+            if(World.exitMap.remove(name)!=null) return;
+            throw new ElementNotFoundException("Element",name);
+    }
     /**
      * Mit dieser Methode können Beschreibung und Raum eines Tools geändert werden
      *
@@ -169,8 +215,8 @@ public class World {
                         switch (command.get(1)) {
                             case "description" -> temp.setDescription(Input.input("description"));
                             case "container" -> {
-                                if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
-                                else System.out.println(command.get(2) + " nicht gefunden");
+                                if (containerMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
+                                else System.out.println(command.get(2) + "nicht gefunden");
                             }
                             default -> System.out.println("command not found");
                         }
@@ -781,5 +827,3 @@ public class World {
         throw new ElementNotFoundException(name, "Name");
     }
 }
-
-//TODO: entweder de löschen oder die Maps private mochen, wos schiana war - evt. später wenn wo olla zeit hobm an refactor van projekt mochn

@@ -22,7 +22,7 @@ public class LoadStoreWorld {
      * @param path Datei mit gespeicherter Welt
      * @throws FileNotFoundException Wenn die Datei nicht gefunden wird
      */
-    protected static void load(String path) throws FileNotFoundException {
+    public static void load(String path) throws FileNotFoundException {
         try {
             FileInputStream fileIn;
             ObjectInputStream in;
