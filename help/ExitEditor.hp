@@ -1,0 +1,19 @@
+std=\
+Der Exit Editor ermöglicht es Exits zu bearbeiten.\n\
+Es gibt folgende Parameter in Exit:\n\
+Beschreibung (description) und zwei Richtungen (destination1 destination2)\n\
+Der Exit Editor unterstützt folgende Befehle: \n\
+show, back, set, help\n\
+Für genauere Beschreibung eines Befehls: help [|command|]
+
+show=\
+Befehl zeigt die Eigenschaften des Exits an.
+
+back=\
+Befehl zum verlassen des Editors.
+
+set=\
+Befehl ermöglicht das setzen (ändern) von:\n\
+Beschreibung: set description (Eingabe der Beschreibung wird abgefragt)\n\
+1.Richtung: set destination1 [Raum]
+2.Richtung: set destination2 [Raum]

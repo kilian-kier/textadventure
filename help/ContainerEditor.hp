@@ -1,0 +1,26 @@
+std=\
+Der Container Editor ermöglicht es Container zu bearbeiten.\n\
+Es gibt folgende Parameter im Container:\n\
+Beschreibung (description), Ort (room) und eine Liste mit Tools\n\
+Der Container Editor unterstützt folgende Befehle: \n\
+show, back, set, help, add, rm\n\
+Für genauere Beschreibung eines Befehls: help [|command|]
+
+show=\
+Befehl zeigt die Eigenschaften des Containers an.
+
+back=\
+Befehl zum verlassen des Editors.
+
+add=\
+Befehl zum hinzufügen von Tools zum Container\n\
+add [Tool] (Listeneingabe mit Leerzeichen möglich)
+
+rm=\
+Befehl zum löschen von Tools aus Container\n\
+rm [Tool] (Listeneingabe mit Leerzeichen möglich)
+
+set=\
+Befehl ermöglicht das setzen (ändern) von:\n\
+Beschreibung: set description (Eingabe der Beschreibung wird abgefragt)\n\
+Ort: set room [Raum]

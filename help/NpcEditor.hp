@@ -1,0 +1,26 @@
+std=\
+Der Npc Editor ermöglicht es Npc zu bearbeiten.\n\
+Es gibt folgende Parameter in Npc:\n\
+Beschreibung (description), einen Ort (Room) und Dialoge\n\
+Der Npc Editor unterstützt folgende Befehle: \n\
+show, back, set, help, add, rm\n\
+Für genauere Beschreibung eines Befehls: help [|command|]
+
+show=\
+Befehl zeigt die Eigenschaften des Npc an.
+
+back=\
+Befehl zum verlassen des Editors.
+
+add=\
+Befehl zum hinzufügen eines Dialogs\n\
+add (DialogEditor wird aufgerufen)
+
+rm=\
+Befehl zum löschen eines Dialogs\n\
+rm (DialogEditor wird aufgerufen)
+
+set=\
+Befehl ermöglicht das setzen (ändern) von:\n\
+Beschreibung: set description (Eingabe der Beschreibung wird abgefragt)\n\
+Ort: set room [Raum]

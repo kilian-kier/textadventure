@@ -1,0 +1,34 @@
+std=\
+Der Room Editor ermöglicht es Rooms zu bearbeiten.\n\
+Es gibt folgende Parameter im Room:\n\
+Beschreibung (description), Umgebung (location) und Listen für Tools, Container, Npc und Exits\n\
+Der Room Editor unterstützt folgende Befehle: \n\
+show, back, set, help, add, rm\n\
+Für genauere Beschreibung eines Befehls: help [|command|]
+
+show=\
+Befehl zeigt die Eigenschaften des Rooms an.
+
+back=\
+Befehl zum verlassen des Editors.
+
+add=\
+Befehl zum hinzufügen von: (Listeneingabe mit Leerzeichen möglich)\n\
+add tool [Tool]\n\
+add npc [NPC]\n\
+add exit [Exit]\n\
+add container [Container]\n\
+
+
+
+rm=\
+Befehl zum löschen von: (Listeneingabe mit Leerzeichen möglich)\n\
+add tool [Tool]\n\
+add npc [NPC]\n\
+add exit [Exit]\n\
+add container [Container]\n\
+
+set=\
+Befehl ermöglicht das setzen (ändern) von:\n\
+Beschreibung: set description (Eingabe der Beschreibung wird abgefragt)\n\
+Umgebung: set location [Location]
