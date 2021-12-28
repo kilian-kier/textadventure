@@ -171,7 +171,6 @@ public class World {
                         System.out.println("Es gibt Fehler in der Welt");
                         break;
                     }
-                    World.roomMap.get("haus").setMusicPath("music/haus.mp3");
                     World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
                     LoadStoreWorld.store(path);
                     Game.start(path);
