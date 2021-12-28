@@ -1,13 +1,11 @@
-package com.textadventure.Story;
+package com.textadventure.story;
 
 import com.textadventure.Event.*;
 import com.textadventure.exeptions.ElementExistsException;
 import com.textadventure.exeptions.ElementNotFoundException;
+import com.textadventure.help.Help;
 import com.textadventure.input.Input;
-import com.textadventure.locations.Room;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 

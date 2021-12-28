@@ -1,8 +1,6 @@
 package com.textadventure.things;
 
-import com.textadventure.Story.World;
-import com.textadventure.exeptions.ItemNotFoundException;
-import com.textadventure.exeptions.ItemNotFoundInContainerException;
+import com.textadventure.story.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;

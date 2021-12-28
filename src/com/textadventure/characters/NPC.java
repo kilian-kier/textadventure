@@ -1,13 +1,11 @@
 package com.textadventure.characters;
 
 import com.textadventure.GameElement;
-import com.textadventure.Story.World;
+import com.textadventure.story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
 import com.textadventure.locations.Room;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  *  Nicht Spieler Charakter im Spiel verfügt über Dialoge (dialog) und befindet sich in einem Raum (room).

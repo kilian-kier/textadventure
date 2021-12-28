@@ -1,4 +1,4 @@
-package com.textadventure.Story;
+package com.textadventure.story;
 
 import com.textadventure.GameElement;
 import com.textadventure.exeptions.ElementNotFoundException;

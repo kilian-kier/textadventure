@@ -1,10 +1,9 @@
 package com.textadventure.characters;
 
-import com.textadventure.Story.Help;
+import com.textadventure.help.Help;
 import com.textadventure.input.Input;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;

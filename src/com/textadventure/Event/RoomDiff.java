@@ -1,12 +1,9 @@
 package com.textadventure.Event;
 
-import com.textadventure.Story.Help;
-import com.textadventure.Story.World;
+import com.textadventure.help.Help;
+import com.textadventure.story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
-import com.textadventure.exeptions.TypeDoesNotExistException;
-import com.textadventure.exeptions.TypeNotValidException;
 import com.textadventure.input.Input;
-import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 
 import java.io.Serializable;

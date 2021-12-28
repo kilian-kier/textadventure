@@ -1,9 +1,8 @@
 package com.textadventure.things;
 
 import com.textadventure.GameElement;
-import com.textadventure.Story.World;
+import com.textadventure.story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
-import com.textadventure.exeptions.ItemNotFoundInContainerException;
 
 import java.io.Serializable;
 

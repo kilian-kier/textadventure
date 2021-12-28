@@ -1,6 +1,6 @@
 std=\
 Es gibt folgende Befehle\n\
-nehme, gehe, spreche, schaue, untersuche oder info, gebe oder lege, clear, hilfe
+nehme, gehe, spreche, schaue, untersuche oder info, gebe oder lege, musik, clear, hilfe
 
 nehme=\
 Der Spieler nimmt Dinge von einem Behälter oder \
@@ -53,6 +53,10 @@ lege=\
 Benutzung: gebe [|Ding|] [|Behälter|(optional)]\n\
 Der Befehl legt ein Ding in einen Behälter.\n\
 Wird kein Behälter angegeben, wird das Ding auf den Boden gelegt.\n\
+
+musik=\
+Benutzung: musik [start/stop]\n\
+Schaltet die Musik ein oder aus.\n\
 
 clear=\
 Benutzung: clear\n\
