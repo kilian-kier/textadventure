@@ -1,18 +1,13 @@
 package com.textadventure.Event;
 
-import com.textadventure.Story.Help;
-import com.textadventure.Story.World;
+import com.textadventure.help.Help;
+import com.textadventure.story.World;
 import com.textadventure.characters.Dialog;
 import com.textadventure.characters.NPC;
 import com.textadventure.exeptions.GameElementNotFoundException;
-import com.textadventure.exeptions.TypeDoesNotExistException;
-import com.textadventure.exeptions.TypeNotValidException;
 import com.textadventure.input.Input;
-import com.textadventure.locations.Location;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Scanner;
 

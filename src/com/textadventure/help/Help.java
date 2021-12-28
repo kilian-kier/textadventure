@@ -1,5 +1,6 @@
-package com.textadventure.Story;
+package com.textadventure.help;
 
+import com.textadventure.Main;
 import com.textadventure.exeptions.NoHelpFoundException;
 
 import java.io.File;
@@ -40,7 +41,9 @@ public class Help {
         if(path.charAt(path.length()-1)!='/'){
             path+="/";
         }
+        System.out.println(Main.class.getResource("../../../../world.world"));
         File dir = new File(path);
+        System.out.println(Help.class.getResource("Show.class"));
         String contents[]=dir.list();
         InputStream input;
         for (String i :contents) {

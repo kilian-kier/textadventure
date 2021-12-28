@@ -1,7 +1,7 @@
 package com.textadventure.Event;
 
-import com.textadventure.Story.Help;
-import com.textadventure.Story.World;
+import com.textadventure.help.Help;
+import com.textadventure.story.World;
 import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;

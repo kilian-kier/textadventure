@@ -1,10 +1,10 @@
 package com.textadventure.input;
 
 import com.textadventure.Event.Event;
-import com.textadventure.Story.Checker;
-import com.textadventure.Story.Help;
-import com.textadventure.Story.LoadStoreWorld;
-import com.textadventure.Story.World;
+import com.textadventure.story.Checker;
+import com.textadventure.help.Help;
+import com.textadventure.story.LoadStoreWorld;
+import com.textadventure.story.World;
 import com.textadventure.characters.NPC;
 import com.textadventure.exeptions.*;
 import com.textadventure.gamemusic.MusicPlayer;

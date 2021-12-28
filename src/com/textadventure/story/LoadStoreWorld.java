@@ -1,4 +1,4 @@
-package com.textadventure.Story;
+package com.textadventure.story;
 
 import com.textadventure.Event.Event;
 import com.textadventure.characters.NPC;
@@ -10,8 +10,6 @@ import com.textadventure.things.Tool;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Lädt und Speichert Welt

@@ -1,15 +1,14 @@
-package com.textadventure.Story;
+package com.textadventure.story;
 
 
 import com.textadventure.Event.Event;
 import com.textadventure.GameElement;
-import com.textadventure.characters.Dialog;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
-import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.help.Help;
 import com.textadventure.input.Game;
 import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
@@ -18,8 +17,6 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
-import javax.print.attribute.standard.Destination;
-import javax.swing.text.Element;
 import java.util.*;
 
 /**

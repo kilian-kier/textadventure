@@ -1,17 +1,7 @@
 package com.textadventure;
 
-import com.textadventure.Story.*;
-import com.textadventure.characters.Player;
-import com.textadventure.input.Game;
-import com.textadventure.locations.Exit;
-import com.textadventure.locations.Location;
-import com.textadventure.locations.Room;
-import com.textadventure.things.Container;
-import com.textadventure.things.Tool;
-
-import java.io.*;
-import java.util.Map;
-import java.util.Properties;
+import com.textadventure.help.Help;
+import com.textadventure.story.*;
 
 public class Main {
 

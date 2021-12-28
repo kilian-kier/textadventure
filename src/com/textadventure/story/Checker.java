@@ -1,4 +1,4 @@
-package com.textadventure.Story;
+package com.textadventure.story;
 
 import com.textadventure.Event.Event;
 import com.textadventure.characters.NPC;

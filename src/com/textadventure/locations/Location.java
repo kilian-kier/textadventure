@@ -1,7 +1,7 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
-import com.textadventure.Story.World;
+import com.textadventure.story.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;

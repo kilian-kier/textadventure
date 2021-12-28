@@ -1,6 +1,6 @@
 package com.textadventure.Event;
 
-import com.textadventure.Story.World;
+import com.textadventure.story.World;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.EventExistsException;
 import java.io.Serializable;
