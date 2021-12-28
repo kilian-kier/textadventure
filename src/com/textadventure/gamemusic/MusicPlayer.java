@@ -3,18 +3,22 @@ package com.textadventure.gamemusic;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class MusicPlayer implements Runnable {
+    Thread thread = null;
     private Player player = null;
-    private final String filename;
 
+    /**
+     * Für jedes abzuspielende Audio muss ein MusicPlayer erstellt werden
+     *
+     * @param filename Dateipath des Audios
+     */
     public MusicPlayer(String filename) {
-        this.filename = filename;
         if (filename != null) {
             try {
                 FileInputStream inputStream = new FileInputStream(filename);
@@ -35,9 +39,14 @@ public class MusicPlayer implements Runnable {
         }
     }
 
+    /**
+     * Startet einen neuen Thread mit dem MusicPlayer
+     */
     public void play() {
-        if (player != null)
-            new Thread(this).start();
+        if (player != null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
 
     private void restart() {
@@ -51,11 +60,23 @@ public class MusicPlayer implements Runnable {
         }
     }
 
+    /**
+     * Stoppt den Thread und löscht den Player
+     */
     public void stop() {
-        if (player != null)
+        if (player != null) {
             player.close();
+            if (thread != null)
+                thread.stop();
+        }
     }
 
+    /**
+     * Liest eine Audiodatei ein und gibt die Bytes der Datei zurück
+     *
+     * @param filepath Dateipfad der Audiodatei
+     * @return Bytes der Audiodatei
+     */
     public byte[] readFile(String filepath) {
         byte[] ret = null;
         String temp = "";

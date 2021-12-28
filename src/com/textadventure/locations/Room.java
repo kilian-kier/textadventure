@@ -40,13 +40,14 @@ public class Room extends GameElement implements Serializable {
         return name;
     }
 
-    public boolean removeNpc(String npc){
+    public boolean removeNpc(String npc) {
         return npcs.remove(npc);
     }
 
-    public boolean removeExit (String exit){
+    public boolean removeExit(String exit) {
         return exits.remove(exit);
     }
+
     //TODO: vielleicht amol löschen wenns do Herr Gamper nt braucht
     public void addExit(String exit) {
         exits.add(exit);
@@ -61,7 +62,6 @@ public class Room extends GameElement implements Serializable {
     }
 
     /**
-     *
      * @return die Liste der Tools, die sich in diesem Raum befinden
      */
     public ArrayList<String> getTools() {
@@ -69,7 +69,6 @@ public class Room extends GameElement implements Serializable {
     }
 
     /**
-     *
      * @return das Objekt des Containers, in dem die Tools von diesem Raum sind
      */
     public Container getToolsContainer() {
@@ -77,7 +76,6 @@ public class Room extends GameElement implements Serializable {
     }
 
     /**
-     *
      * @param name der Name des gesuchten Tools
      * @return das Objekt des Tools
      * @throws ItemNotFoundException wenn sich das Tool nicht in diesem Raum befindet
@@ -91,6 +89,7 @@ public class Room extends GameElement implements Serializable {
 
     /**
      * speichert das Tool in kleingeschiebener Form in diesem Raum
+     *
      * @param tool der Name des zu speichernden Tools
      */
     public void addTool(String tool) {
@@ -101,7 +100,6 @@ public class Room extends GameElement implements Serializable {
     }
 
     /**
-     *
      * @return die Liste der Containern zurück, die sich in diesem Raum befinden
      */
     public ArrayList<String> getContainers() {
@@ -109,7 +107,6 @@ public class Room extends GameElement implements Serializable {
     }
 
     /**
-     *
      * @param name der Name des gesuchten Containers
      * @return das Objekt des Containers
      * @throws ItemNotFoundException wenn der Container sich nicht in diesem Raum befindet oder es ihn nicht gibt
@@ -196,7 +193,8 @@ public class Room extends GameElement implements Serializable {
                     ret = false;
                 }
             }
-        }catch(NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
         for (String tool : tools.getTools()) {
             if (World.toolMap.get(tool) == null) {
                 System.out.printf("Tool %s von Raum %s existiert nicht\n", tool, name);

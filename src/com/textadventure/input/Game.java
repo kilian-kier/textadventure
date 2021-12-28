@@ -17,15 +17,25 @@ import com.textadventure.things.Tool;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Game {
 
+    /**
+     * Der erste Buchstabe eines Wortes wird zu einem Großbuchstaben
+     *
+     * @param s das zu veränderndes Wort
+     * @return das großgeschriebene Wort
+     */
     private static String firstCap(String s) {
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
+    /**
+     * Startet das Spiel
+     *
+     * @param path zur Weltdatei
+     */
     public static void start(String path) {
         try {
             LoadStoreWorld.load(path);
@@ -166,15 +176,12 @@ public class Game {
                 case "lege":
                     // NO BREAK
                 case "gebe":
-                    Map<String, Room> r = World.roomMap;
-                    Map<String, Container> co = World.containerMap;
-
-                    World.containerMap.get(cmd.get(2)).addTool(cmd.get(1));
+                    /*World.containerMap.get(cmd.get(2)).addTool(cmd.get(1));
                     World.containerMap.get(World.toolMap.get(cmd.get(1)).getCurrentContainer()).removeTool(cmd.get(1));
                     World.toolMap.get(cmd.get(1)).setContainer(cmd.get(2));
 
-                    break;
-                    /*if (cmd.size() != 2 && cmd.size() != 3) {
+                    break;*/
+                    if (cmd.size() != 2 && cmd.size() != 3) {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
                         } catch (CommandSyntaxException e) {
@@ -217,7 +224,6 @@ public class Game {
                             continue;
                         }
                     }
-                    break;*/
                 case "spreche":
                     if (cmd.size() != 2) {
                         try {
@@ -418,7 +424,6 @@ public class Game {
                     }
             }
             Event.execEvent(cmd);
-            //TODO: Clear screen
         }
     }
 }

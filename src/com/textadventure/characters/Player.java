@@ -2,7 +2,9 @@ package com.textadventure.characters;
 
 import com.textadventure.GameElement;
 import com.textadventure.Story.World;
-import com.textadventure.exeptions.*;
+import com.textadventure.exeptions.ExitNotFoundException;
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.exeptions.NoBackException;
 import com.textadventure.interfaces.RoomChangeable;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Room;
@@ -16,6 +18,13 @@ public class Player extends GameElement implements RoomChangeable {
     private Room currentRoom;
     private Room previousRoom;
 
+    /**
+     * Ein Spieler, der sich in der Welt befindet
+     *
+     * @param name        Name des Spielers
+     * @param description Beschreibung des Spielers
+     * @param currentRoom Raum, in dem der Spieler startet
+     */
     public Player(String name, String description, Room currentRoom) {
         super(name);
         this.description = description;
@@ -27,11 +36,16 @@ public class Player extends GameElement implements RoomChangeable {
         return currentRoom;
     }
 
-    //TODO: löschen, hons lei in do Main zin testen gebraucht
-    public Room getPreviousRoom() {
-        return previousRoom;
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
     }
 
+    /**
+     * Sucht den Ausgang und falls der Spieler sich in einen der Zielräume befindet, wird er in den anderen Raum gewechselt
+     *
+     * @param exit der Name des Ausgangs
+     * @throws ExitNotFoundException, wenn es den Ausgang nicht gibt
+     */
     @Override
     public void changeRoom(String exit) throws ExitNotFoundException {
         if (!currentRoom.getExits().contains(exit))
@@ -53,6 +67,11 @@ public class Player extends GameElement implements RoomChangeable {
         throw new ExitNotFoundException(exit);
     }
 
+    /**
+     * Ändert den Raum des Spielers, in dem er sich zuvor befand
+     *
+     * @throws NoBackException, wenn der Spieler zuvor in keinem Raum war
+     */
     @Override
     public void goBack() throws NoBackException {
         if (previousRoom != null) {
@@ -72,6 +91,9 @@ public class Player extends GameElement implements RoomChangeable {
         }
     }
 
+    /**
+     * @return das Invantar/Rucksack des Spielers als ArrayList
+     */
     public ArrayList<String> getTools() {
         return this.inventory.getTools();
     }
@@ -82,28 +104,26 @@ public class Player extends GameElement implements RoomChangeable {
         } else
             throw new ItemNotFoundException(name);
     }
-    public Container getToolsContainer(){
-        return this.inventory;
-    }
 
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
+    public Container getToolsContainer() {
+        return this.inventory;
     }
 
     public void addTool(String tool) {
         inventory.addTool(tool);
     }
+
     public void removeTool(String tool) {
         inventory.removeTool(tool);
     }
 
     @Override
     public String toString() {
-        String string="";
-        string+=String.format("Name %s\n",this.name);
-        string+=String.format("Beschreibung: %s\n",this.description);
-        if(this.currentRoom == null) string+=String.format("Raum: null");
-        else string+=String.format("Raum: %s",this.currentRoom.getName());
+        String string = "";
+        string += String.format("Name %s\n", this.name);
+        string += String.format("Beschreibung: %s\n", this.description);
+        if (this.currentRoom == null) string += String.format("Raum: null");
+        else string += String.format("Raum: %s", this.currentRoom.getName());
         return string;
     }
 }
