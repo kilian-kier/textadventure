@@ -14,7 +14,7 @@ public class Main {
         System.out.println(diff);*/
 
 
-        Help.load("help");
+        Help.load();
         World.worldEditor("world.world");
 
         /*World.worldEditor("world.world");

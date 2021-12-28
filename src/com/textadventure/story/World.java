@@ -17,7 +17,12 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.security.CodeSource;
 import java.util.*;
+import java.util.zip.ZipInputStream;
 
 /**
  * Die World Klasse hat 7 HashMaps und ein Objekt des Players und ein Objekt des MusicPlayers.
@@ -35,7 +40,21 @@ public class World {
     static public HashMap<String, String> eventKeyMap = new HashMap<>();
     //TODO new Player
     static public Player player;
-    static public MusicPlayer musicPlayer = new MusicPlayer(null);
+    static public MusicPlayer musicPlayer = new MusicPlayer();
+
+    public static boolean isJar() {
+        try {
+            CodeSource src = Help.class.getProtectionDomain().getCodeSource();
+            if (src != null) {
+                URL jar = src.getLocation();
+                ZipInputStream zip = new ZipInputStream(jar.openStream());
+                return zip.getNextEntry() != null;
+            }
+        } catch (IOException e) {
+            //DO NOTHING
+        }
+        return false;
+    }
 
     /**
      * Im weltEditor kann die Speilwelt gespeichert/geladen und bearbeitet werden.
@@ -152,7 +171,7 @@ public class World {
                         System.out.println("Es gibt Fehler in der Welt");
                         break;
                     }
-                    World.roomMap.get("haus").setMusicPath("music/test.mp3");
+                    World.roomMap.get("haus").setMusicPath("music/haus.mp3");
                     World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
                     LoadStoreWorld.store(path);
                     Game.start(path);

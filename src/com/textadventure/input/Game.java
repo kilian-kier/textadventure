@@ -1,16 +1,14 @@
 package com.textadventure.input;
 
 import com.textadventure.Event.Event;
-import com.textadventure.story.Checker;
-import com.textadventure.help.Help;
-import com.textadventure.story.LoadStoreWorld;
-import com.textadventure.story.World;
 import com.textadventure.characters.NPC;
 import com.textadventure.exeptions.*;
-import com.textadventure.gamemusic.MusicPlayer;
+import com.textadventure.help.Help;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
+import com.textadventure.story.LoadStoreWorld;
+import com.textadventure.story.World;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
@@ -48,7 +46,6 @@ public class Game {
         LinkedList<String> cmd;
         String input;
 
-        World.musicPlayer = new MusicPlayer(World.player.getCurrentRoom().getMusicPath());
         World.musicPlayer.play();
 
         while (true) {
@@ -65,9 +62,6 @@ public class Game {
             Exit exit;
             Room room;
             switch (cmd.get(0)) {
-                case "check":
-                    Checker.check();
-                    break;
                 case "nehme":
                     if (cmd.size() != 2 && cmd.size() != 3) {
                         try {
@@ -168,8 +162,6 @@ public class Game {
                             continue;
                         }
                     }
-                    World.musicPlayer.stop();
-                    World.musicPlayer = new MusicPlayer(World.player.getCurrentRoom().getMusicPath());
                     World.musicPlayer.play();
                     System.out.println(firstCap(World.player.getName()) + " befindet sich nun in: " + firstCap(World.player.getCurrentRoom().getName()));
                     break;
@@ -390,14 +382,19 @@ public class Game {
                         }
                     }
                     break;
-                case "music":
-                    if (cmd.size() != 1) {
+                case "musik":
+                    if (cmd.size() != 2) {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
                         } catch (CommandSyntaxException e) {
                             System.out.println(e.getMessage());
                             continue;
                         }
+                    }
+                    if (cmd.get(1).equals("start")) {
+                        World.musicPlayer.play();
+                    } else if (cmd.get(1).equals("stop")) {
+                        World.musicPlayer.stop();
                     }
                     break;
                 case "clear":
