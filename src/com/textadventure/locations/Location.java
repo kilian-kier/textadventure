@@ -22,21 +22,24 @@ public class Location extends GameElement implements Serializable {
         return rooms;
     }
 
+    public void setRooms(ArrayList<String> rooms) {
+        this.rooms = rooms;
+    }
+
     public void addRoom(String room) {
-        if(!rooms.contains(room)){
+        if (!rooms.contains(room)) {
             rooms.add(room);
         }
     }
-    public void setRooms(ArrayList<String> rooms){
-        this.rooms=rooms;
-    }
+
     public String getRoomIndex(int index) throws IndexOutOfBoundsException {
         return rooms.get(index);
     }
 
-    public boolean removeRoom (String name){
+    public boolean removeRoom(String name) {
         return rooms.remove(name);
     }
+
     public void removeAllRooms() {
         rooms.clear();
     }
@@ -44,16 +47,17 @@ public class Location extends GameElement implements Serializable {
     public void removeRoomIndex(int index) throws IndexOutOfBoundsException {
         rooms.remove(index);
     }
-    public boolean check(){
-        boolean ret=true;
-        for (String room:rooms) {
-            if(World.roomMap.get(room)==null){
-                System.out.printf("Raum %s von Location %s existiert nicht\n",room,name);
-                ret=false;
-            }else{
-                if(!World.roomMap.get(room).getLocation().equals(name)){
-                    System.out.printf("Raum %s wird von Location %s referenziert aber nicht umgekehrt\n",room,name);
-                    ret=false;
+
+    public boolean check() {
+        boolean ret = true;
+        for (String room : rooms) {
+            if (World.roomMap.get(room) == null) {
+                System.out.printf("Raum %s von Location %s existiert nicht\n", room, name);
+                ret = false;
+            } else {
+                if (!World.roomMap.get(room).getLocation().equals(name)) {
+                    System.out.printf("Raum %s wird von Location %s referenziert aber nicht umgekehrt\n", room, name);
+                    ret = false;
                 }
             }
         }
@@ -63,10 +67,10 @@ public class Location extends GameElement implements Serializable {
 
     @Override
     public String toString() {
-        String string="";
-        string+=String.format("Location %s\n",name);
-        string+=String.format("Beschreibung: %s\n",getDescription());
-        string+=String.format("Räume: %s",rooms.toString());
+        String string = "";
+        string += String.format("Location %s\n", name);
+        string += String.format("Beschreibung: %s\n", getDescription());
+        string += String.format("Räume: %s", rooms.toString());
         return string;
     }
 }
