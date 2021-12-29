@@ -48,7 +48,20 @@ public class Exit extends GameElement implements Serializable {
     }
 
 
-
+    public String getDescription1(){
+        try {
+            return description.split("[@]")[0];
+        }catch(Exception e){
+            return description;
+        }
+    }
+    public String getDescription2(){
+        try {
+            return description.split("[@]")[1];
+        }catch(Exception e){
+            return description;
+        }
+    }
     public String getDestination2() {
         return destination2;
     }
@@ -83,24 +96,32 @@ public class Exit extends GameElement implements Serializable {
         return this.name;
     }
 
-    public boolean check(){
-        boolean ret=true;
-        if(World.roomMap.get(destination1)==null){
-            System.out.printf("Destination 1 %s von Exit %s existiert nicht\n",destination1,name);
-            ret=false;
-        }else{
-            if(!World.roomMap.get(destination1).getExits().contains(name)){
-                System.out.printf("Raum %s wird von Exit %s als Destination 1 referenziert aber nicht umgekehrt\n",destination1,name);
-                ret=false;
+    public boolean check(boolean fix) {
+        boolean ret = true;
+        if (World.roomMap.get(destination1) == null) {
+            System.out.printf("Destination 1 %s von Exit %s existiert nicht\n", destination1, name);
+            ret = false;
+        } else {
+            if (!World.roomMap.get(destination1).getExits().contains(name)) {
+                System.out.printf("Raum %s wird von Exit %s als Destination 1 referenziert aber nicht umgekehrt\n", destination1, name);
+                if (fix) {
+                    World.roomMap.get(destination1).addExit(name);
+                    System.out.println("Fehler ausgebessert");
+                }
+                ret = false;
             }
-        }
-        if(World.roomMap.get(destination2)==null){
-            System.out.printf("Destination 2 %s von Exit %s existiert nicht\n",destination2,name);
-            ret=false;
-        }else{
-            if(!World.roomMap.get(destination2).getExits().contains(name)){
-                System.out.printf("Raum %s wird von Exit %s als Destination 2 referenziert aber nicht umgekehrt\n",destination2,name);
-                ret=false;
+            if (World.roomMap.get(destination2) == null) {
+                System.out.printf("Destination 2 %s von Exit %s existiert nicht\n", destination2, name);
+                ret = false;
+            } else {
+                if (!World.roomMap.get(destination2).getExits().contains(name)) {
+                    System.out.printf("Raum %s wird von Exit %s als Destination 2 referenziert aber nicht umgekehrt\n", destination2, name);
+                    if (fix) {
+                        World.roomMap.get(destination2).addExit(name);
+                        System.out.println("Fehler ausgebessert");
+                    }
+                    ret = false;
+                }
             }
         }
         return ret;

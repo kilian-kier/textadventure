@@ -57,13 +57,13 @@ public class Dialog implements Serializable {
                     try{
                         switch(commands.get(2)){
                             case "question":
-                                setQA(Integer.parseInt(commands.get(1)),Input.input("Frage"),null,null);
+                                setQA(Integer.parseInt(commands.get(1)),Input.input("Frage",false),null,null);
                                 break;
                             case "answer":
-                                setQA(Integer.parseInt(commands.get(1)),null,Input.input("Antwort"),null);
+                                setQA(Integer.parseInt(commands.get(1)),null,Input.input("Antwort",false),null);
                                 break;
                             case "event":
-                                setQA(Integer.parseInt(commands.get(1)),null,null,Input.input("Event"));
+                                setQA(Integer.parseInt(commands.get(1)),null,null,Input.input("Event",true));
                                 break;
                         }
                     }catch(IndexOutOfBoundsException e){
@@ -121,9 +121,9 @@ public class Dialog implements Serializable {
     }
     public String[] inputQA(){
         String[] qa = new String[3];
-        qa[0]=Input.input("Frage");
-        qa[1]=Input.input("Antwort");
-        qa[2]=Input.input("Event"); //Eingabe von none wenn kein Event
+        qa[0]=Input.input("Frage",false);
+        qa[1]=Input.input("Antwort",false);
+        qa[2]=Input.input("Event",true); //Eingabe von none wenn kein Event
         if(qa[2].equals("none")){
             qa[2]=null;
         }

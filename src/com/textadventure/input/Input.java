@@ -4,16 +4,13 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Sammlung verschiedener Eingabe Funktionen
  */
 public class Input {
-    private static String editor = "kate";
+    private static String editor = "gnome-text-editor";
 
     /**
      * Öffnet einen String in einem Editor
@@ -38,7 +35,7 @@ public class Input {
         try {
             Files.write(Path.of(filename), string.getBytes());
             Process process = new ProcessBuilder(cmd).start();
-            process.waitFor();
+           process.waitFor();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,13 +104,17 @@ public class Input {
         return command;
     }
 
-    static public String input(String string) {
+    static public String input(String string,boolean lowercase) {
         Scanner scanner = new Scanner(System.in);
         String input = "";
         System.out.print(string+": ");
         while (input.length() == 0)
             input = scanner.nextLine();
-        return input.toLowerCase();
+        if(lowercase) {
+            return input.toLowerCase();
+        }else{
+            return input;
+        }
     }
 
     static public LinkedList<String> splitInput (String input){

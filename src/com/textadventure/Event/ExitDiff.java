@@ -103,7 +103,7 @@ public class ExitDiff extends Diff implements Serializable {
                             if (Input.getEditor() != null) {
                                 setDescription(Input.edit(getDescription()));
                             } else {
-                                setDescription(Input.input("Beschreibung"));
+                                setDescription(Input.input("Beschreibung",false));
                             }
                             System.out.println("Beschreibung hinzugefügt");
                             break;
@@ -111,7 +111,7 @@ public class ExitDiff extends Diff implements Serializable {
                             if(commands.size()>2){
                                 setDestination1(commands.get(2));
                             }else {
-                                setDestination1(Input.input("Destination1"));
+                                setDestination1(Input.input("Destination1",true));
                             }
                             System.out.println("Destination1 hinzugefügt");
                             break;
@@ -119,7 +119,7 @@ public class ExitDiff extends Diff implements Serializable {
                             if(commands.size()>2){
                                 setDestination2(commands.get(2));
                             }else {
-                                setDestination2(Input.input("Destination2"));
+                                setDestination2(Input.input("Destination2",true));
                             }
                             System.out.println("Destination2 hinzugefügt");
                             break;

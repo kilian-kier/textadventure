@@ -112,7 +112,7 @@ public class LocationDiff extends Diff implements Serializable {
                             if (Input.getEditor() != null) {
                                 setDescription(Input.edit(getDescription()));
                             } else {
-                                setDescription(Input.input("Beschreibung"));
+                                setDescription(Input.input("Beschreibung",false));
                             }
                             System.out.println("Beschreibung hinzugefügt");
                             break;

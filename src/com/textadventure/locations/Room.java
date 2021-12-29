@@ -172,7 +172,7 @@ public class Room extends GameElement implements Serializable {
         this.name = newLocationString;
     }
 
-    public boolean check() {
+    public boolean check(boolean fix) {
         boolean ret = true;
         try {
             if (World.locationMap.get(location) == null) {
@@ -181,6 +181,10 @@ public class Room extends GameElement implements Serializable {
             } else {
                 if (!World.locationMap.get(location).getRooms().contains(name)) {
                     System.out.printf("Location %s wird von Raum %s referenziert aber nicht umgekehrt\n", location, name);
+                    if(fix){
+                        World.locationMap.get(location).addRoom(name);
+                        System.out.println("Fehler ausgebessert");
+                    }
                     ret = false;
                 }
             }
@@ -193,6 +197,10 @@ public class Room extends GameElement implements Serializable {
             } else {
                 if (!World.toolMap.get(tool).getCurrentContainer().equals(name)) {
                     System.out.printf("Tool %s wird von Raum %s referenziert aber nicht umgekehrt\n", tool, name);
+                    if(fix){
+                        World.toolMap.get(tool).setContainer(name);
+                        System.out.println("Fehler ausgebessert");
+                    }
                     ret = false;
                 }
             }
@@ -204,6 +212,10 @@ public class Room extends GameElement implements Serializable {
             } else {
                 if (!World.containerMap.get(cont).getCurrentContainer().equals(name)) {
                     System.out.printf("Container %s wird von Raum %s referenziert aber nicht umgekehrt\n", cont, name);
+                    if(fix){
+                        World.containerMap.get(cont).setContainer(name);
+                        System.out.println("Fehler ausgebessert");
+                    }
                     ret = false;
                 }
             }
@@ -215,21 +227,27 @@ public class Room extends GameElement implements Serializable {
             } else {
                 if (!World.npcMap.get(npc).getRoom().equals(name)) {
                     System.out.printf("NPC %s wird von Raum %s referenziert aber nicht umgekehrt\n", npc, name);
+                    if(fix){
+                        World.npcMap.get(npc).setRoom(name);
+                        System.out.println("Fehler ausgebessert");
+                    }
                     ret = false;
                 }
             }
         }
-        for (String exit : exits) {
-            if (World.exitMap.get(exit) == null) {
-                System.out.printf("Exit %s von Raum %s existiert nicht\n", exit, name);
-                ret = false;
-            } else {
-                if (!World.exitMap.get(exit).getDestination1().equals(name) && !World.exitMap.get(exit).getDestination2().equals(name)) {
-                    System.out.printf("Exit %s wird von Raum %s referenziert aber nicht umgekehrt\n", exit, name);
+        try {
+            for (String exit : exits) {
+                if (World.exitMap.get(exit) == null) {
+                    System.out.printf("Exit %s von Raum %s existiert nicht\n", exit, name);
                     ret = false;
+                } else {
+                    if (!World.exitMap.get(exit).getDestination1().equals(name) && !World.exitMap.get(exit).getDestination2().equals(name)) {
+                        System.out.printf("Exit %s wird von Raum %s referenziert aber nicht umgekehrt\n", exit, name);
+                        ret = false;
+                    }
                 }
             }
-        }
+        }catch(Exception ignore){}
         return ret;
     }
 

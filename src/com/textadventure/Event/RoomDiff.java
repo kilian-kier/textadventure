@@ -169,7 +169,7 @@ public class RoomDiff extends Diff implements Serializable {
                             if (Input.getEditor() != null) {
                                 setDescription(Input.edit(getDescription()));
                             } else {
-                                setDescription(Input.input("Beschreibung"));
+                                setDescription(Input.input("Beschreibung",false));
                             }
                             System.out.println("Beschreibung hinzugefügt");
                             break;
@@ -177,7 +177,7 @@ public class RoomDiff extends Diff implements Serializable {
                             if(commands.size()>2){
                                 setLocation(commands.get(2));
                             }else {
-                                setLocation(Input.input("Ort"));
+                                setLocation(Input.input("Ort",true));
                             }
                             System.out.println("Ort hinzugefügt");
                             break;
