@@ -10,6 +10,7 @@ import com.textadventure.things.Tool;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Lädt und Speichert Welt
@@ -23,11 +24,14 @@ public class LoadStoreWorld {
      */
     public static void load(String path) throws FileNotFoundException {
         try {
-            InputStream fileIn = null;
+            InputStream fileIn;
             ObjectInputStream in;
-            if (World.isJar())
-                fileIn = LoadStoreWorld.class.getResourceAsStream("/" + path);
-            else
+            if (path == null) {
+                if (World.isJar())
+                    fileIn = LoadStoreWorld.class.getResourceAsStream("/world.world");
+                else
+                    fileIn = new FileInputStream("world.world");
+            } else
                 fileIn = new FileInputStream(path);
 
             in = new ObjectInputStream(fileIn);
@@ -62,7 +66,7 @@ public class LoadStoreWorld {
      */
     protected static void include(String path) {
         try {
-            FileInputStream fileIn;
+            InputStream fileIn;
             ObjectInputStream in;
 
             fileIn = new FileInputStream(path);
