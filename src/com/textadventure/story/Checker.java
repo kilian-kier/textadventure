@@ -17,10 +17,11 @@ public class Checker {
      * Jedes Element der Welt besitzt eine eigene check Funktion, welche hier aufgerufen wird, sodass sich die Elemente selbst überprüfen.
      * @return true, wenn es keine Fehler gibt, ansonsten false
      */
-    public static boolean check(){
+    public static boolean check(boolean fix){
+        //TODO fix
         boolean ret=true;
         for (Room room: World.roomMap.values() ) {
-            if(!room.check()){
+            if(!room.check(fix)){
                 ret=false;
             }
         }
@@ -46,7 +47,7 @@ public class Checker {
             }
         }
         for (Exit exit: World.exitMap.values() ) {
-            if(!exit.check()){
+            if(!exit.check(fix)){
                 ret=false;
             }
         }

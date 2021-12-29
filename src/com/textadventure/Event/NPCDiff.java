@@ -97,7 +97,7 @@ public class NPCDiff extends Diff implements Serializable {
                                 if (Input.getEditor() != null) {
                                     setDescription(Input.edit(getDescription()));
                                 } else {
-                                    setDescription(Input.input("Beschreibung"));
+                                    setDescription(Input.input("Beschreibung",false));
                                 }
                                 System.out.println("Beschreibung hinzugefügt");
                                 break;
@@ -105,7 +105,7 @@ public class NPCDiff extends Diff implements Serializable {
                                 if (commands.size() > 2) {
                                     setRoom(commands.get(2));
                                 } else {
-                                    setRoom(Input.input("Raum"));
+                                    setRoom(Input.input("Raum",true));
                                 }
                                 System.out.println("Raum hinzugefügt");
                                 break;

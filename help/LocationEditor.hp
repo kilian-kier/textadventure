@@ -14,11 +14,11 @@ Befehl zum verlassen des Editors.
 
 add=\
 Befehl zum hinzufügen von Rooms zur Location\n\
-add [Tool] (Listeneingabe mit Leerzeichen möglich)
+add [Room] (Listeneingabe mit Leerzeichen möglich)
 
 rm=\
 Befehl zum löschen von Rooms aus Location\n\
-rm [Tool] (Listeneingabe mit Leerzeichen möglich)
+rm [Room] (Listeneingabe mit Leerzeichen möglich)
 
 set=\
 Befehl ermöglicht das setzen (ändern) von:\n\
