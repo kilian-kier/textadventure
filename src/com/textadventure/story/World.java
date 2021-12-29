@@ -6,8 +6,8 @@ import com.textadventure.GameElement;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.ElementNotFoundException;
-import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.help.Help;
 import com.textadventure.input.Game;
 import com.textadventure.input.Input;
@@ -17,11 +17,16 @@ import com.textadventure.locations.Room;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
-import java.io.FileInputStream;
+import java.awt.*;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.security.CodeSource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -75,12 +80,11 @@ public class World {
             if (commands == null) continue;
             switch (commands.get(0)) {
                 case "rm":
-                    try{
+                    try {
                         rmGameElement(commands.get(1));
-                    }catch(ElementNotFoundException e){
+                    } catch (ElementNotFoundException e) {
                         System.out.println(e.getMessage());
-                    }
-                    catch(IndexOutOfBoundsException e){
+                    } catch (IndexOutOfBoundsException e) {
                         System.out.println("Zun wenig Argumente");
                     }
                     break;
@@ -120,19 +124,34 @@ public class World {
                     }
                     break;
                 case "store":
-                    if(commands.size()>1){
-                        LoadStoreWorld.store(commands.get(1));
-                    }else{
-                        LoadStoreWorld.store(path);
+                    try {
+                        FileDialog fd = new FileDialog(new Frame(), "Weltdatei speichern", FileDialog.SAVE);
+                        fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                        fd.setFile("world.world");
+                        fd.setVisible(true);
+                        String filename = fd.getFile();
+                        if (filename != null)
+                            LoadStoreWorld.store(filename);
+                        else
+                            System.out.println("Keine Datei ausgewählt");
+                    } catch (URISyntaxException e) {
+                        //DO NOTHING
                     }
                     break;
                 case "load":
-                    try{
-                    if(commands.size()<2){
-                        LoadStoreWorld.load(path);
-                    }else {
-                        LoadStoreWorld.load(commands.get(1));
-                    }
+                    try {
+                        if (commands.size() < 2) {
+                            FileDialog fd = new FileDialog(new Frame(), "Weltdatei laden", FileDialog.LOAD);
+                            fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                            fd.setFile("*.world");
+                            fd.setVisible(true);
+                            String filename = fd.getFile();
+                            if (filename != null)
+                                LoadStoreWorld.load(filename);
+                            else
+                                System.out.println("Keine Datei ausgewählt");
+                        } else if (commands.get(1).equals("-s"))
+                            LoadStoreWorld.load(null);
                     } catch (Exception e) {
                         System.out.println("Pfad nicht gefunden");
                         e.printStackTrace();
@@ -143,9 +162,17 @@ public class World {
                     break;
                 case "include":
                     try {
-                        LoadStoreWorld.include(commands.get(1));
-                    } catch (IndexOutOfBoundsException e) {
-                        System.out.println("Zu wenig Parameter");
+                        FileDialog fd = new FileDialog(new Frame(), "Weltdatei hinzufügen", FileDialog.LOAD);
+                        fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                        fd.setFile("*.world");
+                        fd.setVisible(true);
+                        String filename = fd.getFile();
+                        if (filename != null)
+                            LoadStoreWorld.include(filename);
+                        else
+                            System.out.println("Keine Datei ausgewählt");
+                    } catch (URISyntaxException e) {
+                        //DO NOTHING
                     }
                     break;
                 case "check":
@@ -171,10 +198,9 @@ public class World {
                         System.out.println("Es gibt Fehler in der Welt");
                         break;
                     }
-                    World.roomMap.get("haus").setMusicPath("music/haus.mp3");
                     World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
-                    LoadStoreWorld.store(path);
-                    Game.start(path);
+                    //LoadStoreWorld.store(path);
+                    Game.start();
                     break;
                 case "exit":
                     exit = true;
@@ -188,21 +214,22 @@ public class World {
 
     private static void rmGameElement(String name) throws ElementNotFoundException {
 
-            if(World.eventMap.remove(World.eventKeyMap.get(name))!=null){
-                World.eventKeyMap.remove(name);
-                return;
-            }
-            if(World.roomMap.remove(name)!=null){
-                World.containerMap.remove(name);
-                return;
-            }
-            if(World.containerMap.remove(name)!=null) return;
-            if(World.locationMap.remove(name)!=null) return;
-            if(World.npcMap.remove(name)!=null) return;
-            if(World.toolMap.remove(name)!=null) return;
-            if(World.exitMap.remove(name)!=null) return;
-            throw new ElementNotFoundException("Element",name);
+        if (World.eventMap.remove(World.eventKeyMap.get(name)) != null) {
+            World.eventKeyMap.remove(name);
+            return;
+        }
+        if (World.roomMap.remove(name) != null) {
+            World.containerMap.remove(name);
+            return;
+        }
+        if (World.containerMap.remove(name) != null) return;
+        if (World.locationMap.remove(name) != null) return;
+        if (World.npcMap.remove(name) != null) return;
+        if (World.toolMap.remove(name) != null) return;
+        if (World.exitMap.remove(name) != null) return;
+        throw new ElementNotFoundException("Element", name);
     }
+
     /**
      * Mit dieser Methode können Beschreibung und Raum eines Tools geändert werden
      *
@@ -229,7 +256,7 @@ public class World {
                     case "back":
                         return true;
                     case "show":
-                        System.out.println(temp.toString());
+                        System.out.println(temp);
                         break;
                     case "set":
                         switch (command.get(1)) {
@@ -280,7 +307,7 @@ public class World {
                     case "back":
                         return true;
                     case "show":
-                        System.out.println(temp.toString());
+                        System.out.println(temp);
                         break;
                     case "add":
                         command.removeFirst();
@@ -344,7 +371,7 @@ public class World {
                     case "back":
                         return true;
                     case "show":
-                        System.out.println(temp.toString());
+                        System.out.println(temp);
                         break;
                     case "add":
                         command.removeFirst();
@@ -406,7 +433,7 @@ public class World {
                     case "back":
                         return true;
                     case "show":
-                        System.out.println(temp.toString());
+                        System.out.println(temp);
                         break;
                     case "set":
                         switch (command.get(1)) {
@@ -461,7 +488,7 @@ public class World {
                     case "back":
                         return true;
                     case "show":
-                        System.out.println(temp.toString());
+                        System.out.println(temp);
                         break;
                     case "add":
                     case "rm":
@@ -516,7 +543,7 @@ public class World {
                     case "back":
                         return true;
                     case "show":
-                        System.out.println(temp.toString());
+                        System.out.println(temp);
                         break;
                     case "set":
                         switch (command.get(1)) {
@@ -635,7 +662,7 @@ public class World {
                     case "back":
                         return true;
                     case "show":
-                        System.out.println(temp.toString());
+                        System.out.println(temp);
                         break;
                     case "set":
                         switch (command.get(1)) {

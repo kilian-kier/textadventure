@@ -31,16 +31,8 @@ public class Game {
 
     /**
      * Startet das Spiel
-     *
-     * @param path zur Weltdatei
      */
-    public static void start(String path) {
-        try {
-            LoadStoreWorld.load(path);
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-            System.exit(0);
-        }
+    public static void start() {
         Event.execSingleEvent("start");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> cmd;
