@@ -14,7 +14,7 @@ public class GameElement implements Serializable, Interactable {
     protected String name;
     protected boolean interactable=true;
 
-    //TODO Interactable in to String
+    //TODO Interactable in toString
     public boolean isInteractable() {
         return interactable;
     }

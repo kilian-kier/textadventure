@@ -15,7 +15,7 @@ public class Tool extends Item implements Serializable {
     }
 
     @Override
-    public boolean check() {
+    public boolean check(boolean fix) {
         boolean ret = true;
         if (World.containerMap.get(currentContainer) == null) {
             System.out.printf("Raum %s von Tool %s existiert nicht\n", currentContainer, name);
@@ -23,6 +23,10 @@ public class Tool extends Item implements Serializable {
         } else {
             if (!World.containerMap.get(currentContainer).getTools().contains(name)) {
                 System.out.printf("Raum %s wird von Tool %s referenziert aber nicht umgekehrt\n", currentContainer, name);
+                if(fix){
+                    World.containerMap.get(currentContainer).addTool(name);
+                    System.out.println("Fehler ausgebessert");
+                }
                 ret = false;
             }
         }

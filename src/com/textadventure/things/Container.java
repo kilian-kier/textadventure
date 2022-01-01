@@ -18,7 +18,7 @@ public class Container extends Item implements Serializable {
     }
 
     @Override
-    public boolean check() {
+    public boolean check(boolean fix) {
         boolean ret=true;
         if(World.roomMap.get(currentContainer)==null){
             System.out.printf("Raum %s von Container %s existiert nicht\n",currentContainer,name);
@@ -26,6 +26,10 @@ public class Container extends Item implements Serializable {
         }else{
             if(!World.roomMap.get(currentContainer).getContainers().contains(name)){
                 System.out.printf("Raum %s wird von Container %s referenziert aber nicht umgekehrt\n",currentContainer,name);
+                if(fix){
+                    World.roomMap.get(currentContainer).addContainer(name);
+                    System.out.println("Fehler ausgebessert");
+                }
                 ret=false;
             }
         }
@@ -36,6 +40,10 @@ public class Container extends Item implements Serializable {
             }else{
                 if(!World.toolMap.get(tool).getCurrentContainer().equals(name)){
                     System.out.printf("Tool %s wird von Container %s referenziert aber nicht umgekehrt\n",tool,name);
+                    if(fix){
+                        World.toolMap.get(tool).setContainer(name);
+                        System.out.println("Fehler ausgebessert");
+                    }
                     ret=false;
                 }
             }

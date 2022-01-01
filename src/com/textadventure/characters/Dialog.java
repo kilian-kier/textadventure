@@ -2,6 +2,7 @@ package com.textadventure.characters;
 
 import com.textadventure.help.Help;
 import com.textadventure.input.Input;
+import com.textadventure.story.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class Dialog implements Serializable {
 
     public void setDialog(ArrayList<String[]> dialog) {
         if(dialog==null){
-            dialog.clear();
+            this.dialog.clear();
         }else {
             this.dialog = dialog;
         }
@@ -38,9 +39,24 @@ public class Dialog implements Serializable {
                 arr[2]=event;
             }
         }
-        dialog.set(index,arr);
+        if(index>=dialog.size()){
+            dialog.add(arr);
+        }else{
+            dialog.set(index, arr);
+        }
     }
 
+    public boolean check(boolean fix){
+        boolean ret = true;
+        for (String[] i :dialog
+             ) {
+            if(!World.eventKeyMap.containsKey(i[2]) && i[2]!=null){
+                System.out.printf("Event %s von Dialog existiert nicht\n",i[2]);
+            }
+            ret=false;
+        }
+        return ret;
+    }
 
     public void edit(){
         boolean exit = false;
@@ -66,10 +82,13 @@ public class Dialog implements Serializable {
                                 setQA(Integer.parseInt(commands.get(1)),null,null,Input.input("Event",true));
                                 break;
                         }
-                    }catch(IndexOutOfBoundsException e){
+                    }/*catch(IndexOutOfBoundsException e){
                         System.out.println("Zu wenig Parameter");
                     }catch(NumberFormatException e){
                         System.out.println("Ungültiger Parameter");
+                    }*/
+                    catch(Exception e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "add":
@@ -132,17 +151,18 @@ public class Dialog implements Serializable {
     @Override
     public String toString(){
         String string="";
-            for (String[] i: dialog) {
-                try {
-                    string += String.format("Frage: %s; Antwort: %s; Event: %s\n", i[0], i[1], i[2]);
-                }catch(IndexOutOfBoundsException e){
-                    System.err.println("Ungültiger Dialog\n");
-                    e.printStackTrace();
-                }
+        for (String[] i: dialog) {
+            try {
+                string += String.format("Frage: %s; Antwort: %s; Event: %s\n", i[0], i[1], i[2]);
+            }catch(IndexOutOfBoundsException e){
+                System.err.println("Ungültiger Dialog\n");
+                e.printStackTrace();
             }
+        }
+        if(string.length()>0){
         if(string.charAt(string.length()-1)=='\n') {
             string=string.substring(0,string.length()-1);
-        }
+        }}
         return string;
     }
 }
