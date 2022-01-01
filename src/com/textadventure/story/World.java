@@ -21,6 +21,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import java.util.zip.ZipInputStream;
  */
 
 public class World {
+    //TODO Interactable
     static public HashMap<String, Room> roomMap = new HashMap<>();
     static public HashMap<String, Exit> exitMap = new HashMap<>();
     static public HashMap<String, Location> locationMap = new HashMap<>();
@@ -81,53 +83,24 @@ public class World {
             commands = Input.splitInput(input);
             if (commands == null) continue;
             switch (commands.get(0)) {
-                //TODO Fast Exit
+                case "bridge":
+                    try {
+                        createBridge(commands.get(1), commands.get(2));
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Argumente");
+                    }
+                    break;
                 case "explorer":
                     explorer=!explorer;
                     System.out.printf("Explorer auf %b gesetzt\n",explorer);
                     break;
                 case "mv":
                     try {
-                        try {
-                            GameElement element = getElement(commands.get(1), null);
-                            element.setName(commands.get(2));
-                            if(element.getClass().equals(Exit.class)){
-                                World.exitMap.remove(commands.get(1));
-                                World.exitMap.put(commands.get(2),(Exit)element);
-                            }else if(element.getClass().equals(Room.class)){
-                                World.roomMap.remove(commands.get(1));
-                                World.roomMap.put(commands.get(2),(Room)element);
-                                ((Room) element).getToolsContainer().setName(commands.get(2));
-                                World.containerMap.remove(commands.get(1));
-                                World.containerMap.put(commands.get(2),((Room) element).getToolsContainer());
-                            } else if(element.getClass().equals(Location.class)){
-                                World.locationMap.remove(commands.get(1));
-                                World.locationMap.put(commands.get(2),(Location)element);
-                            }
-                            else if(element.getClass().equals(NPC.class)){
-                                World.npcMap.remove(commands.get(1));
-                                World.npcMap.put(commands.get(2),(NPC) element);
-                            }else if(element.getClass().equals(Container.class)){
-                                World.containerMap.remove(commands.get(1));
-                                World.containerMap.put(commands.get(2),(Container)element);
-                            }else  if(element.getClass().equals(Tool.class)){
-                                World.toolMap.remove(commands.get(1));
-                                World.toolMap.put(commands.get(2),(Tool)element);
-                            }
-                            System.out.println("Element erfolgreich unbenannt");
-                        } catch (ElementNotFoundException e) {
-                            if (eventKeyMap.get(commands.get(1)) != null) {
-                                String event = eventKeyMap.get(commands.get(1));
-                                eventMap.get(event).setName(commands.get(2));
-                                eventKeyMap.remove(commands.get(1));
-                                eventKeyMap.put(commands.get(2),event);
-                                System.out.println("Element erfolgreich unbenannt");
-                            } else {
-                                System.out.println(e.getMessage());
-                            }
-                        }
+                        mvGameElement(commands.get(1),commands.get(2));
                     }catch(IndexOutOfBoundsException e){
                         System.out.println("Zu wenig Argumente");
+                    }catch(ElementNotFoundException e){
+                        System.out.println(e.getMessage());
                     }
                     break;
                 case "rm":
@@ -293,6 +266,90 @@ public class World {
         }
     }
 
+    /**
+     * Eine Funktion zur vereinfachten erstellung von Exits, welche zwei Räume veerbinden
+     *
+     * @param room1 Erster Raum
+     * @param room2 Zweiter Raum
+     */
+    private static void createBridge(String room1, String room2) {
+        if(!World.roomMap.containsKey(room1) || !World.roomMap.containsKey(room2)){
+            System.out.println("Mindestens einer der Räume existiert nicht");
+            return;
+        }
+        String exitname;
+        try {
+             exitname = room1.substring(0, 4) + room2.substring(0, 4);
+        }catch(Exception e){
+            exitname= room1+room2;
+        }
+        if(World.exitMap.containsKey(exitname)){
+            System.out.println( "Exit " + exitname +" existiert bereits");
+            return;
+        }
+        String description1=Input.input(String.format("Beschreibung aus Sicht von %s:",room2),false);
+        String description2=Input.input(String.format("Beschreibung aus Sicht von %s:",room1),false);
+        Exit exit = new Exit(exitname,description1+"@"+description2);
+        exit.setDestination1(room1);
+        exit.setDestination2(room2);
+        World.exitMap.put(exitname, exit);
+        World.roomMap.get(room1).addExit(exitname);
+        World.roomMap.get(room2).addExit(exitname);
+        return;
+    }
+
+    /**
+     * Die Funktion dient zum umbenennen eines Spiel elements
+     * @param name1 Ursprünglicher Name
+     * @param name2 Neuer Name
+     * @throws ElementNotFoundException Falls ein Element nicht existiert
+     */
+    private static void mvGameElement(String name1, String name2) throws ElementNotFoundException{
+        try {
+            GameElement element = getElement(name1, null);
+            element.setName(name2);
+            if(element.getClass().equals(Exit.class)){
+                World.exitMap.remove(name1);
+                World.exitMap.put(name2,(Exit)element);
+            }else if(element.getClass().equals(Room.class)){
+                World.roomMap.remove(name1);
+                World.roomMap.put(name2,(Room)element);
+                ((Room) element).getToolsContainer().setName(name2);
+                World.containerMap.remove(name1);
+                World.containerMap.put(name2,((Room) element).getToolsContainer());
+            } else if(element.getClass().equals(Location.class)){
+                World.locationMap.remove(name1);
+                World.locationMap.put(name2,(Location)element);
+            }
+            else if(element.getClass().equals(NPC.class)){
+                World.npcMap.remove(name1);
+                World.npcMap.put(name2,(NPC) element);
+            }else if(element.getClass().equals(Container.class)){
+                World.containerMap.remove(name1);
+                World.containerMap.put(name2,(Container)element);
+            }else  if(element.getClass().equals(Tool.class)){
+                World.toolMap.remove(name1);
+                World.toolMap.put(name2,(Tool)element);
+            }
+            System.out.println("Element erfolgreich unbenannt");
+        } catch (ElementNotFoundException e) {
+            if (eventKeyMap.get(name1) != null) {
+                String event = eventKeyMap.get(name1);
+                eventMap.get(event).setName(name2);
+                eventKeyMap.remove(name1);
+                eventKeyMap.put(name2,event);
+                System.out.println("Element erfolgreich unbenannt");
+            } else {
+                throw e;
+            }
+        }
+    }
+    /**
+     * Funktion entfernt ein Spiel Element
+     *
+     * @param name Name des Elements
+     * @throws ElementNotFoundException Wird geworfen, wenn ein Element nicht existiert
+     */
     private static void rmGameElement(String name) throws ElementNotFoundException {
 
         if (World.eventMap.remove(World.eventKeyMap.get(name)) != null) {
@@ -345,6 +402,10 @@ public class World {
                             case "container" -> {
                                 if (containerMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
                                 else System.out.println(command.get(2) + "nicht gefunden");
+                            }
+                            case "interactable"->{
+                                temp.setInteractable(!temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -410,6 +471,10 @@ public class World {
                                 if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
                                 else System.out.println(command.get(2) + "nicht gefunden");
                             }
+                            case "interactable"->{
+                                temp.setInteractable(!temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                            }
                             default -> System.out.println("command not found");
                         }
                         break;
@@ -469,11 +534,15 @@ public class World {
                         break;
 
                     case "set":
-                        if ("description".equals(command.get(1))) {
-                            temp.setDescription(Input.input("description",false));
-                        } else {
-                            System.out.println("command not found");
+                        switch(command.get(1)){
+                            case "description"->temp.setDescription(Input.input("description",false));
+                            case "interactable"->{
+                                temp.setInteractable(!temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                            }
+                            default -> System.out.println("command not found");
                         }
+
                         break;
                     default:
                         System.out.println("command not found");
@@ -525,6 +594,10 @@ public class World {
                             case "destination2" -> {
                                 if (roomMap.containsKey(command.get(2))) temp.setDestination2(command.get(2));
                                 else System.out.println(command.get(2) + " nicht gefunden");
+                            }
+                            case "interactable"->{
+                                temp.setInteractable(!temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
                             }
                             case "description" -> temp.setDescription(Input.input("description",false));
                             default -> System.out.println("command not found");
@@ -582,6 +655,10 @@ public class World {
                                 if (roomMap.containsKey(command.get(2))) temp.setRoom(command.get(2));
                                 else System.out.println(command.get(2) + " nicht gefunden");
                             }
+                            case "interactable"->{
+                                temp.setInteractable(!temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                            }
                             default -> System.out.println("command not found");
                         }
                         break;
@@ -632,6 +709,10 @@ public class World {
                             case "location" -> {
                                 if (locationMap.containsKey(command.get(2))) temp.setLocation(command.get(2));
                                 else System.out.println(command.get(2) + " nicht gefunden");
+                            }
+                            case "interactable"->{
+                                temp.setInteractable(!temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -752,6 +833,10 @@ public class World {
                                     temp.setCurrentRoom(roomMap.get(command.get(2)));
                                 else System.out.println(command.get(2) + " nicht gefunden");
                             }
+                            case "interactable"->{
+                                temp.setInteractable(!temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                            }
                             case "description" -> temp.setDescription(Input.input("description",false));
                             default -> System.out.println("command not found");
                         }
@@ -814,7 +899,11 @@ public class World {
         throw new ElementNotFoundException(args.get(1), "Game Element");
     }
 
-
+    /**
+     * Erstellt ein neues Spiel Element
+     *
+     * @param args Die Argumente. Das erste Argument enthält meistens new, das zweite den Typ des Elements, das Dritte einen Optionalen Namen
+     */
     static private void newGameElement(LinkedList<String> args) {
         //Get GameElement Properties name, description and info
         GameElement element = null;

@@ -20,6 +20,15 @@ public class Room extends GameElement implements Serializable {
     private final ArrayList<String> container = new ArrayList<>();
     private final ArrayList<String> npcs = new ArrayList<>();
     private String location;
+    private String music;
+
+    public String getMusic() {
+        return music;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
+    }
 
     public Room(String name, String description) {
         super(name);
@@ -173,6 +182,7 @@ public class Room extends GameElement implements Serializable {
     }
 
     public boolean check(boolean fix) {
+        //TODO Musik
         boolean ret = true;
         try {
             if (World.locationMap.get(location) == null) {
@@ -258,6 +268,7 @@ public class Room extends GameElement implements Serializable {
         string += String.format("Raum %s\n", name);
         string += String.format("Beschreibung: %s\n", getDescription());
         string += String.format("Location: %s\n", getLocation());
+        string += String.format("Musik: %s\n", music);
         string += String.format("Tools: %s\n", tools.getTools() != null ? tools.getTools().toString() : null);
         string += String.format("Npcs: %s\n", npcs);
         string += String.format("Container: %s\n", container);
