@@ -69,7 +69,7 @@ public class NPC extends GameElement implements Serializable {
         this.name=newRoomString;
     }
 
-    public boolean check(){
+    public boolean check(boolean fix){
         boolean ret=true;
         if(World.roomMap.get(room)==null){
             System.out.printf("Raum %s von NPC %s existiert nicht\n",room,name);
@@ -77,9 +77,14 @@ public class NPC extends GameElement implements Serializable {
         }else{
             if(!World.roomMap.get(room).getNpcs().contains(name)){
                 System.out.printf("Raum %s wird von NPC %s referenziert aber nicht umgekehrt\n",room,name);
+                if(fix){
+                    World.roomMap.get(room).addNpcs(name);
+                    System.out.println("Fehler ausgebessert");
+                }
                 ret=false;
             }
         }
+        dialog.check(fix);
         return ret;
     }
 

@@ -16,6 +16,15 @@ public class Event implements Serializable {
     private Collection<String> dependent;
     private boolean happened=false;
     private boolean once=true;
+    private String music;
+
+    public String getMusic() {
+        return music;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
+    }
 
     public boolean isOnce() {
         return once;
@@ -87,6 +96,7 @@ public class Event implements Serializable {
         differences.remove(diffstring);
     }
     private boolean applyDiffsToWorld(){
+        //TODO Musik bei Event ausführen
         try {
             for (String i : dependent) {
                 try {
@@ -100,7 +110,9 @@ public class Event implements Serializable {
         } catch (NullPointerException e) {
 
         }
-        System.out.println(info);
+        if(info!=null){
+            System.out.println(info);
+        }
         for (Diff diff:differences.values()) {
             try {
                 diff.applyDiffToWorld();
@@ -127,7 +139,7 @@ public class Event implements Serializable {
 
     public static boolean execSingleEvent(String eventName){
         ArrayList<String> args = new ArrayList<>();
-        args.add(World.eventKeyMap.get("start"));
+        args.add(World.eventKeyMap.get(eventName));
         return execEvent(args);
     }
 
@@ -157,6 +169,7 @@ public class Event implements Serializable {
     }
 
     public boolean check(){
+        //TODO Musik
         boolean ret=true;
         if(dependent!=null) {
             for (String i : dependent) {
@@ -180,6 +193,7 @@ public class Event implements Serializable {
         string+=String.format("Event Name: %s\n",name);
         string+=String.format("Info: %s\n",info);
         string+=String.format("Befehl: %s\n",cmd.toString());
+        string+=String.format("Musik: %s\n",music);
         string+=String.format("Abhängig von: %s\n",dependent);
         string+=String.format("Einmalig? %b\n",once);
         string+="Diffs:";

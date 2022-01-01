@@ -252,9 +252,13 @@ public class World {
                         System.out.println("Es gibt Fehler in der Welt");
                         break;
                     }
-                    World.player = new Player("Stefe", "Ein juger Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
-                    //LoadStoreWorld.store(path);
+                    LoadStoreWorld.store("temp.world");
                     Game.start();
+                    try {
+                        LoadStoreWorld.load("temp.world");
+                    }catch(Exception e){
+                        System.out.println("Someone messed with the temp.world file");
+                    }
                     break;
                 case "exit":
                     exit = true;
@@ -405,7 +409,7 @@ public class World {
                             }
                             case "interactable"->{
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -473,7 +477,7 @@ public class World {
                             }
                             case "interactable"->{
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -538,7 +542,7 @@ public class World {
                             case "description"->temp.setDescription(Input.input("description",false));
                             case "interactable"->{
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -597,7 +601,7 @@ public class World {
                             }
                             case "interactable"->{
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
                             }
                             case "description" -> temp.setDescription(Input.input("description",false));
                             default -> System.out.println("command not found");
@@ -657,7 +661,7 @@ public class World {
                             }
                             case "interactable"->{
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -712,7 +716,7 @@ public class World {
                             }
                             case "interactable"->{
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -835,7 +839,7 @@ public class World {
                             }
                             case "interactable"->{
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
                             }
                             case "description" -> temp.setDescription(Input.input("description",false));
                             default -> System.out.println("command not found");

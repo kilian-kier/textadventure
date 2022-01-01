@@ -27,7 +27,7 @@ public class Checker {
         }
         for (Container container: World.containerMap.values() ) {
             if(World.roomMap.containsKey((container.getName()))) continue;
-            if(!container.check()){
+            if(!container.check(fix)){
                 ret=false;
             }
         }
@@ -37,12 +37,12 @@ public class Checker {
             }
         }
         for (Tool tool: World.toolMap.values() ) {
-            if(!tool.check()){
+            if(!tool.check(fix)){
                 ret=false;
             }
         }
         for (NPC npc: World.npcMap.values() ) {
-            if(!npc.check()){
+            if(!npc.check(fix)){
                 ret=false;
             }
         }

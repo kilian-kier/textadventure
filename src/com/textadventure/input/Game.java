@@ -218,15 +218,15 @@ public class Game {
                         }
                     }
                     if (!World.npcMap.containsKey(cmd.get(1))) {
-                        try {
-                            throw new ElementNotFoundException(cmd.get(1), "NPC");
-                        } catch (ElementNotFoundException e) {
-                            System.out.println(e.getMessage());
-                            continue;
-                        }
+                        System.out.printf( "Es gibt hier niemanden mit dem Namen %s\n",firstCap(cmd.get(1)));
+                        continue;
                     } else {
-                        System.out.print("Wähle eine Frage: ");
                         NPC n = World.npcMap.get(cmd.get(1));
+                        if(!n.getRoom().equals(World.player.getCurrentRoom().getName())){
+                            System.out.printf( "Es gibt hier niemanden mit dem Namen %s\n",firstCap(n.getName()));
+                            break;
+                        }
+                        System.out.print("Wähle eine Frage: \n");
                         for (int i = 0; i < n.getDialog().getDialog().size(); i++) {
                             System.out.printf("[%d] ", i + 1);
                             System.out.println(n.getDialog().getDialog().get(i)[0]);
@@ -234,10 +234,11 @@ public class Game {
                         int x;
                         do {
                             x = scanner.nextInt();
-                        } while (x > 0 && x <= n.getDialog().getDialog().size());
-                        ArrayList<String> event = new ArrayList<>();
-                        event.add(n.getDialog().getDialog().get(x - 1)[1]);
-                        Event.execEvent(event);
+                        } while (x <= 0 || x>  n.getDialog().getDialog().size());
+                        System.out.println(n.getDialog().getDialog().get(x-1)[1]);
+                        if(n.getDialog().getDialog().get(x-1)[2]!=null){
+                            Event.execSingleEvent(n.getDialog().getDialog().get(x-1)[2]);
+                        }scanner.nextLine();
                     }
                     break;
                 case "schaue":

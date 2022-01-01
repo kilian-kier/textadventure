@@ -221,6 +221,7 @@ public class RoomDiff extends Diff implements Serializable {
                             }catch(IndexOutOfBoundsException e){
                                 System.out.println("Zu wenig Parameter");
                             }
+                            break;
                         case "addcontainer":
                             commands.removeFirst();
                             if(commands.isEmpty()){

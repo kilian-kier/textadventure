@@ -105,15 +105,20 @@ public class Input {
     }
 
     static public String input(String string,boolean lowercase) {
-        Scanner scanner = new Scanner(System.in);
-        String input = "";
-        System.out.print(string+": ");
-        while (input.length() == 0)
-            input = scanner.nextLine();
-        if(lowercase) {
-            return input.toLowerCase();
+        System.out.print(string + ": ");
+        if(lowercase || editor ==null) {
+            Scanner scanner = new Scanner(System.in);
+            String input = "";
+            while (input.length() == 0)
+                input = scanner.nextLine();
+            if (lowercase) {
+                return input.toLowerCase();
+            } else {
+                return input;
+            }
         }else{
-            return input;
+            System.out.println();
+            return edit("");
         }
     }
 

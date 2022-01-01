@@ -69,7 +69,7 @@ abstract public class Item  extends GameElement implements Serializable {
         return newContainer;
     }
 
-    public abstract boolean check();
+    public abstract boolean check(boolean fix);
 
     @Override
     public void investigate() {

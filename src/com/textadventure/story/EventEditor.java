@@ -56,6 +56,18 @@ public class EventEditor {
                         System.out.println("Event wird nun einmalig ausgefuehrt");
                     }
                     break;
+                case "music":
+                    try{
+                        if(commands.get(1).equals("none")){
+                            event.setMusic(null);
+                        }else{
+                            event.setMusic(commands.get(1));
+                        }
+                        System.out.printf("Neuer Musikpfad: %s",commands.get(1));
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Parameter");
+                    }
+                    break;
                 case "cmd":
                     commands.removeFirst();
                     event.storeEvent(commands);
