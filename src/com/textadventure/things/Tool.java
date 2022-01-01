@@ -35,7 +35,8 @@ public class Tool extends Item implements Serializable {
         String string = "";
         string += String.format("Tool %s\n", name);
         string += String.format("Beschreibung: %s\n", description);
-        string += String.format("Container/Raum: %s", currentContainer);
+        string += String.format("Container/Raum: %s\n", currentContainer);
+        string += String.format("Interactable: %b", interactable);
         return string;
     }
 }

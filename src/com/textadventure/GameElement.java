@@ -12,6 +12,15 @@ public class GameElement implements Serializable, Interactable {
     private static final long serialVersionUID = 7977434406346025468L;
     protected String description;
     protected String name;
+    protected boolean interactable=true;
+
+    //TODO Interactable in to String
+    public boolean isInteractable() {
+        return interactable;
+    }
+    public void setInteractable(boolean interactable) {
+        this.interactable = interactable;
+    }
 
     public GameElement(String name) {
         this.name = name.toLowerCase();

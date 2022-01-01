@@ -266,9 +266,10 @@ public class Game {
                             System.out.println();
                         }
 
-                        System.out.printf("%s befindt sich an folgendem Ort: %s\n",firstCap(World.player.getName()),firstCap(World.player.getCurrentRoom().getName()));
+                        System.out.printf("%s befindet sich an folgendem Ort: %s\n",firstCap(World.player.getName()),firstCap(World.player.getCurrentRoom().getName()));
                         System.out.print("Der Ort befindet sich in " + firstCap(World.player.getCurrentRoom().getLocation()));
                         if (World.player.getCurrentRoom().getExits().size() != 0) {
+                            System.out.println();
                             for (String e : World.player.getCurrentRoom().getExits())
                                 try {
                                     System.out.println();

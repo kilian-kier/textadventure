@@ -23,8 +23,15 @@ public class RoomDiff extends Diff implements Serializable {
     Collection<String> rmContainer =null;
     Collection<String> addNPCs =null;
     Collection<String> rmNPCs =null;
+    String music=null;
 
+    public String getMusic() {
+        return music;
+    }
 
+    public void setMusic(String music) {
+        this.music = music;
+    }
 
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
@@ -36,6 +43,9 @@ public class RoomDiff extends Diff implements Serializable {
         }
         if (description != null) { //Description
             room.setDescription(getDescription());
+        }
+        if(music!=null){
+            room.setMusic(music);
         }
         try{
             if (addTools != null) {
@@ -84,6 +94,7 @@ public class RoomDiff extends Diff implements Serializable {
 
     @Override
     public boolean check() {
+        //TODO Musik
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;
@@ -199,6 +210,17 @@ public class RoomDiff extends Diff implements Serializable {
                             setRmTools(commands);
                             System.out.println("Rmtools hinzugefügt");
                             break;
+                        case "music":
+                            try{
+                                if(commands.get(1).equals("none")){
+                                    setMusic(null);
+                                }else{
+                                    setMusic(commands.get(1));
+                                }
+                                System.out.printf("Neuer Musikpfad: %s",commands.get(1));
+                            }catch(IndexOutOfBoundsException e){
+                                System.out.println("Zu wenig Parameter");
+                            }
                         case "addcontainer":
                             commands.removeFirst();
                             if(commands.isEmpty()){
@@ -308,6 +330,7 @@ public class RoomDiff extends Diff implements Serializable {
         string+=String.format("Diff von %s\n",name);
         string+=String.format("Beschreibung: %s\n",getDescription());
         string+=String.format("Location: %s\n",getLocation());
+        string+=String.format("Musik: %s\n",getMusic());
         string+=String.format("AddTools: %s\n",getAddTools()!=null?getAddTools().toString():null);
         string+=String.format("RmTools: %s\n",getRmTools()!=null?getRmTools().toString():null);
         string+=String.format("AddNpcs: %s\n",getAddNpcs()!=null?getAddNpcs().toString():null);
