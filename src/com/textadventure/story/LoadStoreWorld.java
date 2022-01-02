@@ -35,11 +35,14 @@ public class LoadStoreWorld {
                 tempDir.toFile().deleteOnExit();
                 for (String key : keys) {
                     byte[] musicBytes = (byte[]) map.get(key);
-                    File file = new File(tempDir.toString() + "/" + key + ".mp3");
+                    File file = new File(tempDir + "/" + key + ".mp3");
                     if (file.createNewFile()) {
                         FileOutputStream fos = new FileOutputStream(file);
                         fos.write(musicBytes);
                         World.musicList.put(key, file.getAbsolutePath());
+                        if (World.roomMap.containsKey(key)) {
+                            World.roomMap.get(key).setMusic(file.getAbsolutePath());
+                        }
                         file.deleteOnExit();
                     }
                 }
