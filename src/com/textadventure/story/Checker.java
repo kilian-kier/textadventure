@@ -17,16 +17,17 @@ public class Checker {
      * Jedes Element der Welt besitzt eine eigene check Funktion, welche hier aufgerufen wird, sodass sich die Elemente selbst überprüfen.
      * @return true, wenn es keine Fehler gibt, ansonsten false
      */
-    public static boolean check(){
+    public static boolean check(boolean fix){
+        //TODO fix
         boolean ret=true;
         for (Room room: World.roomMap.values() ) {
-            if(!room.check()){
+            if(!room.check(fix)){
                 ret=false;
             }
         }
         for (Container container: World.containerMap.values() ) {
             if(World.roomMap.containsKey((container.getName()))) continue;
-            if(!container.check()){
+            if(!container.check(fix)){
                 ret=false;
             }
         }
@@ -36,17 +37,17 @@ public class Checker {
             }
         }
         for (Tool tool: World.toolMap.values() ) {
-            if(!tool.check()){
+            if(!tool.check(fix)){
                 ret=false;
             }
         }
         for (NPC npc: World.npcMap.values() ) {
-            if(!npc.check()){
+            if(!npc.check(fix)){
                 ret=false;
             }
         }
         for (Exit exit: World.exitMap.values() ) {
-            if(!exit.check()){
+            if(!exit.check(fix)){
                 ret=false;
             }
         }

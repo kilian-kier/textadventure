@@ -51,7 +51,11 @@ public class Show {
         if(!World.containerMap.isEmpty()) {
             System.out.println("Container:");
             for (String i : World.containerMap.keySet()) {
-                System.out.println("\t" + i);
+                if(World.roomMap.containsKey(i)){
+                    System.out.println("\t" + i+ " (room)");
+                }else{
+                    System.out.println("\t" + i);
+                }
             }
         }else{
             System.out.println("Keine Container");

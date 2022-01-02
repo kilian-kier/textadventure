@@ -126,7 +126,7 @@ public class Game {
                             } else {
                                 boolean found = false;
                                 if (World.player.getCurrentRoom().getName().equals(room.getName())) {
-                                    System.out.println(firstCap(World.player.getName()) + " ist bereits in diesem Raum.");
+                                    System.out.println(firstCap(World.player.getName()) + " ist bereits hier");
                                     break;
                                 }
                                 for (String ex : World.player.getCurrentRoom().getExits()) {
@@ -155,7 +155,7 @@ public class Game {
                         }
                     }
                     World.musicPlayer.play();
-                    System.out.println(firstCap(World.player.getName()) + " befindet sich nun in: " + firstCap(World.player.getCurrentRoom().getName()));
+                    System.out.println(firstCap(World.player.getName()) + " geht zu " + firstCap(World.player.getCurrentRoom().getName()));
                     break;
                 case "lege":
                     // NO BREAK
@@ -218,15 +218,15 @@ public class Game {
                         }
                     }
                     if (!World.npcMap.containsKey(cmd.get(1))) {
-                        try {
-                            throw new ElementNotFoundException(cmd.get(1), "NPC");
-                        } catch (ElementNotFoundException e) {
-                            System.out.println(e.getMessage());
-                            continue;
-                        }
+                        System.out.printf( "Es gibt hier niemanden mit dem Namen %s\n",firstCap(cmd.get(1)));
+                        continue;
                     } else {
-                        System.out.print("Wähle eine Frage: ");
                         NPC n = World.npcMap.get(cmd.get(1));
+                        if(!n.getRoom().equals(World.player.getCurrentRoom().getName())){
+                            System.out.printf( "Es gibt hier niemanden mit dem Namen %s\n",firstCap(n.getName()));
+                            break;
+                        }
+                        System.out.print("Wähle eine Frage: \n");
                         for (int i = 0; i < n.getDialog().getDialog().size(); i++) {
                             System.out.printf("[%d] ", i + 1);
                             System.out.println(n.getDialog().getDialog().get(i)[0]);
@@ -234,10 +234,11 @@ public class Game {
                         int x;
                         do {
                             x = scanner.nextInt();
-                        } while (x > 0 && x <= n.getDialog().getDialog().size());
-                        ArrayList<String> event = new ArrayList<>();
-                        event.add(n.getDialog().getDialog().get(x - 1)[1]);
-                        Event.execEvent(event);
+                        } while (x <= 0 || x>  n.getDialog().getDialog().size());
+                        System.out.println(n.getDialog().getDialog().get(x-1)[1]);
+                        if(n.getDialog().getDialog().get(x-1)[2]!=null){
+                            Event.execSingleEvent(n.getDialog().getDialog().get(x-1)[2]);
+                        }scanner.nextLine();
                     }
                     break;
                 case "schaue":
@@ -251,7 +252,7 @@ public class Game {
                     }
                     if (cmd.size() == 1 || cmd.get(1).equals(World.player.getCurrentRoom().getName())) {
                         if (World.player.getCurrentRoom().getTools().size() != 0 || World.player.getCurrentRoom().getContainers().size() != 0) {
-                            System.out.print("In diesem Raum befinden sich folgende Dinge: ");
+                            System.out.print("Es befinden sich hier folgende Dinge: ");
                             for (String t : World.player.getCurrentRoom().getTools())
                                 System.out.print(firstCap(t) + " ");
                             for (String c : World.player.getCurrentRoom().getContainers())
@@ -260,21 +261,32 @@ public class Game {
                         }
 
                         if (World.player.getCurrentRoom().getNpcs().size() != 0) {
-                            System.out.print("In diesem Raum befinden sich folgende NPCs: ");
+                            System.out.print("Hier befinden sich folgende NPCs: ");
                             for (String n : World.player.getCurrentRoom().getNpcs())
                                 System.out.print(firstCap(n) + " ");
                             System.out.println();
                         }
 
+                        System.out.printf("%s befindet sich an folgendem Ort: %s\n",firstCap(World.player.getName()),firstCap(World.player.getCurrentRoom().getName()));
+                        System.out.print("Der Ort befindet sich in " + firstCap(World.player.getCurrentRoom().getLocation()));
                         if (World.player.getCurrentRoom().getExits().size() != 0) {
-                            System.out.print("In diesem Raum befinden sich folgende Ausgänge: ");
-                            for (String e : World.player.getCurrentRoom().getExits())
-                                System.out.print(firstCap(e) + " ");
                             System.out.println();
-                        } else
-                            System.out.println("In diesem Raum befinden sich keine Ausgänge.");
+                            for (String e : World.player.getCurrentRoom().getExits())
+                                try {
+                                    System.out.println();
+                                    if ((World.exitMap.get(e).getDestination1()).equals(World.player.getCurrentRoom().getName())) {
+                                        System.out.print(firstCap(World.exitMap.get(e).getDescription2()) );
+                                    } else {
+                                        System.out.print(firstCap(World.exitMap.get(e).getDescription1()) );
+                                    }
+                                }catch(Exception f){
+                                    System.out.println("Ausnahme Fehler in Schaue");
+                                }
+                            System.out.println();
+                        } else {
+                            System.out.println("\nEs gibt keinen Ausweg");
+                        }
 
-                        System.out.println("Dieser Raum befindet sich in: " + firstCap(World.player.getCurrentRoom().getLocation()));
                     } else {
                         if (World.containerMap.containsKey(cmd.get(1))) {
                             Container container;
@@ -343,7 +355,7 @@ public class Game {
                     }
                     if (cmd.size() == 1 || cmd.get(1).equals(World.player.getCurrentRoom().getName())) {
                         System.out.println(World.player.getCurrentRoom().getDescription());
-                        System.out.println("Dieser Raum befindet sich in: " + firstCap(World.player.getCurrentRoom().getLocation()));
+                        System.out.println("Der Ort befindet sich in " + firstCap(World.player.getCurrentRoom().getLocation()));
                     } else {
                         if (cmd.get(1).equals(World.player.getName())) {
                             System.out.println(World.player.getDescription());

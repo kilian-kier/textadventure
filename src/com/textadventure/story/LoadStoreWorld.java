@@ -2,6 +2,7 @@ package com.textadventure.story;
 
 import com.textadventure.Event.Event;
 import com.textadventure.characters.NPC;
+import com.textadventure.characters.Player;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
@@ -38,7 +39,6 @@ public class LoadStoreWorld {
             HashMap<String, Object> map = (HashMap<String, Object>) in.readObject();
             in.close();
 
-
             World.roomMap = (HashMap<String, Room>) map.get("rooms");
             World.locationMap = (HashMap<String, Location>) map.get("locations");
             World.toolMap = (HashMap<String, Tool>) map.get("tools");
@@ -47,6 +47,7 @@ public class LoadStoreWorld {
             World.containerMap = (HashMap<String, Container>) map.get("container");
             World.eventMap = (HashMap<String, Event>) map.get("events");
             World.eventKeyMap = (HashMap<String, String>) map.get("eventkeys");
+            World.player= (Player) map.get("player");
 
             System.out.println("Welt wurde geladen");
             fileIn.close();
@@ -82,6 +83,7 @@ public class LoadStoreWorld {
             World.containerMap.putAll((HashMap<String, Container>) map.get("container"));
             World.eventMap.putAll((HashMap<String, Event>) map.get("events"));
             World.eventKeyMap.putAll((HashMap<String, String>) map.get("eventkeys"));
+            World.player= (Player) map.get("player");
 
             System.out.println("Welt wurde hinzugefügt");
             fileIn.close();
@@ -129,7 +131,7 @@ public class LoadStoreWorld {
             map.put("container", World.containerMap);
             map.put("events", World.eventMap);
             map.put("eventkeys", World.eventKeyMap);
-            //map.put("player",World.player); ????
+            map.put("player",World.player);
 
             out.writeObject(map);
             out.close();

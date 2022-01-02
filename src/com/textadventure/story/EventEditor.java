@@ -15,13 +15,14 @@ import java.util.Scanner;
 public class EventEditor {
     /**
      * Event Editor zum editieren oder erstellen von Events
+     *
      * @param name Der name des Events. Existiert er bereits, wird das Event editiert, ansonsten ein neues erstellt.
      * @return Gibt false zurück, wenn nicht erfolgreich
      */
     public static boolean edit(String name) {
         Event event=null;
         if (name == null) {
-            name = Input.input("Name");
+            name = Input.input("Name",true);
         }
         if (World.eventKeyMap.containsKey(name)) {
             event = World.eventMap.get(World.eventKeyMap.get(name));
@@ -32,7 +33,7 @@ public class EventEditor {
                 System.out.println(e.getMessage());
                 return false;
             }
-            String access = Input.input("Auslöser");
+            String access = Input.input("Auslöser",true);
             event.storeEvent(Input.splitInput(access));
         }
 
@@ -55,6 +56,18 @@ public class EventEditor {
                         System.out.println("Event wird nun einmalig ausgefuehrt");
                     }
                     break;
+                case "music":
+                    try{
+                        if(commands.get(1).equals("none")){
+                            event.setMusic(null);
+                        }else{
+                            event.setMusic(commands.get(1));
+                        }
+                        System.out.printf("Neuer Musikpfad: %s",commands.get(1));
+                    }catch(IndexOutOfBoundsException e){
+                        System.out.println("Zu wenig Parameter");
+                    }
+                    break;
                 case "cmd":
                     commands.removeFirst();
                     event.storeEvent(commands);
@@ -71,9 +84,11 @@ public class EventEditor {
                         info = "";
                     }
                     if (Input.getEditor() != null) {
+
                         info = Input.edit(info);
+
                     } else {
-                        info = Input.input("Info");
+                        info = Input.input("Info",false);
                     }
                     event.setInfo(info);
                     System.out.println("Info hinzugefügt");
@@ -83,7 +98,7 @@ public class EventEditor {
                     try{
                          input2=commands.get(1);
                     }catch(IndexOutOfBoundsException e){
-                         input2= Input.input("Raum");
+                         input2= Input.input("Raum",true);
                     }
                     if(input2.equals("none")){
                         input2=null;
@@ -159,7 +174,7 @@ public class EventEditor {
         if(args.size()>2){
             name = args.get(2);
         }else{
-            name=Input.input("Name");
+            name=Input.input("Name",true);
         }
         if(event.getDiff(name)!=null){
             throw new ElementExistsException(name);

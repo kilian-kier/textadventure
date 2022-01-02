@@ -68,7 +68,7 @@ public class ToolDiff extends Diff implements Serializable {
                             if (Input.getEditor() != null) {
                                 setDescription(Input.edit(getDescription()));
                             } else {
-                                setDescription(Input.input("Beschreibung"));
+                                setDescription(Input.input("Beschreibung",false));
                             }
                             System.out.println("Beschreibung hinzugefügt");
                             break;
@@ -76,7 +76,7 @@ public class ToolDiff extends Diff implements Serializable {
                             if(commands.size()>2){
                                 setContainer(commands.get(2));
                             }else {
-                                setContainer(Input.input("Container"));
+                                setContainer(Input.input("Container",true));
                             }
                             System.out.println("Container hinzugefügt");
                             break;
