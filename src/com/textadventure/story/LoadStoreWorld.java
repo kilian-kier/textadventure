@@ -3,6 +3,7 @@ package com.textadventure.story;
 import com.textadventure.Event.Event;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
+import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
@@ -10,13 +11,44 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.Set;
 
 /**
  * Lädt und Speichert Welt
  */
 public class LoadStoreWorld {
+    /**
+     * Lädt und erstellt die Musikdateien aus der Weltdatei und speichert die Dateipfäde in der Musikliste.
+     * Die tempörären Dateien und Ordner werden beim Beenden des Programms gelöscht.
+     * @param map HashMap mit den Weltinformationen
+     */
+    private static void createMusicFiles(HashMap<String, Object> map) {
+        try {
+            ArrayList<String> keys = (ArrayList<String>) map.get("musicKeys");
+            if (keys != null) {
+                Path tempDir = Files.createTempDirectory("tmp");
+                tempDir.toFile().deleteOnExit();
+                for (String key : keys) {
+                    byte[] musicBytes = (byte[]) map.get(key);
+                    File file = new File(tempDir.toString() + "/" + key + ".mp3");
+                    if (file.createNewFile()) {
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(musicBytes);
+                        World.musicList.put(key, file.getAbsolutePath());
+                        file.deleteOnExit();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     /**
      * Lädt Welt von Festplatte
      *
@@ -47,7 +79,8 @@ public class LoadStoreWorld {
             World.containerMap = (HashMap<String, Container>) map.get("container");
             World.eventMap = (HashMap<String, Event>) map.get("events");
             World.eventKeyMap = (HashMap<String, String>) map.get("eventkeys");
-            World.player= (Player) map.get("player");
+            World.player = (Player) map.get("player");
+            createMusicFiles(map);
 
             System.out.println("Welt wurde geladen");
             fileIn.close();
@@ -83,7 +116,8 @@ public class LoadStoreWorld {
             World.containerMap.putAll((HashMap<String, Container>) map.get("container"));
             World.eventMap.putAll((HashMap<String, Event>) map.get("events"));
             World.eventKeyMap.putAll((HashMap<String, String>) map.get("eventkeys"));
-            World.player= (Player) map.get("player");
+            World.player = (Player) map.get("player");
+            createMusicFiles(map);
 
             System.out.println("Welt wurde hinzugefügt");
             fileIn.close();
@@ -107,6 +141,7 @@ public class LoadStoreWorld {
         World.containerMap.clear();
         World.eventKeyMap.clear();
         World.eventMap.clear();
+        World.musicList.clear();
         System.out.println("Welt wurde geschlossen");
     }
 
@@ -131,7 +166,12 @@ public class LoadStoreWorld {
             map.put("container", World.containerMap);
             map.put("events", World.eventMap);
             map.put("eventkeys", World.eventKeyMap);
-            map.put("player",World.player);
+            map.put("player", World.player);
+            map.put("musicKeys", new ArrayList<>(World.musicList.keySet()));
+            for (String key : World.musicList.keySet()) {
+                byte[] musicBytes = MusicPlayer.readFile(World.musicList.get(key));
+                map.put(key, musicBytes);
+            }
 
             out.writeObject(map);
             out.close();

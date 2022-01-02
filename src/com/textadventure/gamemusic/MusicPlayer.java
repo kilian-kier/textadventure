@@ -22,7 +22,7 @@ public class MusicPlayer implements Runnable {
         try {
             player.play();
             restart();
-        } catch (JavaLayerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -31,17 +31,19 @@ public class MusicPlayer implements Runnable {
      * Startet einen neuen Thread mit dem MusicPlayer
      */
     public void play() {
-        InputStream input;
+        this.stop();
         if (World.player != null) {
             if (World.player.getCurrentRoom() != null) {
                 try {
+                    String musicpath = World.player.getCurrentRoom().getMusic();
+                    /*
                     if (World.isJar())
                         input = getClass().getResourceAsStream("/music/" + World.player.getCurrentRoom().getName() + ".mp3");
                     else
                         input = new FileInputStream("music/" + World.player.getCurrentRoom().getName() + ".mp3");
-
-                    if (input != null)
-                        player = new Player(input);
+                    */
+                    if (musicpath != null)
+                        player = new Player(new FileInputStream(musicpath));
                 } catch (IOException | JavaLayerException e) {
                     //DO NOTHING
                 }
@@ -81,7 +83,7 @@ public class MusicPlayer implements Runnable {
      * @param filepath Dateipfad der Audiodatei
      * @return Bytes der Audiodatei
      */
-    public byte[] readFile(String filepath) {
+    public static byte[] readFile(String filepath) {
         byte[] ret = null;
         String temp = "";
         try {

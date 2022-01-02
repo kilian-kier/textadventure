@@ -2,6 +2,7 @@ package com.textadventure.input;
 
 import com.textadventure.Event.Event;
 import com.textadventure.characters.NPC;
+import com.textadventure.characters.Player;
 import com.textadventure.exeptions.*;
 import com.textadventure.help.Help;
 import com.textadventure.locations.Exit;
@@ -33,6 +34,8 @@ public class Game {
      * Startet das Spiel
      */
     public static void start() {
+        if (World.player == null)
+            World.player = new Player("Stefe", "der junge Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next())); //TODO: Player wird nicht richtig initialisiert
         Event.execSingleEvent("start");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> cmd;
