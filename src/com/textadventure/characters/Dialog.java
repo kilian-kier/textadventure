@@ -26,7 +26,10 @@ public class Dialog implements Serializable {
         }
     }
     public void setQA(int index, String question,String answer, String event) throws IndexOutOfBoundsException{
-        String[] arr= dialog.remove(index);
+        String[]arr=new String[3];
+        if(index<dialog.size()){
+            arr= dialog.remove(index);
+        }
         if(question!=null){
             arr[0]=question;
         }
@@ -168,9 +171,9 @@ public class Dialog implements Serializable {
     }
 
     public void loadFromHashMap(HashMap<String, String> map) {
-        for(int i=0;i<Integer.MAX_VALUE;i++){
+        for(int i=1;i<Integer.MAX_VALUE;i++){
             if(map.containsKey("question"+i) && map.containsKey("answer"+i)){
-                setQA(i, map.get("question" + i), map.get("answer" + i), map.getOrDefault("event" + i, null));
+                setQA(i-1, map.get("question" + i), map.get("answer" + i), map.get("event" + i));
             }else{
                 break;
             }

@@ -156,6 +156,7 @@ public class LoadStoreWorld {
             input = scanner.next();
         }catch(Exception e){
             System.out.println(e.getMessage());
+            return;
         }
 
         //System.out.println("Input:" +input);
@@ -177,6 +178,8 @@ public class LoadStoreWorld {
                 System.out.println(f.getMessage());
             }
         }
+
+
 
 
         String type;
@@ -243,6 +246,7 @@ public class LoadStoreWorld {
             World.player=new Player(playername,null,null );
             World.player.loadFromHashMap(splitMap.get(playername));
         }
+        System.out.println("Welt wurde geladen");
 
     }
 
@@ -314,10 +318,11 @@ public class LoadStoreWorld {
                 key=key+String.valueOf(c);
             }else if(c=='=' && tokey){
                 tokey=false;
-            } else if(c!='\n' && c!='{'){ //!tokey
+            } else if(c!='\n' && c!='{' && i<input.length()-1){ //!tokey
                 value=value+String.valueOf(c);
             }else if(c=='{'){
                 int temp=i;
+
                 i=getBrackets(input,i);
                 value=input.substring(temp+1,i);
                 value=cleanString(value);

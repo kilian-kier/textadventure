@@ -157,7 +157,7 @@ public class Exit extends GameElement implements Serializable {
             setDescription1(map.get("description1"));
         }
         if(map.containsKey("description2")){
-            setDescription1(map.get("description2"));
+            setDescription2(map.get("description2"));
         }
     }
 }

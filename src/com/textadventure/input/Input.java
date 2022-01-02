@@ -122,6 +122,29 @@ public class Input {
         }
     }
 
+
+    /**
+     * Gibt den Dateityp zurück
+     * @param file Der Dateiname
+     * @param type Alles vor dem Typ, bei false, alles vom Typ bei true
+     * @return
+     */
+    public static String getFileType(String file, boolean type) {
+        for (int i = file.length() - 1; i >= 0; i--) {
+            if (file.charAt(i) == '.') {
+                if (type) {
+                    return file.substring(i + 1);
+                } else {
+                    return file.substring(0, i);
+                }
+            }
+        }
+        if (type) {
+            return "";
+        } else {
+            return file;
+        }
+    }
     static public LinkedList<String> splitInput (String input){
         input = input.toLowerCase();
         if (input.equals("")) return null;

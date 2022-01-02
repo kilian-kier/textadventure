@@ -1,6 +1,7 @@
 package com.textadventure.help;
 
 import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.input.Input;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,22 +21,7 @@ import java.util.zip.ZipInputStream;
 public class Help {
     private static final HashMap<String, Properties> hilfe = new HashMap<>();
 
-    private static String getFileType(String file, boolean type) {
-        for (int i = file.length() - 1; i >= 0; i--) {
-            if (file.charAt(i) == '.') {
-                if (type) {
-                    return file.substring(i + 1);
-                } else {
-                    return file.substring(0, i);
-                }
-            }
-        }
-        if (type) {
-            return "";
-        } else {
-            return file;
-        }
-    }
+
 
     /**
      * Lädt alle hp Dateien in einem Verzeichnis
@@ -52,11 +38,11 @@ public class Help {
                     String[] contents = dir.list();
                     if (contents != null) {
                         for (String i : contents) {
-                            if (getFileType(i, true).equals("hp")) {
+                            if (Input.getFileType(i, true).equals("hp")) {
                                 try {
                                     input = new FileInputStream("help/" + i);
-                                    hilfe.put(getFileType(i, false), new Properties());
-                                    hilfe.get(getFileType(i, false)).load(input);
+                                    hilfe.put(Input.getFileType(i, false), new Properties());
+                                    hilfe.get(Input.getFileType(i, false)).load(input);
                                 } catch (Exception e) {
                                     //Ignore
                                 }
@@ -70,8 +56,8 @@ public class Help {
                         if (entryName.endsWith(".hp")) {
                             input = Help.class.getResourceAsStream("/" + entryName);
                             String filename = entryName.substring(entryName.lastIndexOf("/") + 1);
-                            hilfe.put(getFileType(filename, false), new Properties());
-                            hilfe.get(getFileType(filename, false)).load(input);
+                            hilfe.put(Input.getFileType(filename, false), new Properties());
+                            hilfe.get(Input.getFileType(filename, false)).load(input);
                         }
                     }
                 }
