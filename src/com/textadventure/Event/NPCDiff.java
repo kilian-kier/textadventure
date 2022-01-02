@@ -1,6 +1,7 @@
 package com.textadventure.Event;
 
 import com.textadventure.help.Help;
+import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.characters.Dialog;
 import com.textadventure.characters.NPC;
@@ -8,6 +9,7 @@ import com.textadventure.exeptions.GameElementNotFoundException;
 import com.textadventure.input.Input;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -54,6 +56,23 @@ public class NPCDiff extends Diff implements Serializable {
             }
         }
         return ret;
+    }
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        if(map.containsKey("description")){
+            description=map.get("description");
+        }
+        if(map.containsKey("room")){
+            room=map.get("room");
+        }
+        if(map.containsKey("dialog")){
+            dialog=new Dialog();
+            try {
+                dialog.loadFromHashMap(LoadStoreWorld.createMap(map.get("dialog")));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
     @Override
     public String toString() {

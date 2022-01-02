@@ -168,7 +168,7 @@ public class EventEditor {
         }
         return false;
     }
-    private static Diff newDiff(LinkedList<String> args,Event event) throws IndexOutOfBoundsException, ElementExistsException {
+    public static Diff newDiff(LinkedList<String> args,Event event) throws IndexOutOfBoundsException, ElementExistsException {
         String name ;
         args.get(1);
         if(args.size()>2){
@@ -181,28 +181,7 @@ public class EventEditor {
         }
 
         Diff diff=null;
-        switch(args.get(1)){
-            case "container":
-                diff=new ContainerDiff(name);
-                break;
-            case "exit":
-                diff=new ExitDiff(name);
-                break;
-            case "location":
-                diff=new LocationDiff(name);
-                break;
-            case "npc":
-                diff=new NPCDiff(name);
-                break;
-            case "room":
-                diff=new RoomDiff(name);
-                break;
-            case "tool":
-                diff=new ToolDiff(name);
-                break;
-            default:
-                throw new NullPointerException();
-        }
+        diff=Event.newDiff(name,args.get(1));
         event.addDiff(diff);
         diff.edit();
         return diff;

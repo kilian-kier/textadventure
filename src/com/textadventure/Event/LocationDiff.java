@@ -8,6 +8,7 @@ import com.textadventure.locations.Location;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -69,6 +70,18 @@ public class LocationDiff extends Diff implements Serializable {
             }
         }
         return ret;
+    }
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        if(map.containsKey("description")){
+            description=map.get("description");
+        }
+        if(map.containsKey("addrooms")){
+            addRooms=Input.splitInput(map.get("addrooms"));
+        }
+        if(map.containsKey("rmrooms")){
+            rmRooms=Input.splitInput(map.get("rmrooms"));
+        }
     }
     @Override
     public String toString() {

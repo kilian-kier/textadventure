@@ -3,6 +3,7 @@ package com.textadventure.things;
 import com.textadventure.story.World;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Eine Art Item ohne Möglichkeit weitere Items zu speichern
@@ -42,5 +43,13 @@ public class Tool extends Item implements Serializable {
         string += String.format("Container/Raum: %s\n", currentContainer);
         string += String.format("Interactable: %b", interactable);
         return string;
+    }
+
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        super.loadFromHashMap(map);
+        if(map.containsKey("container")){
+            currentContainer=map.get("container");
+        }
     }
 }

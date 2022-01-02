@@ -4,6 +4,7 @@ import com.textadventure.story.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Ein Item welches es ermöglicht Tools zu speichern. Tools befinden sich in einer Liste (tools).
@@ -96,4 +97,12 @@ public class Container extends Item implements Serializable {
         return tools.remove(name);
     }
 
+
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        super.loadFromHashMap(map);
+        if(map.containsKey("room")){
+            currentContainer=map.get("room");
+        }
+    }
 }

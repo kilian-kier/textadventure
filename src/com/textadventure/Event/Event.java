@@ -1,5 +1,7 @@
 package com.textadventure.Event;
 
+import com.textadventure.input.Input;
+import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.exeptions.EventExistsException;
@@ -186,7 +188,32 @@ public class Event implements Serializable {
         }
         return ret;
     }
-
+    public static Diff newDiff(String name, String type){
+        Diff diff;
+        switch(type){
+            case "container":
+                diff=new ContainerDiff(name);
+                break;
+            case "exit":
+                diff=new ExitDiff(name);
+                break;
+            case "location":
+                diff=new LocationDiff(name);
+                break;
+            case "npc":
+                diff=new NPCDiff(name);
+                break;
+            case "room":
+                diff=new RoomDiff(name);
+                break;
+            case "tool":
+                diff=new ToolDiff(name);
+                break;
+            default:
+                throw new NullPointerException();
+        }
+        return diff;
+    }
     @Override
     public String toString() {
         String string="";
@@ -202,5 +229,47 @@ public class Event implements Serializable {
             string+=i.toString();
         }
         return string;
+    }
+
+    public void loadFromHashMap(HashMap<String,String> map){
+        if(map.containsKey("info")){
+            this.info=map.get("info");
+        }
+        if(map.containsKey("cmd")){
+            this.cmd= Input.splitInput(map.get("cmd"));
+        }
+        if(map.containsKey("music")){
+            this.music=map.get("music");
+        }
+        if(map.containsKey("dependent")){
+            this.dependent=Input.splitInput(map.get("dependent"));
+        }
+        if(map.containsKey("once")){
+            try{
+                this.once=Boolean.parseBoolean(map.get("once"));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        if(map.containsKey("diffs")) {
+            HashMap<String,String > diffs=null;
+            try {
+                 diffs = LoadStoreWorld.createMap(map.get("diffs"));
+            } catch(Exception e){
+                System.out.println(e.getMessage());
+                return;
+            }
+            for (String i:diffs.keySet()){
+                HashMap<String, String > diff;
+                try {
+                    diff=LoadStoreWorld.createMap(diffs.get(i));
+                } catch(Exception e){
+                    System.out.println(e.getMessage());
+                    continue;
+                }
+                Diff newdiff=Event.newDiff(i,diff.get("type"));
+                newdiff.loadFromHashMap(diff);
+            }
+        }
     }
 }

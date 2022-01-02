@@ -7,6 +7,8 @@ import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -63,6 +65,18 @@ public class ExitDiff extends Diff implements Serializable {
         return ret;
     }
     @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        if(map.containsKey("description")){
+            description=map.get("description");
+        }
+        if(map.containsKey("destination1")){
+            destination1=map.get("destination1");
+        }
+        if(map.containsKey("destination2")){
+            destination2=map.get("destination2");
+        }
+    }
+    @Override
     public String toString() {
         String string="";
         string+=String.format("Diff von %s\n",name);
@@ -83,7 +97,26 @@ public class ExitDiff extends Diff implements Serializable {
     public String getDestination2()  {
         return destination2;
     }
-
+    public void setDescription1(String description1){
+        description = description1+"@"+getDescription2();
+    }
+    public void setDescription2(String description2){
+        description = getDescription1()+"@"+description2;
+    }
+    public String getDescription1(){
+        try {
+            return description.split("[@]")[0];
+        }catch(Exception e){
+            return description;
+        }
+    }
+    public String getDescription2(){
+        try {
+            return description.split("[@]")[1];
+        }catch(Exception e){
+            return description;
+        }
+    }
 
     @Override
     public void edit() {

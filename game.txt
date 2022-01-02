@@ -1,0 +1,177 @@
+
+Stefe{
+type=player
+description={Manchmal, da frage sich Stefe, wer er denn überhaupt ist. 
+Was ist der Sinn seines Lebens, der Zweck dieses Planeten? 
+Des Universums?}
+room=landstraße
+}
+
+Start{
+type=event
+once=true
+info={
+Willkommen im Königreich Lusinam!
+
+Einem Ort an dem Sie Ihre Träume wahr werden lassen können.
+
+Wenn Sie auf ihrem Weg auf Schwierigkeiten stoßen, 
+schreien Sie bitte ganz laut um -hilfe-.
+ 
+Wir, die Bürger von Lusinam wünschen einen
+angenehmen Aufenthalt.}
+cmd=das start event
+}
+
+
+Lusinam{
+type=location
+description={Lusinam. 
+Ein Königreich im Zentrum der Welt.
+In welche Richtung man auch möchte. Es ist von allem weit entfernt.}
+}
+
+Landstraße{
+type=room
+description=Die einzigste Straße, die die Außenwelt  mit Lusinam verbindet.
+location=lusinam
+}
+
+Marktplatz{
+type=room
+description=Der Marktpllatz liegt im zentrum von Lusinam.
+location=lusinam
+}
+
+Kirche{
+type=room
+description={Der heilige Ort von Lusinam gotischer Bauweise.
+Neben der Kirche steht ein Widum.}
+location=lusinam
+}
+
+Oberstadt{
+type=room
+description= Die Oberstadt von Lusinam
+location=lusinam
+}
+
+Unterstadt{
+type=room
+description=Die Unterstadt von Lusinam
+location=lusinam
+}
+
+Kneipe{
+type=room
+description={
+Ein gemütlicher Raum mit einigen Tischen und Stühlen, 
+sowie einem sympatischen Barista.}
+location=dorfkneipe
+}
+
+Dorfkneipe{
+type=location
+description={
+Die Dorfkneipe. Ein Paradies für all jene, die ihr Vermögen 
+bevorzugt in traditionelles Bier investieren. 
+Auch Stefe teilt diese Vorliebe.
+}
+}
+
+Markober{
+type=exit
+destination1=marktplatz
+destination2=oberstadt
+description1=Die Oberstadt grenzt an den Marktplatz.
+description2=Vom Marktplatz führt eine Straße in den östlichen Teil der Stad, die Oberstadt.
+}
+
+Kircmark{
+type=exit
+destination1=kirche
+destination2=marktplatz
+description1=Vor dem Marktplatz steht die schlicht gehaltene, kleine Kirche von Lusinam.
+description2=Vor der Kirche breitet sich der Marktplatz von Lusinam aus.
+}
+
+Tür{
+type=exit
+destination1=kneipe
+destination2=unterstadt
+description1=Eine Tür folgt auf ein paar Stufen und führt in die Kneipe des Dorfes.
+description2=Eine Tür führt zurück in die Unterstadt.
+}
+
+Markunte{
+type=exit
+destination1=marktplatz
+destination2=unterstadt
+description1=Die Unterstadt grenzt an den Marktplatz.
+description2=Eine weitere Straße führt durch die Unterstadt.
+}
+
+Landmark{
+type=exit
+destination1=landstraße
+destination2=marktplatz
+description1= Eine Landstraße führt von hier aus in die weite Welt.
+description2={Hier beginnt die einzige Stadt und somit auch die Hauptstadt des Königreich Lusinams. 
+Die Landstraße führt direkt ins Dorfzentrum, den Marktplatz.}
+}
+
+
+Hildegard{
+type=npc
+description=Eine Gemüsehändlerin auf dem Marktplatz.
+room=marktplatz
+dialog={
+question1=Hallo, ich bin Stefe.
+answer1=Hildegard Gemüse und Co. Wie kann ich Ihnen helfen? Ach, ich verstehe schon, Sie sind interessiert an den roten Tomaten.
+event1=hildegard1	
+}
+}
+
+Hildegard1{
+type=event
+once=true
+cmd=jfkdsaöl jdfksaölfjsaklö aklslödf fjk
+diffs={
+hildegard={
+type=npc
+dialog={
+question1=Ich habe von einem Onkel ein Anwesen hier geerbt, können Sie mir sagen wo ich es finden kann?
+answer1=Das tut mir Leid für Sie. Natürlich weiß ich wo  das Anwesen ist. Ich war schon oft dort. Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen. Habe ich Ihnen schon erzählt wie ich überhaupt dazu gekommen bin Obsthändlerin zu werden?
+}
+}
+}
+}
+
+Maiskolben{
+type=tool
+container=landstraße
+description=Neben der Landstraße gedeihen reife Maiskolben auf einem Feld.
+}
+
+Schild{
+type=tool
+interactable=false
+description={
+Beschreibung: Willkommen im Königreich Lusinam!
+
+Einem Ort an dem Sie Ihre Träume wahr werden lassen können.
+
+Wenn Sie auf ihrem Weg auf Schwierigkeiten stoßen, 
+schreien Sie bitte ganz laut um -hilfe-.
+ 
+Wir, die Bürger von Lusinam wünschen einen
+angenehmen Aufenthalt.
+}
+container=landstraße
+}
+
+
+
+
+
+

@@ -1,6 +1,7 @@
 package com.textadventure.characters;
 
 import com.textadventure.GameElement;
+import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ExitNotFoundException;
 import com.textadventure.exeptions.ItemNotFoundException;
@@ -12,8 +13,10 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends GameElement implements RoomChangeable {
+    private static final long serialVersionUID = 524105953116492598L;
     private final Container inventory = new Container("Rucksack", "Das ist dein Rucksack. Hier kannst du alle Dinge finden, die du besitzt.");
     private Room currentRoom;
     private Room previousRoom;
@@ -125,5 +128,13 @@ public class Player extends GameElement implements RoomChangeable {
         if (this.currentRoom == null) string += String.format("Raum: null");
         else string += String.format("Raum: %s", this.currentRoom.getName());
         return string;
+    }
+    public void loadFromHashMap(HashMap<String, String> map) {
+        if(map.containsKey("description")){
+            description=map.get("description");
+        }
+        if(map.containsKey("room")){
+            currentRoom=World.roomMap.get(map.get("room"));
+        }
     }
 }

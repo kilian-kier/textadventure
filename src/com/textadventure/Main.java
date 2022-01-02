@@ -13,7 +13,6 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
-
         Help.load();
         World.worldEditor("music.world");
 

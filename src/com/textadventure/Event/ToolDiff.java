@@ -7,6 +7,7 @@ import com.textadventure.input.Input;
 import com.textadventure.things.Tool;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -125,7 +126,15 @@ public class ToolDiff extends Diff implements Serializable {
     }
 
 
-
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        if(map.containsKey("description")){
+            description=map.get("description");
+        }
+        if(map.containsKey("container")){
+            container=map.get("container");
+        }
+    }
     @Override
     public String toString() {
         String string="";
