@@ -48,6 +48,7 @@ type=room
 description={Der heilige Ort von Lusinam gotischer Bauweise.
 Neben der Kirche steht ein Widum.}
 location=lusinam
+music=music/haus.mp3
 }
 
 Oberstadt{

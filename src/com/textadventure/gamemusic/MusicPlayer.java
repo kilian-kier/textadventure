@@ -35,7 +35,7 @@ public class MusicPlayer implements Runnable {
         if (World.player != null) {
             if (World.player.getCurrentRoom() != null) {
                 try {
-                    String musicpath = World.player.getCurrentRoom().getMusic();
+                    String musicpath =World.tempDir+"/"+World.player.getCurrentRoom().getMusic();
                     /*
                     if (World.isJar())
                         input = getClass().getResourceAsStream("/music/" + World.player.getCurrentRoom().getName() + ".mp3");
