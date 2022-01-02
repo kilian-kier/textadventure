@@ -55,8 +55,9 @@ public class World {
     static public Player player;
     static public MusicPlayer musicPlayer = new MusicPlayer();
     static public HashMap<String, String> musicList = new HashMap<>();
+    static public String tempDir;
 
-    static boolean explorer = true;
+    static boolean explorer = false;
 
 
     public static boolean isJar() {
@@ -179,6 +180,7 @@ public class World {
                     }
                     break;
                 case "load":
+
                     if (!explorer) {
                         try {
                             if(Input.getFileType(commands.get(1),true).equals("world")){
@@ -189,6 +191,7 @@ public class World {
                         } catch (IndexOutOfBoundsException e) {
                             System.out.println("Zu wenig Parameter");
                         }catch(Exception e){
+                            e.printStackTrace();
                             System.out.println("Pfad nicht gefunden");
                         }
                     }else {
@@ -697,6 +700,20 @@ public class World {
     }
 
     /**
+     * Fügt Musik zur Welt hinzu
+     *
+     * @param path Pfad der Musikdatei
+     * @param room Raum zum Hinzufügen
+     */
+    public static void addMusic(String path,String room){
+        File musicFile = new File(path);
+        if (musicFile.exists()) {
+            World.musicList.put(room, musicFile.getAbsolutePath());
+        } else
+            System.out.println("Datei nicht gefunden");
+    }
+
+    /**
      * Mit dieser Methode können Beschreibung und Location eines Rooms geändert werden. Zudem können Container, Tools, NOCs und Exits ninzugefügt bzw. entfernt werden.
      *
      * @param temp Ist das temporäre Objekt der Klasse Room welches überarbeitet werden soll
@@ -737,12 +754,8 @@ public class World {
                             }
                             case "music" -> {
                                 if (command.size() > 2) {
-                                    File musicFile = new File(command.get(2));
-                                    if (musicFile.exists()) {
-                                        temp.setMusic(command.get(2));
-                                        World.musicList.put(temp.getName(), musicFile.getAbsolutePath());
-                                    } else
-                                        System.out.println("Datei nicht gefunden");
+                                    temp.setMusic(command.get(2));
+                                    addMusic(command.get(2),temp.getName());
                                 } else {
                                     if (explorer) {
                                         FileDialog fd = new FileDialog(new Frame(), "Musikdatei laden", FileDialog.LOAD);
