@@ -1,10 +1,12 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.input.Input;
 import com.textadventure.story.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Enthält eine Liste mit Räumen, die sich an diesem Ort befinden
@@ -72,5 +74,10 @@ public class Location extends GameElement implements Serializable {
         string += String.format("Beschreibung: %s\n", getDescription());
         string += String.format("Räume: %s", rooms.toString());
         return string;
+    }
+
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        super.loadFromHashMap(map);
     }
 }

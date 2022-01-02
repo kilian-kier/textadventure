@@ -30,4 +30,6 @@ public abstract class Diff implements Serializable  {
     public void setName(String name) {
         this.name = name;
     }
+
+    public abstract void loadFromHashMap(HashMap<String, String> diff);
 }

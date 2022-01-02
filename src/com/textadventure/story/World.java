@@ -19,6 +19,9 @@ import com.textadventure.things.Tool;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FilenameFilter;
+
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -27,11 +30,17 @@ import java.security.CodeSource;
 import java.util.*;
 import java.util.zip.ZipInputStream;
 
+  class MyFilenameFilter implements FilenameFilter {
+        @Override
+        public boolean accept(File dir, String name) {
+            return name.endsWith( ".world" ) || name.endsWith( ".txt" );
+        }
+  }
+
 /**
  * Die World Klasse hat 7 HashMaps und ein Objekt des Players und ein Objekt des MusicPlayers.
  * In der World Klasse findet man Methoden zum Erstellen und bearbeiten der Spielwelt.
  */
-
 public class World {
     //TODO Interactable
     static public HashMap<String, Room> roomMap = new HashMap<>();
@@ -48,6 +57,7 @@ public class World {
     static public HashMap<String, String> musicList = new HashMap<>();
 
     static boolean explorer = true;
+
 
     public static boolean isJar() {
         try {
@@ -171,33 +181,41 @@ public class World {
                 case "load":
                     if (!explorer) {
                         try {
-                            if (commands.size() < 2) {
-                                LoadStoreWorld.load(path);
-                            } else {
+                            if(Input.getFileType(commands.get(1),true).equals("world")){
                                 LoadStoreWorld.load(commands.get(1));
+                            }else{
+                                LoadStoreWorld.loadtxt(commands.get(1));
                             }
-                        } catch (Exception e) {
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println("Zu wenig Parameter");
+                        }catch(Exception e){
                             System.out.println("Pfad nicht gefunden");
-                            e.printStackTrace();
                         }
-                    } else {
-                        try {
-                            if (commands.size() < 2) {
-                                FileDialog fd = new FileDialog(new Frame(), "Weltdatei laden", FileDialog.LOAD);
-                                fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
-                                fd.setFile("*.world");
-                                fd.setVisible(true);
-                                String filename = fd.getFile();
-                                if (filename != null)
-                                    LoadStoreWorld.load(fd.getDirectory() + filename);
-                                else
-                                    System.out.println("Keine Datei ausgewählt");
-                            } else if (commands.get(1).equals("-s"))
-                                LoadStoreWorld.load(null);
-                        } catch (Exception e) {
-                            System.out.println("Pfad nicht gefunden");
-                            e.printStackTrace();
-                        }
+                    }else {
+                    try {
+                        if (commands.size() < 2) {
+                            FileDialog fd = new FileDialog(new Frame(), "Weltdatei laden", FileDialog.LOAD);
+                            fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                            fd.setFile("*.world");
+                            FilenameFilter filter = new MyFilenameFilter();
+                            fd.setFilenameFilter(filter);
+                            fd.setVisible(true);
+                            String filename = fd.getFile();
+                            if (filename != null){
+                                    if(Input.getFileType(filename,true).equals("world")){
+                                        LoadStoreWorld.load(fd.getDirectory() + filename);
+                                    }else{
+                                        LoadStoreWorld.loadtxt(fd.getDirectory() + filename);
+                                    }
+                            }
+                            else
+                                System.out.println("Keine Datei ausgewählt");
+                        } else if (commands.get(1).equals("-s"))
+                            LoadStoreWorld.load(null);
+                    } catch (Exception e) {
+                        System.out.println("Pfad nicht gefunden");
+                        e.printStackTrace();
+                    }
                     }
                     break;
                 case "close":

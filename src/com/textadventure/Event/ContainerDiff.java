@@ -8,6 +8,7 @@ import com.textadventure.things.Container;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -188,6 +189,22 @@ public class ContainerDiff extends Diff implements Serializable {
                 }
             }
 
+    }
+
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        if(map.containsKey("description")){
+            description=map.get("description");
+        }
+        if(map.containsKey("room")){
+            room=map.get("room");
+        }
+        if(map.containsKey("addtools")){
+            addTools=Input.splitInput(map.get("addtools"));
+        }
+        if(map.containsKey("rmtools")){
+            rmTools=Input.splitInput(map.get("rmtools"));
+        }
     }
 
     @Override

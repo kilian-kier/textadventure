@@ -8,6 +8,7 @@ import com.textadventure.things.Tool;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Enthält eine Liste mit Ausgängen, Tools, Containern, NPCs und Orten.
@@ -274,5 +275,17 @@ public class Room extends GameElement implements Serializable {
         string += String.format("Container: %s\n", container);
         string += String.format("Exits: %s", exits);
         return string;
+    }
+
+
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        super.loadFromHashMap(map);
+        if(map.containsKey("music")){
+            this.music=map.get("music");
+        }
+        if(map.containsKey("location")){
+            this.location=map.get("location");
+        }
     }
 }
