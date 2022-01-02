@@ -14,7 +14,7 @@ public class Main {
         System.out.println(diff);*/
 
         Help.load();
-        World.worldEditor("world.world");
+        World.worldEditor("music.world");
 
         /*World.worldEditor("world.world");
         Map map = World.containerMap;

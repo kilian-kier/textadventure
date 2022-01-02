@@ -20,16 +20,14 @@ import com.textadventure.things.Tool;
 import java.awt.*;
 import java.io.File;
 import java.io.FilenameFilter;
+
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.CodeSource;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.zip.ZipInputStream;
 
   class MyFilenameFilter implements FilenameFilter {
@@ -56,8 +54,9 @@ public class World {
     //TODO new Player
     static public Player player;
     static public MusicPlayer musicPlayer = new MusicPlayer();
+    static public HashMap<String, String> musicList = new HashMap<>();
 
-    static boolean explorer=false;
+    static boolean explorer = true;
 
 
     public static boolean isJar() {
@@ -95,20 +94,20 @@ public class World {
                 case "bridge":
                     try {
                         createBridge(commands.get(1), commands.get(2));
-                    }catch(IndexOutOfBoundsException e){
+                    } catch (IndexOutOfBoundsException e) {
                         System.out.println("Zu wenig Argumente");
                     }
                     break;
                 case "explorer":
-                    explorer=!explorer;
-                    System.out.printf("Explorer auf %b gesetzt\n",explorer);
+                    explorer = !explorer;
+                    System.out.printf("Explorer auf %b gesetzt\n", explorer);
                     break;
                 case "mv":
                     try {
-                        mvGameElement(commands.get(1),commands.get(2));
-                    }catch(IndexOutOfBoundsException e){
+                        mvGameElement(commands.get(1), commands.get(2));
+                    } catch (IndexOutOfBoundsException e) {
                         System.out.println("Zu wenig Argumente");
-                    }catch(ElementNotFoundException e){
+                    } catch (ElementNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -157,30 +156,30 @@ public class World {
                     }
                     break;
                 case "store":
-                    if(!explorer) {
+                    if (!explorer) {
                         if (commands.size() > 1) {
                             LoadStoreWorld.store(commands.get(1));
                         } else {
                             LoadStoreWorld.store(path);
                         }
-                    }else{
-                    try {
-                        FileDialog fd = new FileDialog(new Frame(), "Weltdatei speichern", FileDialog.SAVE);
-                        fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
-                        fd.setFile("world.world");
-                        fd.setVisible(true);
-                        String filename = fd.getFile();
-                        if (filename != null)
-                            LoadStoreWorld.store(filename);
-                        else
-                            System.out.println("Keine Datei ausgewählt");
-                    } catch (URISyntaxException ignore) {
-                        //DO NOTHING
-                    }
+                    } else {
+                        try {
+                            FileDialog fd = new FileDialog(new Frame(), "Weltdatei speichern", FileDialog.SAVE);
+                            fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                            fd.setFile("world.world");
+                            fd.setVisible(true);
+                            String filename = fd.getFile();
+                            if (filename != null)
+                                LoadStoreWorld.store(fd.getDirectory() + filename);
+                            else
+                                System.out.println("Keine Datei ausgewählt");
+                        } catch (URISyntaxException e) {
+                            //DO NOTHING
+                        }
                     }
                     break;
                 case "load":
-                    if(!explorer) {
+                    if (!explorer) {
                         try {
                             if(Input.getFileType(commands.get(1),true).equals("world")){
                                 LoadStoreWorld.load(commands.get(1));
@@ -204,9 +203,9 @@ public class World {
                             String filename = fd.getFile();
                             if (filename != null){
                                     if(Input.getFileType(filename,true).equals("world")){
-                                        LoadStoreWorld.load(filename);
+                                        LoadStoreWorld.load(fd.getDirectory() + filename);
                                     }else{
-                                        LoadStoreWorld.loadtxt(filename);
+                                        LoadStoreWorld.loadtxt(fd.getDirectory() + filename);
                                     }
                             }
                             else
@@ -230,7 +229,7 @@ public class World {
                         fd.setVisible(true);
                         String filename = fd.getFile();
                         if (filename != null)
-                            LoadStoreWorld.include(filename);
+                            LoadStoreWorld.include(fd.getDirectory() + filename);
                         else
                             System.out.println("Keine Datei ausgewählt");
                     } catch (URISyntaxException e) {
@@ -238,13 +237,13 @@ public class World {
                     }
                     break;
                 case "check":
-                    if(commands.size()>1 && commands.get(1).equals("fix")){
+                    if (commands.size() > 1 && commands.get(1).equals("fix")) {
                         if (!Checker.check(true)) {
                             System.out.println("Es gibt Fehler in der Welt. Sie wurden wenn möglich korrigiert");
                         } else {
                             System.out.println("Alles in Ordnung");
                         }
-                    }else{
+                    } else {
                         if (!Checker.check(false)) {
                             System.out.println("Es gibt Fehler in der Welt");
                         } else {
@@ -273,7 +272,7 @@ public class World {
                     Game.start();
                     try {
                         LoadStoreWorld.load("temp.world");
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println("Someone messed with the temp.world file");
                     }
                     break;
@@ -294,23 +293,23 @@ public class World {
      * @param room2 Zweiter Raum
      */
     private static void createBridge(String room1, String room2) {
-        if(!World.roomMap.containsKey(room1) || !World.roomMap.containsKey(room2)){
+        if (!World.roomMap.containsKey(room1) || !World.roomMap.containsKey(room2)) {
             System.out.println("Mindestens einer der Räume existiert nicht");
             return;
         }
         String exitname;
         try {
-             exitname = room1.substring(0, 4) + room2.substring(0, 4);
-        }catch(Exception e){
-            exitname= room1+room2;
+            exitname = room1.substring(0, 4) + room2.substring(0, 4);
+        } catch (Exception e) {
+            exitname = room1 + room2;
         }
-        if(World.exitMap.containsKey(exitname)){
-            System.out.println( "Exit " + exitname +" existiert bereits");
+        if (World.exitMap.containsKey(exitname)) {
+            System.out.println("Exit " + exitname + " existiert bereits");
             return;
         }
-        String description1=Input.input(String.format("Beschreibung aus Sicht von %s:",room2),false);
-        String description2=Input.input(String.format("Beschreibung aus Sicht von %s:",room1),false);
-        Exit exit = new Exit(exitname,description1+"@"+description2);
+        String description1 = Input.input(String.format("Beschreibung aus Sicht von %s:", room2), false);
+        String description2 = Input.input(String.format("Beschreibung aus Sicht von %s:", room1), false);
+        Exit exit = new Exit(exitname, description1 + "@" + description2);
         exit.setDestination1(room1);
         exit.setDestination2(room2);
         World.exitMap.put(exitname, exit);
@@ -321,36 +320,36 @@ public class World {
 
     /**
      * Die Funktion dient zum umbenennen eines Spiel elements
+     *
      * @param name1 Ursprünglicher Name
      * @param name2 Neuer Name
      * @throws ElementNotFoundException Falls ein Element nicht existiert
      */
-    private static void mvGameElement(String name1, String name2) throws ElementNotFoundException{
+    private static void mvGameElement(String name1, String name2) throws ElementNotFoundException {
         try {
             GameElement element = getElement(name1, null);
             element.setName(name2);
-            if(element.getClass().equals(Exit.class)){
+            if (element.getClass().equals(Exit.class)) {
                 World.exitMap.remove(name1);
-                World.exitMap.put(name2,(Exit)element);
-            }else if(element.getClass().equals(Room.class)){
+                World.exitMap.put(name2, (Exit) element);
+            } else if (element.getClass().equals(Room.class)) {
                 World.roomMap.remove(name1);
-                World.roomMap.put(name2,(Room)element);
+                World.roomMap.put(name2, (Room) element);
                 ((Room) element).getToolsContainer().setName(name2);
                 World.containerMap.remove(name1);
-                World.containerMap.put(name2,((Room) element).getToolsContainer());
-            } else if(element.getClass().equals(Location.class)){
+                World.containerMap.put(name2, ((Room) element).getToolsContainer());
+            } else if (element.getClass().equals(Location.class)) {
                 World.locationMap.remove(name1);
-                World.locationMap.put(name2,(Location)element);
-            }
-            else if(element.getClass().equals(NPC.class)){
+                World.locationMap.put(name2, (Location) element);
+            } else if (element.getClass().equals(NPC.class)) {
                 World.npcMap.remove(name1);
-                World.npcMap.put(name2,(NPC) element);
-            }else if(element.getClass().equals(Container.class)){
+                World.npcMap.put(name2, (NPC) element);
+            } else if (element.getClass().equals(Container.class)) {
                 World.containerMap.remove(name1);
-                World.containerMap.put(name2,(Container)element);
-            }else  if(element.getClass().equals(Tool.class)){
+                World.containerMap.put(name2, (Container) element);
+            } else if (element.getClass().equals(Tool.class)) {
                 World.toolMap.remove(name1);
-                World.toolMap.put(name2,(Tool)element);
+                World.toolMap.put(name2, (Tool) element);
             }
             System.out.println("Element erfolgreich unbenannt");
         } catch (ElementNotFoundException e) {
@@ -358,13 +357,14 @@ public class World {
                 String event = eventKeyMap.get(name1);
                 eventMap.get(event).setName(name2);
                 eventKeyMap.remove(name1);
-                eventKeyMap.put(name2,event);
+                eventKeyMap.put(name2, event);
                 System.out.println("Element erfolgreich unbenannt");
             } else {
                 throw e;
             }
         }
     }
+
     /**
      * Funktion entfernt ein Spiel Element
      *
@@ -419,14 +419,14 @@ public class World {
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description",false));
+                            case "description" -> temp.setDescription(Input.input("description", false));
                             case "container" -> {
                                 if (containerMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
                                 else System.out.println(command.get(2) + "nicht gefunden");
                             }
-                            case "interactable"->{
+                            case "interactable" -> {
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -487,14 +487,14 @@ public class World {
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description",false));
+                            case "description" -> temp.setDescription(Input.input("description", false));
                             case "room" -> {
                                 if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
                                 else System.out.println(command.get(2) + "nicht gefunden");
                             }
-                            case "interactable"->{
+                            case "interactable" -> {
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -555,11 +555,11 @@ public class World {
                         break;
 
                     case "set":
-                        switch(command.get(1)){
-                            case "description"->temp.setDescription(Input.input("description",false));
-                            case "interactable"->{
+                        switch (command.get(1)) {
+                            case "description" -> temp.setDescription(Input.input("description", false));
+                            case "interactable" -> {
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -616,11 +616,11 @@ public class World {
                                 if (roomMap.containsKey(command.get(2))) temp.setDestination2(command.get(2));
                                 else System.out.println(command.get(2) + " nicht gefunden");
                             }
-                            case "interactable"->{
+                            case "interactable" -> {
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
                             }
-                            case "description" -> temp.setDescription(Input.input("description",false));
+                            case "description" -> temp.setDescription(Input.input("description", false));
                             default -> System.out.println("command not found");
                         }
                         break;
@@ -671,14 +671,14 @@ public class World {
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description",false));
+                            case "description" -> temp.setDescription(Input.input("description", false));
                             case "room" -> {
                                 if (roomMap.containsKey(command.get(2))) temp.setRoom(command.get(2));
                                 else System.out.println(command.get(2) + " nicht gefunden");
                             }
-                            case "interactable"->{
+                            case "interactable" -> {
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
                             }
                             default -> System.out.println("command not found");
                         }
@@ -726,14 +726,47 @@ public class World {
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description",false));
+                            case "description" -> temp.setDescription(Input.input("description", false));
                             case "location" -> {
                                 if (locationMap.containsKey(command.get(2))) temp.setLocation(command.get(2));
                                 else System.out.println(command.get(2) + " nicht gefunden");
                             }
-                            case "interactable"->{
+                            case "interactable" -> {
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
+                            }
+                            case "music" -> {
+                                if (command.size() > 2) {
+                                    File musicFile = new File(command.get(2));
+                                    if (musicFile.exists()) {
+                                        temp.setMusic(command.get(2));
+                                        World.musicList.put(temp.getName(), musicFile.getAbsolutePath());
+                                    } else
+                                        System.out.println("Datei nicht gefunden");
+                                } else {
+                                    if (explorer) {
+                                        FileDialog fd = new FileDialog(new Frame(), "Musikdatei laden", FileDialog.LOAD);
+                                        fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                                        fd.setFile("*.mp3");
+                                        fd.setVisible(true);
+                                        String filename = fd.getFile();
+                                        if (filename != null) {
+                                            temp.setMusic(fd.getDirectory() + filename);
+                                            World.musicList.put(temp.getName(), fd.getDirectory() + filename);
+                                        } else
+                                            System.out.println("Keine Datei ausgewählt");
+                                    } else {
+                                        String filename = Input.input("Musikdatei", false);
+                                        if (filename != null) {
+                                            File musicFile = new File(filename);
+                                            if (musicFile.exists()) {
+                                                temp.setMusic(musicFile.getAbsolutePath());
+                                                World.musicList.put(temp.getName(), musicFile.getAbsolutePath());
+                                            } else
+                                                System.out.println("Datei nicht gefunden");
+                                        }
+                                    }
+                                }
                             }
                             default -> System.out.println("command not found");
                         }
@@ -810,7 +843,7 @@ public class World {
                         System.out.println("command not found");
                         break;
                 }
-            } catch (IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException | URISyntaxException e) {
                 try {
                     Help.help("RoomEditor", command.get(0));
                 } catch (NoHelpFoundException ignored) {
@@ -854,11 +887,11 @@ public class World {
                                     temp.setCurrentRoom(roomMap.get(command.get(2)));
                                 else System.out.println(command.get(2) + " nicht gefunden");
                             }
-                            case "interactable"->{
+                            case "interactable" -> {
                                 temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n",temp.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
                             }
-                            case "description" -> temp.setDescription(Input.input("description",false));
+                            case "description" -> temp.setDescription(Input.input("description", false));
                             default -> System.out.println("command not found");
                         }
                         break;
@@ -941,7 +974,7 @@ public class World {
                 if (args.size() > 2) { //Check if name parameter exists
                     element = new GameElement(args.get(2));
                 } else {
-                    element = new GameElement(Input.input("name",true));
+                    element = new GameElement(Input.input("name", true));
                 }
                 try { // If Element already exists somewhere
                     getElement(element.getName(), args.get(1)); // Throws Exception if Element exists
@@ -964,7 +997,7 @@ public class World {
                 } catch (ElementNotFoundException e) {
                     //Alles OK
                 }
-                element.setDescription(Input.input("description",false));
+                element.setDescription(Input.input("description", false));
                 break;
             case "event":
                 if (args.size() > 2) {
@@ -978,8 +1011,8 @@ public class World {
                     System.out.println("Ein Spieler existiert bereits");
                     return;
                 } else {
-                    element = new GameElement(Input.input("name",true));
-                    element.setDescription(Input.input("description",false));
+                    element = new GameElement(Input.input("name", true));
+                    element.setDescription(Input.input("description", false));
                 }
                 break;
             default:
@@ -1064,7 +1097,6 @@ public class World {
         }
         throw new ElementNotFoundException(name, "Name");
     }
-
 
 
 }

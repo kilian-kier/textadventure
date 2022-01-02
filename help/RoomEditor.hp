@@ -31,4 +31,5 @@ add container [Container]\n\
 set=\
 Befehl ermöglicht das setzen (ändern) von:\n\
 Beschreibung: set description (Eingabe der Beschreibung wird abgefragt)\n\
-Umgebung: set location [Location]
+Umgebung: set location [Location]\n\
+Musik: set music [Musikdatei (optional)]
