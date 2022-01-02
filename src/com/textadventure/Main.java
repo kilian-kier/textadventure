@@ -13,6 +13,8 @@ public class Main {
         diff.checkValidity();
         System.out.println(diff);*/
 
+        LoadStoreWorld.loadtxt("game.txt");
+
 
         Help.load();
         World.worldEditor("world.world");

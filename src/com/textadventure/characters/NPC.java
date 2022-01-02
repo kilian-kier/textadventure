@@ -1,11 +1,13 @@
 package com.textadventure.characters;
 
 import com.textadventure.GameElement;
+import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
 import com.textadventure.locations.Room;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  *  Nicht Spieler Charakter im Spiel verfügt über Dialoge (dialog) und befindet sich in einem Raum (room).
@@ -97,5 +99,20 @@ public class NPC extends GameElement implements Serializable {
         string+="Dialog:";
         string+=dialog.toString();
         return string;
+    }
+
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        super.loadFromHashMap(map);
+        if(map.containsKey("room")){
+            room=map.get("room");
+        }
+        if(map.containsKey("dialog")){
+            try {
+                dialog.loadFromHashMap(LoadStoreWorld.createMap(map.get("dialog")));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

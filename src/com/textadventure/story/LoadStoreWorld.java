@@ -3,6 +3,7 @@ package com.textadventure.story;
 import com.textadventure.Event.Event;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
+import com.textadventure.exeptions.BracketException;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
@@ -10,8 +11,10 @@ import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Scanner;
 
 /**
  * Lädt und Speichert Welt
@@ -141,5 +144,218 @@ public class LoadStoreWorld {
         } catch (IOException i) {
             i.printStackTrace();
         }
+    }
+
+
+    public static void loadtxt(String path){
+        String input=null;
+        try {
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+            scanner.useDelimiter("\\Z");
+            input = scanner.next();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        //System.out.println("Input:" +input);
+        HashMap<String, String> split ;
+        try {
+            split=splittxt(input);
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        HashMap<String, HashMap<String,String>> splitMap=new HashMap<>();
+
+        for (String i:split.keySet()) {
+            try{
+                splitMap.put(i,createMap(split.get(i)));
+            }catch(Exception f){
+                System.out.println(f.getMessage());
+            }
+        }
+
+
+        String type;
+        String name;
+        String playername=null;
+        for(String i: splitMap.keySet()){
+            HashMap<String, String> object = splitMap.get(i);
+            name=i;
+            type=object.get("type");
+            switch(type){
+                case "location":
+                    Location location = new Location(name,null);
+                    location.loadFromHashMap(splitMap.get(name));
+                    World.locationMap.put(name,location);
+                    break;
+                case "room":
+                    Room room = new Room(name,null);
+                    room.loadFromHashMap(splitMap.get(name));
+                    World.roomMap.put(name,room);
+                    break;
+                case "npc":
+                    NPC npc = new NPC(name,null);
+                    npc.loadFromHashMap(splitMap.get(name));
+                    World.npcMap.put(name,npc);
+                    break;
+                case "tool":
+                    Tool tool = new Tool(name,null);
+                    tool.loadFromHashMap(splitMap.get(name));
+                    World.toolMap.put(name,tool);
+                    break;
+                case "event":
+                    Event event=null;
+                    try {
+                        event = new Event(name);
+                    }catch(Exception e){
+                        break;
+                    }
+                    event.loadFromHashMap(splitMap.get(name));
+                    event.storeEvent(event.getCmd());
+                    break;
+                case "exit":
+                    Exit exit = new Exit(name,null);
+                    exit.loadFromHashMap(splitMap.get(name));
+                    World.exitMap.put(name,exit);
+                    break;
+                case "container":
+                    Container container = new Container(name,null);
+                    container.loadFromHashMap(splitMap.get(name));
+                    World.containerMap.put(name,container);
+                    break;
+                case "player":
+                    playername = name;
+                    break;
+                default:
+                    if(type.equals("")){
+                        System.out.println("Kein Typ Angegeben bei Element " + name);
+                    }else{
+                        System.out.println("Ungültiger Typ");
+                    }
+                    break;
+            }
+        }
+        if(playername!=null){
+            World.player=new Player(playername,null,null );
+            World.player.loadFromHashMap(splitMap.get(playername));
+        }
+
+    }
+
+    private static int findprevious(String string, int index,char c){
+        try {
+            for (int i = index; i >= 0; i--) {
+                if (string.charAt(i) == c) {
+                    return i;
+                }
+            }
+        }catch(IndexOutOfBoundsException e){
+            return -1;
+        }
+        return 0;
+    }
+    private static int getBrackets(String string,int index) throws BracketException {
+        int opened=0;
+        String ret="";
+        char c;
+        for(int i=index;i<string.length();i++){
+            c=string.charAt(i);
+            if(c=='{'){
+                opened++;
+            } else if(c=='}'){
+                if(opened==1){
+                   return i;
+                }
+                opened--;
+            }else if(opened>0){
+                string+=String.valueOf(c);
+            }
+            if(opened<0){
+                throw new BracketException();
+            }
+        }
+        return -1;
+    }
+    private static String cleanString(String string){
+        int start=0;
+        int end=string.length();
+        for(int i=0;i<end;i++){
+            if(string.charAt(i)=='\n' || string.charAt(i)==' '){
+                start++;
+            }else{
+                break;
+            }
+        }
+        for(int i=end-1;i>start;i--){
+            if(string.charAt(i)=='\n' || string.charAt(i)==' '){
+                end--;
+            }else{
+                break;
+            }
+        }
+        string=string.substring(start,end);
+        return string;
+    }
+    public static HashMap<String,String> createMap(String input) throws BracketException{
+        HashMap<String,String> map = new HashMap<>();
+        char c;
+        String key="";
+        String value="";
+        boolean tokey=true;
+        for(int i=0;i<input.length();i++){
+            c=input.charAt(i);
+            if(tokey && c=='\n') {
+                key = "";
+            }  else if(tokey && c!='='){
+                key=key+String.valueOf(c);
+            }else if(c=='=' && tokey){
+                tokey=false;
+            } else if(c!='\n' && c!='{'){ //!tokey
+                value=value+String.valueOf(c);
+            }else if(c=='{'){
+                int temp=i;
+                i=getBrackets(input,i);
+                value=input.substring(temp+1,i);
+                value=cleanString(value);
+                if(!value.equals("")){
+                    map.put(cleanString(key.toLowerCase()),value);
+                }
+                key="";
+                value="";
+                tokey=true;
+            }else{
+                value=cleanString(value);
+                if(!value.equals("")){
+                    map.put(cleanString(key.toLowerCase()),value);
+                }
+                key="";
+                value="";
+                tokey=true;
+            }
+        }
+        return map;
+    }
+    private static HashMap<String,String> splittxt(String input) throws BracketException {
+        HashMap<String,String> split=new HashMap<>();
+        String string="";
+        char c;
+            for(int i=0;i<input.length();i++){
+                c=input.charAt(i);
+                if(c=='{'){
+                    int temp=i;
+                    i=getBrackets(input,i);
+                    string=input.substring(temp+1,i);
+                    String key=input.substring(findprevious(input,temp,'\n'),temp);
+                    key=cleanString(key);
+                    if(!key.equals("")) {
+                        split.put(key.toLowerCase(), string);
+                    }
+                }
+            }
+        return split;
     }
 }

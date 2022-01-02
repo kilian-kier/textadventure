@@ -165,9 +165,17 @@ public class World {
                             LoadStoreWorld.store(filename);
                         else
                             System.out.println("Keine Datei ausgewählt");
-                    } catch (URISyntaxException e) {
+                    } catch (URISyntaxException ignore) {
                         //DO NOTHING
                     }
+                    }
+                    break;
+                case "loadtxt":
+                    try {
+                        LoadStoreWorld.loadtxt(commands.get(1));
+                        System.out.println("Welt geladen");
+                    } catch (Exception e) {
+                        System.out.println("Pfad nicht gefunden");
                     }
                     break;
                 case "load":

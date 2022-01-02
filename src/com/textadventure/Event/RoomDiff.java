@@ -8,6 +8,7 @@ import com.textadventure.locations.Room;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -324,7 +325,33 @@ public class RoomDiff extends Diff implements Serializable {
             }
         }
     }
-
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        if(map.containsKey("description")){
+            description=map.get("description");
+        }
+        if(map.containsKey("location")){
+            location=map.get("location");
+        }
+        if(map.containsKey("addtools")){
+            addTools=Input.splitInput(map.get("addtools"));
+        }
+        if(map.containsKey("rmtools")){
+            rmTools=Input.splitInput(map.get("rmtools"));
+        }
+        if(map.containsKey("addcontainer")){
+            addContainer=Input.splitInput(map.get("addcontainer"));
+        }
+        if(map.containsKey("rmcontainer")){
+            rmContainer=Input.splitInput(map.get("rmcontainer"));
+        }
+        if(map.containsKey("addnpcs")){
+            addNPCs=Input.splitInput(map.get("addnpcs"));
+        }
+        if(map.containsKey("rmnpcs")){
+            rmNPCs=Input.splitInput(map.get("rmnpcs"));
+        }
+    }
     @Override
     public String toString() {
         String string="";

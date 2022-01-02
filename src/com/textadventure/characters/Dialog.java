@@ -6,6 +6,7 @@ import com.textadventure.story.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -164,5 +165,15 @@ public class Dialog implements Serializable {
             string=string.substring(0,string.length()-1);
         }}
         return string;
+    }
+
+    public void loadFromHashMap(HashMap<String, String> map) {
+        for(int i=0;i<Integer.MAX_VALUE;i++){
+            if(map.containsKey("question"+i) && map.containsKey("answer"+i)){
+                setQA(i, map.get("question" + i), map.get("answer" + i), map.getOrDefault("event" + i, null));
+            }else{
+                break;
+            }
+        }
     }
 }

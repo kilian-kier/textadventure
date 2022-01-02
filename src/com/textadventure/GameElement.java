@@ -3,6 +3,7 @@ package com.textadventure;
 import com.textadventure.interfaces.Interactable;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -52,4 +53,14 @@ public class GameElement implements Serializable, Interactable {
         //TODO
     }
 
+    public void loadFromHashMap(HashMap<String,String> map){
+        if(map.containsKey("description")){
+            this.description=map.get("description");
+        }
+        if(map.containsKey("interactable")){
+            try {
+                this.interactable = Boolean.parseBoolean(map.get("interactable"));
+            }catch(Exception ignore){}
+        }
+    }
 }

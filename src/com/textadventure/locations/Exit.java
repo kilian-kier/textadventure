@@ -5,6 +5,8 @@ import com.textadventure.story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Ein Ausgang enthält zwei Räume (destination1/2) zwischen denen er sich befinded. Es gibt eine Doppelte Beschreibung welche in der Mitte mit einem
@@ -47,7 +49,12 @@ public class Exit extends GameElement implements Serializable {
         this.name=newRoomString;
     }
 
-
+    public void setDescription1(String description1){
+        description = description1+"@"+getDescription2();
+    }
+    public void setDescription2(String description2){
+        description = getDescription1()+"@"+description2;
+    }
     public String getDescription1(){
         try {
             return description.split("[@]")[0];
@@ -136,4 +143,21 @@ public class Exit extends GameElement implements Serializable {
         return string;
     }
 
+
+    @Override
+    public void loadFromHashMap(HashMap<String, String> map) {
+        super.loadFromHashMap(map);
+        if(map.containsKey("destination1")){
+            destination1=map.get("destination1");
+        }
+        if(map.containsKey("destination2")){
+            destination2=map.get("destination2");
+        }
+        if(map.containsKey("description1")){
+            setDescription1(map.get("description1"));
+        }
+        if(map.containsKey("description2")){
+            setDescription1(map.get("description2"));
+        }
+    }
 }
