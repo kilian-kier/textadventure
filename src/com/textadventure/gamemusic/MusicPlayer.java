@@ -30,7 +30,12 @@ public class MusicPlayer {
         return ret;
     }
 
-
+    /**
+     * Wandelt die Endung einer Date in .wav um und gibt den neuen Namen zurück
+     *
+     * @param path Dateiname
+     * @return Neuer Dateiname mit .wav
+     */
     private static String getWavPath(String path){
         File file = new File(path);
         path= Input.getFileType(file.getName(),false);
