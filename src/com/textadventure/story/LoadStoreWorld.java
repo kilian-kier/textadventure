@@ -25,8 +25,6 @@ import java.util.Scanner;
  * Lädt und Speichert Welt
  */
 public class LoadStoreWorld {
-
-
     /**
      * Lädt und erstellt die Musikdateien aus der Weltdatei und speichert die Dateipfäde in der Musikliste.
      * Die tempörären Dateien und Ordner werden beim Beenden des Programms gelöscht.
@@ -35,17 +33,17 @@ public class LoadStoreWorld {
      */
     private static void createMusicFiles(HashMap<String, Object> map) {
        try {
-            ArrayList<String> keys = (ArrayList<String>) map.get("musicKeys");
+           ArrayList<String> keys = (ArrayList<String>) map.get("musicKeys");
            Converter c = new Converter();
             if (keys != null) {
                 Path tempDir = Files.createTempDirectory("tmp");
                 tempDir.toFile().deleteOnExit();
+                World.tempDir = tempDir.toString();
                 for (String key : keys) {
                     File getName = new File(key);
                     key=getName.getName();
                     byte[] musicBytes = (byte[]) map.get(key);
                     File file = new File(tempDir + "/" + key);
-                    World.tempDir = tempDir.toString();
 
                     if (file.createNewFile()) {
                         FileOutputStream fos = new FileOutputStream(file);
@@ -57,6 +55,7 @@ public class LoadStoreWorld {
                             file.deleteOnExit();
                         }
                         file = new File(World.tempDir + "/" + Input.getFileType(key,false) + ".wav");
+                        file.deleteOnExit();
 
                         if (World.roomMap.containsKey(key)) {
                             World.roomMap.get(key).setMusic(file.getName(), false);
@@ -64,7 +63,6 @@ public class LoadStoreWorld {
                         if (World.eventKeyMap.containsKey(key)) {
                             World.eventMap.get(World.eventKeyMap.get(key)).setMusic(file.getName());
                         }
-                        file.deleteOnExit();
                     }
                 }
             }
@@ -199,7 +197,6 @@ public class LoadStoreWorld {
                     System.out.println("File "+file.getAbsolutePath()+" does not exist");
                     continue;
                 }
-                System.out.println(key);
                 byte[] musicBytes = MusicPlayer.readFile(key);
                 map.put(file.getName(), musicBytes);
             }
@@ -315,7 +312,15 @@ public class LoadStoreWorld {
             World.player = new Player(playername, null, null);
             World.player.loadFromHashMap(splitMap.get(playername));
         }
-        System.out.println("Welt wurde geladen");
+
+        Checker.check(true);
+        try {
+            store(Input.getFileType(path,false)+".world");
+            close();
+            load(Input.getFileType(path,false)+".world");
+        }catch(Exception ignore){
+
+        }
 
     }
 
