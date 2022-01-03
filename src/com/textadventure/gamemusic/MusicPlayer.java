@@ -1,5 +1,6 @@
 package com.textadventure.gamemusic;
 
+import com.textadventure.input.Input;
 import com.textadventure.story.World;
 
 import javax.sound.sampled.*;
@@ -22,18 +23,26 @@ public class MusicPlayer {
     public static byte[] readFile(String filepath) {
         byte[] ret = null;
         try {
-            ret = Files.readAllBytes(Path.of(filepath));
+            ret = Files.readAllBytes(Path.of(World.tempDir+"/"+filepath));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return ret;
     }
 
+
+    private static String getWavPath(String path){
+        File file = new File(path);
+        path= Input.getFileType(file.getName(),false);
+        return path+".wav";
+    }
+
     public void play() {
         try {
             stop(true);
             if (World.player.getCurrentRoom().getMusic() != null) {
-                filePath = World.tempDir + "/" + World.player.getCurrentRoom().getMusic();
+                String filename=getWavPath(World.player.getCurrentRoom().getMusic());
+                filePath = World.tempDir + "/" + filename;
                 audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);

@@ -310,7 +310,7 @@ public class Room extends GameElement implements Serializable {
         super.loadFromHashMap(map);
         if(map.containsKey("music")){
             this.music=map.get("music");
-            World.addMusic(music,this.name);
+            World.addMusic(music);
         }
         if(map.containsKey("location")){
             this.location=map.get("location");

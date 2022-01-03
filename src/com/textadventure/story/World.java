@@ -53,10 +53,10 @@ public class World {
     //TODO new Player
     static public Player player;
     static public MusicPlayer musicPlayer = new MusicPlayer();
-    static public HashMap<String, String> musicList = new HashMap<>();
-    static public String tempDir;
+    static public ArrayList<String> musicList = new ArrayList<>();
+    static public String tempDir=".";
 
-    static boolean explorer = true;
+    static boolean explorer = false;
 
 
     public static boolean isJar() {
@@ -702,12 +702,11 @@ public class World {
      * Fügt Musik zur Welt hinzu
      *
      * @param path Pfad der Musikdatei
-     * @param room Raum zum Hinzufügen
      */
-    public static void addMusic(String path,String room){
+    public static void addMusic(String path){
         File musicFile = new File(path);
         if (musicFile.exists()) {
-            World.musicList.put(room, musicFile.getAbsolutePath());
+            World.musicList.add(path);
         } else
             System.out.println("Datei nicht gefunden");
     }
@@ -754,7 +753,7 @@ public class World {
                             case "music" -> {
                                 if (command.size() > 2) {
                                     temp.setMusic(command.get(2), false);
-                                    addMusic(command.get(2),temp.getName());
+                                    addMusic(command.get(2));
                                 } else {
                                     if (explorer) {
                                         FileDialog fd = new FileDialog(new Frame(), "Musikdatei laden", FileDialog.LOAD);
@@ -763,8 +762,8 @@ public class World {
                                         fd.setVisible(true);
                                         String filename = fd.getFile();
                                         if (filename != null) {
-                                            temp.setMusic(fd.getDirectory() + filename, false);
-                                            World.musicList.put(temp.getName(), fd.getDirectory() + filename);
+                                            temp.setMusic(filename, false);
+                                            addMusic(filename);
                                         } else
                                             System.out.println("Keine Datei ausgewählt");
                                     } else {
@@ -772,8 +771,8 @@ public class World {
                                         if (filename != null) {
                                             File musicFile = new File(filename);
                                             if (musicFile.exists()) {
-                                                temp.setMusic(musicFile.getAbsolutePath(), false);
-                                                World.musicList.put(temp.getName(), musicFile.getAbsolutePath());
+                                                temp.setMusic(musicFile.getName(), false);
+                                                addMusic(musicFile.getName());
                                             } else
                                                 System.out.println("Datei nicht gefunden");
                                         }

@@ -5,6 +5,7 @@ import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.BracketException;
 import com.textadventure.gamemusic.MusicPlayer;
+import com.textadventure.input.Input;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
@@ -24,6 +25,8 @@ import java.util.Scanner;
  * Lädt und Speichert Welt
  */
 public class LoadStoreWorld {
+
+
     /**
      * Lädt und erstellt die Musikdateien aus der Weltdatei und speichert die Dateipfäde in der Musikliste.
      * Die tempörären Dateien und Ordner werden beim Beenden des Programms gelöscht.
@@ -31,25 +34,30 @@ public class LoadStoreWorld {
      * @param map HashMap mit den Weltinformationen
      */
     private static void createMusicFiles(HashMap<String, Object> map) {
-        try {
+       try {
             ArrayList<String> keys = (ArrayList<String>) map.get("musicKeys");
-            Converter c = new Converter();
+           Converter c = new Converter();
             if (keys != null) {
                 Path tempDir = Files.createTempDirectory("tmp");
                 tempDir.toFile().deleteOnExit();
                 for (String key : keys) {
+                    File getName = new File(key);
+                    key=getName.getName();
                     byte[] musicBytes = (byte[]) map.get(key);
-                    File file = new File(tempDir + "/" + key + ".mp3");
+                    File file = new File(tempDir + "/" + key);
                     World.tempDir = tempDir.toString();
+
                     if (file.createNewFile()) {
                         FileOutputStream fos = new FileOutputStream(file);
                         fos.write(musicBytes);
-                        c.convert(file.getAbsolutePath(), World.tempDir + "/" + key + ".wav");
-                        if (!file.delete())
+                        if(Input.getFileType(file.getName(),true).equals("mp3")){
+                            c.convert(file.getAbsolutePath(), World.tempDir + "/" + Input.getFileType(key,false) + ".wav");
+                        }
+                        if (!file.delete()) {
                             file.deleteOnExit();
-                        file = new File(World.tempDir + "/" + key + ".wav");
+                        }
+                        file = new File(World.tempDir + "/" + Input.getFileType(key,false) + ".wav");
 
-                        World.musicList.put(key, file.getAbsolutePath());
                         if (World.roomMap.containsKey(key)) {
                             World.roomMap.get(key).setMusic(file.getName(), false);
                         }
@@ -60,8 +68,9 @@ public class LoadStoreWorld {
                     }
                 }
             }
-        } catch (IOException | JavaLayerException e) {
+       } catch (IOException  | JavaLayerException e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -96,7 +105,7 @@ public class LoadStoreWorld {
             World.eventMap = (HashMap<String, Event>) map.get("events");
             World.eventKeyMap = (HashMap<String, String>) map.get("eventkeys");
             World.player = (Player) map.get("player");
-            new Thread(() -> createMusicFiles(map)).start();
+           createMusicFiles(map);
 
             System.out.println("Welt wurde geladen");
             fileIn.close();
@@ -133,7 +142,7 @@ public class LoadStoreWorld {
             World.eventMap.putAll((HashMap<String, Event>) map.get("events"));
             World.eventKeyMap.putAll((HashMap<String, String>) map.get("eventkeys"));
             World.player = (Player) map.get("player");
-            new Thread(() -> createMusicFiles(map)).start();
+            createMusicFiles(map);
 
             System.out.println("Welt wurde hinzugefügt");
             fileIn.close();
@@ -183,10 +192,16 @@ public class LoadStoreWorld {
             map.put("events", World.eventMap);
             map.put("eventkeys", World.eventKeyMap);
             map.put("player", World.player);
-            map.put("musicKeys", new ArrayList<>(World.musicList.keySet()));
-            for (String key : World.musicList.keySet()) {
-                byte[] musicBytes = MusicPlayer.readFile(World.musicList.get(key));
-                map.put(key, musicBytes);
+            map.put("musicKeys", World.musicList);
+            for (String key : World.musicList) {
+                File file = new File(key);
+                if(!file.exists()){
+                    System.out.println("File "+file.getAbsolutePath()+" does not exist");
+                    continue;
+                }
+                System.out.println(key);
+                byte[] musicBytes = MusicPlayer.readFile(key);
+                map.put(file.getName(), musicBytes);
             }
 
             out.writeObject(map);
@@ -195,6 +210,7 @@ public class LoadStoreWorld {
             System.out.println("Welt wurde gespeichert");
 
         } catch (IOException i) {
+            System.out.println(i.getMessage());
             i.printStackTrace();
         }
     }
@@ -212,7 +228,9 @@ public class LoadStoreWorld {
             return;
         }
 
-        //System.out.println("Input:" +input);
+        input=input.replace("\t","");
+        input=input.replace("\\t","\t");
+
         HashMap<String, String> split;
         try {
             split = splittxt(input);
