@@ -96,7 +96,7 @@ public class LoadStoreWorld {
             World.eventMap = (HashMap<String, Event>) map.get("events");
             World.eventKeyMap = (HashMap<String, String>) map.get("eventkeys");
             World.player = (Player) map.get("player");
-            createMusicFiles(map);
+            new Thread(() -> createMusicFiles(map)).start();
 
             System.out.println("Welt wurde geladen");
             fileIn.close();
@@ -133,7 +133,7 @@ public class LoadStoreWorld {
             World.eventMap.putAll((HashMap<String, Event>) map.get("events"));
             World.eventKeyMap.putAll((HashMap<String, String>) map.get("eventkeys"));
             World.player = (Player) map.get("player");
-            createMusicFiles(map);
+            new Thread(() -> createMusicFiles(map)).start();
 
             System.out.println("Welt wurde hinzugefügt");
             fileIn.close();

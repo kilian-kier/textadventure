@@ -8,13 +8,10 @@ import com.textadventure.help.Help;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
-import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -50,7 +47,7 @@ public class Game {
             if (cmd == null)
                 continue;
             if (cmd.get(0).equals("exit")) {
-                World.musicPlayer.stop();
+                World.musicPlayer.stop(false);
                 break;
             }
             Tool tool;
@@ -401,7 +398,7 @@ public class Game {
                     if (cmd.get(1).equals("start")) {
                         World.musicPlayer.play();
                     } else if (cmd.get(1).equals("stop")) {
-                        World.musicPlayer.stop();
+                        World.musicPlayer.stop(false);
                     }
                     break;
                 case "clear":

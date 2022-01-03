@@ -39,6 +39,10 @@ public class Player extends GameElement implements RoomChangeable {
         return currentRoom;
     }
 
+    public Room getPreviousRoom() {
+        return previousRoom;
+    }
+
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }

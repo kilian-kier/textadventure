@@ -1,18 +1,17 @@
 package com.textadventure.gamemusic;
 
 import com.textadventure.story.World;
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
-import javazoom.jl.converter.Converter;
 
-import java.io.FileInputStream;
+import javax.sound.sampled.*;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class MusicPlayer implements Runnable {
-    private Thread thread = null;
-    private Player player = null;
+public class MusicPlayer {
+    private Clip clip;
+    private AudioInputStream audioInputStream;
+    private String filePath;
 
     /**
      * Liest eine Audiodatei ein und gibt die Bytes der Datei zurück
@@ -30,68 +29,37 @@ public class MusicPlayer implements Runnable {
         return ret;
     }
 
-    @Override
-    public void run() {
+    public void play() {
         try {
-            player.play();
-        } catch (Exception e) {
+            stop(true);
+            if (World.player.getCurrentRoom().getMusic() != null) {
+                filePath = World.tempDir + "/" + World.player.getCurrentRoom().getMusic();
+                audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+                int frame = World.player.getCurrentRoom().getMusicFrame();
+                if (frame != 0)
+                    clip.setFramePosition(frame);
+                clip.start();
+                if (World.player.getCurrentRoom().isEventMusic()) {
+                    World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
+                }
+            }
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Startet einen neuen Thread mit dem MusicPlayer
-     */
-    public void play() {
-        this.stop();
-        if (World.player != null) {
-            if (World.player.getCurrentRoom() != null) {
-                try {
-                    if (World.player.getCurrentRoom().getMusic() != null) {
-                        String musicpath = World.tempDir + "/" + World.player.getCurrentRoom().getMusic();
-                        player = new Player(new FileInputStream(musicpath));
-                    } else
-                        player = null;
-
-                    if (World.player.getCurrentRoom().isEventMusic()) {
-                        World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
-                    }
-                } catch (IOException | JavaLayerException e) {
-                    //DO NOTHING
-                }
-            }
-        }
-        if (player != null) {
-            thread = new Thread(this);
-            thread.start();
-        }
-    }
-
-    private void restart() {
-        if (player != null) {
-            try {
-                player.close();
-                if (World.player.getCurrentRoom().getMusic() != null) {
-                    String musicpath = World.tempDir + "/" + World.player.getCurrentRoom().getMusic();
-                    player = new Player(new FileInputStream(musicpath));
-                } else
-                    player = null;
-                thread = new Thread(this);
-                thread.start();
-            } catch (IOException | JavaLayerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Stoppt den Thread und löscht den Player
-     */
-    public void stop() {
-        if (player != null) {
-            player.close();
-            if (thread != null)
-                thread.stop();
+    public void stop(boolean changedRoom) {
+        if (this.clip != null) {
+            if (changedRoom) {
+                if (World.player.getPreviousRoom() != null)
+                    World.player.getPreviousRoom().setMusicFrame(clip.getFramePosition());
+            } else
+                World.player.getCurrentRoom().setMusicFrame(clip.getFramePosition());
+            clip.stop();
+            clip.close();
         }
     }
 }

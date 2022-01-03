@@ -23,6 +23,7 @@ public class Room extends GameElement implements Serializable {
     private String location;
     private String previousMusic;
     private boolean eventMusic;
+    private int musicFrame = 0;
     private String music;
 
     public String getMusic() {
@@ -31,6 +32,14 @@ public class Room extends GameElement implements Serializable {
 
     public String getPreviousMusic() {
         return previousMusic;
+    }
+
+    public int getMusicFrame() {
+        return musicFrame;
+    }
+
+    public void setMusicFrame(int frame) {
+        this.musicFrame = frame;
     }
 
     public boolean isEventMusic() {
@@ -44,6 +53,7 @@ public class Room extends GameElement implements Serializable {
         }
         else {
             this.previousMusic = null;
+
         }
         this.music = music;
     }
