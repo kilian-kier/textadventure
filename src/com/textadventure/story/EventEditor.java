@@ -68,7 +68,7 @@ public class EventEditor {
                                 event.setMusic(null);
                             }else{
                                 event.setMusic(commands.get(1));
-                                World.musicList.put(name, commands.get(1));
+                                World.musicList.add(commands.get(1));
                                 System.out.printf("Neuer Musikpfad: %s\n",commands.get(1));
                             }
                         } else {
@@ -80,7 +80,7 @@ public class EventEditor {
                                 String filename = fd.getFile();
                                 if (filename != null) {
                                     event.setMusic(fd.getDirectory() + filename);
-                                    World.musicList.put(name, fd.getDirectory() + filename);
+                                    World.musicList.add(filename);
                                     System.out.printf("Neuer Musikpfad: %s\n", fd.getDirectory() + filename);
                                 } else
                                     System.out.println("Keine Datei ausgewählt");
@@ -90,7 +90,7 @@ public class EventEditor {
                                     File musicFile = new File(filename);
                                     if (musicFile.exists()) {
                                         event.setMusic(musicFile.getAbsolutePath());
-                                        World.musicList.put(name, musicFile.getAbsolutePath());
+                                        World.musicList.add(musicFile.getName());
                                         System.out.printf("Neuer Musikpfad: %s\n", musicFile.getAbsolutePath());
                                     } else
                                         System.out.println("Datei nicht gefunden");

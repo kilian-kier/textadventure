@@ -244,7 +244,7 @@ public class Event implements Serializable {
         }
         if(map.containsKey("music")){
             this.music=map.get("music");
-            World.addMusic(music,this.name);
+            World.addMusic(music);
         }
         if(map.containsKey("dependent")){
             this.dependent=Input.splitInput(map.get("dependent"));
