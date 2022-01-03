@@ -212,7 +212,10 @@ public class LoadStoreWorld {
         }
     }
 
-
+    /**
+     * Lädt Welt von Txt Datei
+     * @param path Pfad zur Datei
+     */
     public static void loadtxt(String path) {
         String input = null;
         try {
@@ -246,7 +249,6 @@ public class LoadStoreWorld {
                 System.out.println(f.getMessage());
             }
         }
-
 
         String type;
         String name;
@@ -370,7 +372,7 @@ public class LoadStoreWorld {
                 break;
             }
         }
-        for (int i = end - 1; i > start; i--) {
+        for (int i = end-1 ; i > start; i--) {
             if (string.charAt(i) == '\n' || string.charAt(i) == ' ') {
                 end--;
             } else {
@@ -395,7 +397,7 @@ public class LoadStoreWorld {
                 key = key + String.valueOf(c);
             } else if (c == '=' && tokey) {
                 tokey = false;
-            } else if (c != '\n' && c != '{' && i < input.length() - 1) { //!tokey
+            } else if (c != '\n' && c != '{' && i < input.length()-1) { //!tokey
                 value = value + String.valueOf(c);
             } else if (c == '{') {
                 int temp = i;
@@ -410,6 +412,9 @@ public class LoadStoreWorld {
                 value = "";
                 tokey = true;
             } else {
+                if(i==input.length()-1){
+                    value = value + String.valueOf(c);
+                }
                 value = cleanString(value);
                 if (!value.equals("")) {
                     map.put(cleanString(key.toLowerCase()), value);
