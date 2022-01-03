@@ -140,7 +140,7 @@ Hildegard{
 	dialog={
 		question1=Hallo, ich bin Stefe.
 		answer1=Hildegard Gemüse und Co. Wie kann ich Ihnen helfen? Ach, ich verstehe schon, Sie sind interessiert an den roten Tomaten.
-		event1=hildegard11
+		event1=hildegard1
 	}
 }
 
@@ -153,7 +153,11 @@ Hildegard1{
 			type=npc
 			dialog={
 				question1=Ich habe von einem Onkel ein Anwesen hier geerbt, können Sie mir sagen wo ich es finden kann?
-				answer1=Das tut mir Leid für Sie. Natürlich weiß ich wo das Anwesen ist. Ich war schon oft dort. Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen. Habe ich Ihnen schon erzählt wie ich überhaupt dazu gekommen bin Obsthändlerin zu werden?
+				answer1={
+					Das tut mir Leid für Sie. Natürlich weiß ich wo das Anwesen ist. Ich war schon oft dort. 
+					Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen. 
+					Habe ich Ihnen schon erzählt wie ich überhaupt dazu gekommen bin Obsthändlerin zu werden?
+				}
 			}
 		}
 	}
@@ -163,7 +167,7 @@ Maiskolben{
 	type=tool
 	container=landstraße
 	description=Neben der Landstraße gedeihen reife Maiskolben auf einem Feld.
-}
+	}
 
 Schild{
 	type=tool

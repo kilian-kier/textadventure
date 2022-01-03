@@ -259,7 +259,7 @@ public class Event implements Serializable {
         if(map.containsKey("diffs")) {
             HashMap<String,String > diffs=null;
             try {
-                 diffs = LoadStoreWorld.createMap(map.get("diffs"));
+                diffs = LoadStoreWorld.createMap(map.get("diffs"));
             } catch(Exception e){
                 System.out.println(e.getMessage());
                 return;
@@ -274,6 +274,7 @@ public class Event implements Serializable {
                 }
                 Diff newdiff=Event.newDiff(i,diff.get("type"));
                 newdiff.loadFromHashMap(diff);
+                addDiff(newdiff);
             }
         }
     }
