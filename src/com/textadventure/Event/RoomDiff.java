@@ -46,7 +46,7 @@ public class RoomDiff extends Diff implements Serializable {
             room.setDescription(getDescription());
         }
         if(music!=null){
-            room.setMusic(music);
+            room.setMusic(music, false);
         }
         try{
             if (addTools != null) {

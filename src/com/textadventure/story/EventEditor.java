@@ -1,11 +1,16 @@
 package com.textadventure.story;
 
 import com.textadventure.Event.*;
+import com.textadventure.Event.Event;
 import com.textadventure.exeptions.ElementExistsException;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.help.Help;
 import com.textadventure.input.Input;
 
+import java.awt.*;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -58,13 +63,41 @@ public class EventEditor {
                     break;
                 case "music":
                     try{
-                        if(commands.get(1).equals("none")){
-                            event.setMusic(null);
-                        }else{
-                            event.setMusic(commands.get(1));
+                        if (commands.size() > 1) {
+                            if(commands.get(1).equals("none")){
+                                event.setMusic(null);
+                            }else{
+                                event.setMusic(commands.get(1));
+                                World.musicList.put(name, commands.get(1));
+                                System.out.printf("Neuer Musikpfad: %s\n",commands.get(1));
+                            }
+                        } else {
+                            if (World.explorer) {
+                                FileDialog fd = new FileDialog(new Frame(), "Musikdatei laden", FileDialog.LOAD);
+                                fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                                fd.setFile("*.mp3");
+                                fd.setVisible(true);
+                                String filename = fd.getFile();
+                                if (filename != null) {
+                                    event.setMusic(fd.getDirectory() + filename);
+                                    World.musicList.put(name, fd.getDirectory() + filename);
+                                    System.out.printf("Neuer Musikpfad: %s\n", fd.getDirectory() + filename);
+                                } else
+                                    System.out.println("Keine Datei ausgewählt");
+                            } else {
+                                String filename = Input.input("Musikdatei", false);
+                                if (filename != null) {
+                                    File musicFile = new File(filename);
+                                    if (musicFile.exists()) {
+                                        event.setMusic(musicFile.getAbsolutePath());
+                                        World.musicList.put(name, musicFile.getAbsolutePath());
+                                        System.out.printf("Neuer Musikpfad: %s\n", musicFile.getAbsolutePath());
+                                    } else
+                                        System.out.println("Datei nicht gefunden");
+                                }
+                            }
                         }
-                        System.out.printf("Neuer Musikpfad: %s",commands.get(1));
-                    }catch(IndexOutOfBoundsException e){
+                    }catch(IndexOutOfBoundsException | URISyntaxException e){
                         System.out.println("Zu wenig Parameter");
                     }
                     break;

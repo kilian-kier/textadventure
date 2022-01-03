@@ -6,7 +6,6 @@ import com.textadventure.exeptions.ItemNotFoundException;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,14 +21,30 @@ public class Room extends GameElement implements Serializable {
     private final ArrayList<String> container = new ArrayList<>();
     private final ArrayList<String> npcs = new ArrayList<>();
     private String location;
+    private String previousMusic;
+    private boolean eventMusic;
     private String music;
 
     public String getMusic() {
         return music;
     }
 
+    public String getPreviousMusic() {
+        return previousMusic;
+    }
 
-    public void setMusic(String music) {
+    public boolean isEventMusic() {
+        return eventMusic;
+    }
+
+    public void setMusic(String music, boolean event) {
+        eventMusic = event;
+        if (event) {
+            this.previousMusic = this.music;
+        }
+        else {
+            this.previousMusic = null;
+        }
         this.music = music;
     }
 

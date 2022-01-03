@@ -3,25 +3,37 @@ package com.textadventure.gamemusic;
 import com.textadventure.story.World;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
+import javazoom.jl.converter.Converter;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.CodeSource;
-import java.util.zip.ZipInputStream;
 
 public class MusicPlayer implements Runnable {
     private Thread thread = null;
     private Player player = null;
 
+    /**
+     * Liest eine Audiodatei ein und gibt die Bytes der Datei zurück
+     *
+     * @param filepath Dateipfad der Audiodatei
+     * @return Bytes der Audiodatei
+     */
+    public static byte[] readFile(String filepath) {
+        byte[] ret = null;
+        try {
+            ret = Files.readAllBytes(Path.of(filepath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
     @Override
     public void run() {
         try {
             player.play();
-            restart();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,15 +47,15 @@ public class MusicPlayer implements Runnable {
         if (World.player != null) {
             if (World.player.getCurrentRoom() != null) {
                 try {
-                    String musicpath =World.tempDir+"/"+World.player.getCurrentRoom().getMusic();
-                    /*
-                    if (World.isJar())
-                        input = getClass().getResourceAsStream("/music/" + World.player.getCurrentRoom().getName() + ".mp3");
-                    else
-                        input = new FileInputStream("music/" + World.player.getCurrentRoom().getName() + ".mp3");
-                    */
-                    if (musicpath != null)
+                    if (World.player.getCurrentRoom().getMusic() != null) {
+                        String musicpath = World.tempDir + "/" + World.player.getCurrentRoom().getMusic();
                         player = new Player(new FileInputStream(musicpath));
+                    } else
+                        player = null;
+
+                    if (World.player.getCurrentRoom().isEventMusic()) {
+                        World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
+                    }
                 } catch (IOException | JavaLayerException e) {
                     //DO NOTHING
                 }
@@ -57,10 +69,16 @@ public class MusicPlayer implements Runnable {
 
     private void restart() {
         if (player != null) {
-            player.close();
             try {
-                player.play(0);
-            } catch (JavaLayerException e) {
+                player.close();
+                if (World.player.getCurrentRoom().getMusic() != null) {
+                    String musicpath = World.tempDir + "/" + World.player.getCurrentRoom().getMusic();
+                    player = new Player(new FileInputStream(musicpath));
+                } else
+                    player = null;
+                thread = new Thread(this);
+                thread.start();
+            } catch (IOException | JavaLayerException e) {
                 e.printStackTrace();
             }
         }
@@ -75,22 +93,5 @@ public class MusicPlayer implements Runnable {
             if (thread != null)
                 thread.stop();
         }
-    }
-
-    /**
-     * Liest eine Audiodatei ein und gibt die Bytes der Datei zurück
-     *
-     * @param filepath Dateipfad der Audiodatei
-     * @return Bytes der Audiodatei
-     */
-    public static byte[] readFile(String filepath) {
-        byte[] ret = null;
-        String temp = "";
-        try {
-            ret = Files.readAllBytes(Path.of(filepath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ret;
     }
 }

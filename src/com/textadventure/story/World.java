@@ -21,7 +21,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -57,7 +56,7 @@ public class World {
     static public HashMap<String, String> musicList = new HashMap<>();
     static public String tempDir;
 
-    static boolean explorer = false;
+    static boolean explorer = true;
 
 
     public static boolean isJar() {
@@ -754,7 +753,7 @@ public class World {
                             }
                             case "music" -> {
                                 if (command.size() > 2) {
-                                    temp.setMusic(command.get(2));
+                                    temp.setMusic(command.get(2), false);
                                     addMusic(command.get(2),temp.getName());
                                 } else {
                                     if (explorer) {
@@ -764,7 +763,7 @@ public class World {
                                         fd.setVisible(true);
                                         String filename = fd.getFile();
                                         if (filename != null) {
-                                            temp.setMusic(fd.getDirectory() + filename);
+                                            temp.setMusic(fd.getDirectory() + filename, false);
                                             World.musicList.put(temp.getName(), fd.getDirectory() + filename);
                                         } else
                                             System.out.println("Keine Datei ausgewählt");
@@ -773,7 +772,7 @@ public class World {
                                         if (filename != null) {
                                             File musicFile = new File(filename);
                                             if (musicFile.exists()) {
-                                                temp.setMusic(musicFile.getAbsolutePath());
+                                                temp.setMusic(musicFile.getAbsolutePath(), false);
                                                 World.musicList.put(temp.getName(), musicFile.getAbsolutePath());
                                             } else
                                                 System.out.println("Datei nicht gefunden");
