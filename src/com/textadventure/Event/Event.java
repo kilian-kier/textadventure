@@ -18,7 +18,7 @@ public class Event implements Serializable {
     private Collection<String> dependent;
     private boolean happened=false;
     private boolean once=true;
-    private String music;
+    private String music = null;
 
     public String getMusic() {
         return music;
@@ -134,7 +134,11 @@ public class Event implements Serializable {
     public static boolean execEvent(Collection<String> args){
         String hash = stringForHash(args);
         if(World.eventMap.containsKey(hash)){
-            return World.eventMap.get(hash).applyDiffsToWorld();
+            Event event = World.eventMap.get(hash);
+            if (event.getMusic() != null)
+                World.player.getCurrentRoom().setMusic(event.getMusic(), true);
+
+            return event.applyDiffsToWorld();
         }
         return false;
     }
