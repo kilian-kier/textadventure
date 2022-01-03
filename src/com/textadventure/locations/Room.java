@@ -6,6 +6,7 @@ import com.textadventure.exeptions.ItemNotFoundException;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class Room extends GameElement implements Serializable {
     public String getMusic() {
         return music;
     }
+
 
     public void setMusic(String music) {
         this.music = music;
@@ -283,6 +285,7 @@ public class Room extends GameElement implements Serializable {
         super.loadFromHashMap(map);
         if(map.containsKey("music")){
             this.music=map.get("music");
+            World.addMusic(music,this.name);
         }
         if(map.containsKey("location")){
             this.location=map.get("location");

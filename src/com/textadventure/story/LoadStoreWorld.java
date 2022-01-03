@@ -43,9 +43,10 @@ public class LoadStoreWorld {
                     if (file.createNewFile()) {
                         FileOutputStream fos = new FileOutputStream(file);
                         fos.write(musicBytes);
+                        World.tempDir=file.getAbsolutePath().replace(file.getName(),"");
                         World.musicList.put(key, file.getAbsolutePath());
                         if (World.roomMap.containsKey(key)) {
-                            World.roomMap.get(key).setMusic(file.getAbsolutePath());
+                            World.roomMap.get(key).setMusic(file.getName());
                         }
                         file.deleteOnExit();
                     }
