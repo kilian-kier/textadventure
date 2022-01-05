@@ -1,4 +1,16 @@
+nullroom1{ //Für Exits, die nirgends hinführen
+	type=room
+	location=nulllocation
+}
+nullroom2{
+	type=room
+	location=nulllocation
+}
+nulllocation{
+	type=location
+}
 
+//Spieler Start
 Stefe{
 	type=player
 	room=landstraße
@@ -8,7 +20,6 @@ Stefe{
 		Des Universums?
 	}
 }
-
 Start{
 	type=event
 	once=true
@@ -24,9 +35,8 @@ Start{
 		angenehmen Aufenthalt.
 	}
 	music=music/start.mp3
-	cmd=das start event
+	cmd=fjksdlaö jfklsöafj jkdflöas fjsak
 }
-
 
 Lusinam{
 	type=location
@@ -36,33 +46,128 @@ Lusinam{
 		In welche Richtung man auch möchte. Es ist von allem weit entfernt.
 	}
 }
+Dorfkneipe{
+	type=location
+	description={
+		Die Dorfkneipe. Ein Paradies für all jene, die ihr Vermögen
+		bevorzugt in traditionelles Bier investieren.
+		Auch Stefe teilt diese Vorliebe.
+	}
+}
 
 Landstraße{
 	type=room
 	description=Die einzigste Straße, die die Außenwelt  mit Lusinam verbindet.
 	location=lusinam
 }
-
 Marktplatz{
 	type=room
 	description=Der Marktpllatz liegt im zentrum von Lusinam.
 	location=lusinam
 }
-
 Kirche{
 	type=room
 	description={
-		Der heilige Ort von Lusinam gotischer Bauweise.
-		Neben der Kirche steht ein Widum.
+		Der heilige Ort von Lusinam.
 	}
 	location=lusinam
 	music=music/kirche.mp3
 }
-
+Kirchturm{
+	location=lusinam
+	type=room
+	description={
+		Der Kirchturm von Lusinam. Vor einem kleinen Fenster steht ein Fernrohr.
+		Man kann damit die ganze Stadt überblicken.
+	}
+}
+Treppe{
+	type=exit
+	destination1=kirchturm
+	destination2=kirche
+	description1=Eine schmale Holztreppe führt in den Kirchturm
+	description2=Eine Treppe führt zurück in das Kirchenschiff.
+}
 Oberstadt{
 	type=room
-	description= Die Oberstadt von Lusinam
+	description=Die Oberstadt von Lusinam
 	location=lusinam
+}
+Anwesen{
+	type=location
+	description=Das alte Anwesen von Stefes verstorbenem Onkel
+}
+Garten{
+	type=room
+	description=Ein verwucherter alter Garten
+	location=anwesen
+}
+Torbogen{
+	type=exit
+	destination1=garten
+	destination2=oberstadt
+	description1=Ein Eiserner Torbogen führt einen in den Garten von Stefes Onkels Anwesen
+	description2=Der Torbogen verbindet die Oberstadt mit dem Anwesen
+}
+Holztür{
+	type=exit
+	destination1=haus
+	destination2=garten
+	description1=Eine große dunkle Holztür führt in das Innere des Hauses.
+	description2=Eine Tür führt zurück in den Garten.
+	interactable=false
+}
+Fass{
+	type=event
+	once=false
+	room=garten
+	cmd=gehe haus
+	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
+	notdependent=gebefleisch
+}
+Fass2{
+	type=event
+	once=false
+	room=garten
+	cmd=gehe holztür
+	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
+	notdependent=gebefleisch
+}
+Haus{
+	type=room
+	description=Das Haus des Onkels. Es hat einige Jahre auf dem Buckel.
+	location=anwesen
+}
+Hund{
+	type=npc
+	room=garten
+	description=Ein schwarz weiß gefleckter Hund.
+	dialog={
+		question1=Hallo mein kleiner
+		answer1=Grrrrr
+		question2=Vermisst du dein Herrchen?
+		answer2=Grrrrr
+		question3=Braves Hündchen
+		answer3=Grrrrr
+	}
+}
+GebeFleisch{
+	type=event
+	cmd=gebe schweinshaxen Hund
+	info=Der Hund beschäftigt sich mit dem Fleisch
+	once=true
+	room=garten
+	inventory=schweinshaxen
+	diffs={
+		Stefe={
+			type=player
+			rmtools=schweinshaxen
+		}
+		Holztür={
+			type=exit
+			interactable=true
+		}
+	}
 }
 
 Unterstadt{
@@ -80,22 +185,33 @@ Kneipe{
 	music=music/kneipe.mp3
 }
 
-Dorfkneipe{
-	type=location
-	description={
-		Die Dorfkneipe. Ein Paradies für all jene, die ihr Vermögen
-		bevorzugt in traditionelles Bier investieren.
-		Auch Stefe teilt diese Vorliebe.
-	}
-}
 
 Markober{
 	type=exit
-	destination1=marktplatz
-	destination2=oberstadt
+	destination1=nullroom1
+	destination2=nullroom2
 	description1=Die Oberstadt grenzt an den Marktplatz.
 	description2=Vom Marktplatz führt eine Straße in den östlichen Teil der Stad, die Oberstadt.
 }
+Markober1{
+	type=event
+	type=event
+	once=true
+	cmd=jfkdsaöl jdfsaklöasdlslödf fjk
+	diffs={
+		markober={
+			destination1=marktplatz
+			destination2=oberstadt
+			type=exit
+		}
+		hildegard={
+			type=npc
+			dialog={
+			}
+		}
+	}
+}
+
 
 Kircmark{
 	type=exit
@@ -104,7 +220,6 @@ Kircmark{
 	description1=Vor dem Marktplatz steht die schlicht gehaltene, kleine Kirche von Lusinam.
 	description2=Vor der Kirche breitet sich der Marktplatz von Lusinam aus.
 }
-
 Tür{
 	type=exit
 	destination1=kneipe
@@ -112,15 +227,13 @@ Tür{
 	description1=Eine Tür folgt auf ein paar Stufen und führt in die Kneipe des Dorfes.
 	description2=Eine Tür führt zurück in die Unterstadt.
 }
-
 Markunte{
 	type=exit
-	destination1=marktplatz
-	destination2=unterstadt
+	destination1=nullroom1
+	destination2=nullroom2
 	description1=Die Unterstadt grenzt an den Marktplatz.
 	description2=Eine weitere Straße führt durch die Unterstadt.
 }
-
 Landmark{
 	type=exit
 	destination1=landstraße
@@ -132,43 +245,164 @@ Landmark{
 	}
 }
 
-
+//NPCs und Dazugehörige Events
+Quasimodo{
+	type=npc
+	description=Der Messner von Lusinam
+	room=kirche
+	dialog={
+		question1=Hallo, mein Name ist Stefe.
+		answer1=Pssssssssst. Der Pfarrer betet.
+	}
+}
+Horst{
+	type=npc
+	description=Ein Metzger, der auf dem Marktplatz versucht seine Ware loszuwerden.
+	room=marktplatz
+	dialog={
+		question1=Hallo, Stefe ich bin neu hier.
+		answer1=Hallo.
+		question2=Könnte Sie mir ein paar Schweinshaxen geben.
+		answer2=5 Gulden.
+		event2=horst1
+	}
+}
+Horst1{
+	type=event
+	once=true
+	cmd= fjdskalöfj j dkslalö fdsaklö f
+	diffs={
+		horst={
+			type=npc
+			dialog={
+				question1={
+					Ich habe leider kein Geld dabei, könnten Sie mir das Geld an
+					diesem wunderschönen Tag nicht ausnahmsweise erlassen?
+				}
+				answer1=Nein.
+				question2=Sie scheinen mir etwas deprimiert. Bedrückt Sie etwas?
+				answer2=Hildegard
+				event2=horst2
+			}
+		}
+	}
+}
+Horst2{
+	type=event
+	once=true
+	cmd= fjdskalöfasdfdkslalö fdsaklö f
+	diffs={
+		horst={
+			type=npc
+			dialog={
+				question1={
+					Ich habe leider kein Geld dabei, könnten Sie mir das Geld an
+					diesem wunderschönen Tag nicht ausnahmsweise erlassen?
+				}
+				answer1=Nein.
+				question2=Was ist mit Hildegard?
+				answer2=Sie redet
+			}
+		}
+	}
+}
 Hildegard{
 	type=npc
 	description=Eine Gemüsehändlerin auf dem Marktplatz.
 	room=marktplatz
 	dialog={
 		question1=Hallo, ich bin Stefe.
-		answer1=Hildegard Gemüse und Co. Wie kann ich Ihnen helfen? Ach, ich verstehe schon, Sie sind interessiert an den roten Tomaten.
+		answer1={
+			Hildegard Gemüse und Co. Wie kann ich Ihnen helfen?
+			Ich sehe schon, Sie sind interessiert an den roten Tomaten.
+			Sie sind von ausgezeichneter Qualität.
+		}
 		event1=hildegard1
+
 	}
 }
-
 Hildegard1{
 	type=event
 	once=true
-	cmd=jfkdsaöl jdfksaölfjsaklö aklslödf fjk
+	cmd=fdksjalö jkfdslöa f
+	diffs={
+		hildegard={
+			type=npc
+			dialog={
+				question1=Züchten Sie die Tomaten selbst?
+				answer1={
+					Natürlich. Ich habe sie erst heute Morgen frisch gepflückt. Sie sind köstlich.
+					Sie erinnern mich an die ersten Kürbisse, die ich damals gemeinsam mit meiner Mutter
+					gezüchtet habe. Wir züchteten die größten und schmackhaftesten Kürbisse in der Stadt.
+				}
+				event1=hildegard2
+				question2=Ich habe von einem Onkel ein Anwesen hier geerbt, können Sie mir sagen, wo ich es finden kann?
+				answer2={
+					Das tut mir Leid für Sie. Natürlich weiß ich wo das Anwesen ist. Ich war schon oft dort. 
+					Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen. 
+					Habe ich Ihnen schon erzählt wie ich überhaupt dazu gekommen bin Obsthändlerin zu werden?
+				}
+				event2=hildegard3
+			}
+		}
+	}
+}
+Hildegard2{
+	type=event
+	once=true
+	cmd=jfkdsaöl jdfksaölfjsaklö aklslödsaasf fjk
 	diffs={
 		hildegard={
 			type=npc
 			dialog={
 				question1=Ich habe von einem Onkel ein Anwesen hier geerbt, können Sie mir sagen wo ich es finden kann?
 				answer1={
-					Das tut mir Leid für Sie. Natürlich weiß ich wo das Anwesen ist. Ich war schon oft dort. 
-					Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen. 
+					Das tut mir Leid für Sie. Natürlich weiß ich wo das Anwesen ist. Ich war schon oft dort.
+					Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen.
 					Habe ich Ihnen schon erzählt wie ich überhaupt dazu gekommen bin Obsthändlerin zu werden?
 				}
+				event1=hildegard3
+				question2=Ich möchte nicht ungehobelt erscheinen, aber es ist Winter.
+				answer2=Ach, was verstehen Sie schon von Gemüse!
+				question3=Die Riesenkürbisse erinnern Sie an Ihre Tomaten?
+				answer3=Das hab' ich doch eben gesagt.
+			}
+		}
+	}
+}
+Hildegard3{
+	type=event
+	once=true
+	cmd=jfkdsaöl jdfksaölfjsaklöasdlslödf fjk
+	diffs={
+		hildegard={
+			type=npc
+			dialog={
+				question1=Nein, das möchte ich nicht. Wo liegt es?
+				answer1={
+					Die Jugend von heute, hat einfach keine Geduld. Ts, ts,ts.
+					Es ist aber wirklich eine gute Geschichte, die sich lohnt.
+					Sie hat etwas außerord... den .. tlich ...
+					Vergiss es, du hörst mir doch nicht zu.
+					Das Anwesen befindet sich in der Oberstadt.
+				}
+				event1=markober1
 			}
 		}
 	}
 }
 
-Maiskolben{
-	type=tool
-	container=landstraße
-	description=Neben der Landstraße gedeihen reife Maiskolben auf einem Feld.
-	}
 
+
+
+
+//Tools
+Schneefeld{
+	type=tool
+	interactable=false
+	container=landstraße
+	description=Nach links und rechts erstreckt sich eine weite Fläche, welche von einer dünnen Schneeschicht bedeckt wird.
+}
 Schild{
 	type=tool
 	interactable=false
@@ -185,12 +419,218 @@ Schild{
 	}
 	container=landstraße
 }
+Schnapsflasche{
+	type=tool
+	container=theke
+	description=Ein Gesöff, welches, dem Gestank nach zu urteilen, Putzalkohol sehr nahekommen muss.
+}
+Tomaten{
+	type=tool
+	container=obststand
+	description=Hildegards Tomaten
+	interactable=false
+}
+Schweinshaxen {
+	type=tool
+	interactable=false
+	description=Die Schweinshaxen am Fleischwarenstand. Stefe läuft das Wasser im Mund zusammen.
+	container=fleischwarenstand
+}
+Spieluhr{
+	type=tool
+	interactable=true
+	container=marktplatz
+	description=Eine vergoldete Spieluhr auf dem Boden des Marktplatzes.
+}
+Spieluhr1{
+	type=event
+	once=true
+	room=marktplatz
+	cmd=nehme spieluhr
+	//TODO Spieluhr Balletmusik
+	diffs={
+		spieluhr={
+			type=tool
+			description=Eine vergoldete Spieluhr, mit einer Balletttänzerin, die sich mit der Walze dreht.
+		}
+		harald={
+			type=npc
+			dialog={
+				question1=Was würden Sie mir für diese Spieluhr bezahlen?
+				answer1={
+					Also wenn ick net wüsste dat dat Teil dem Könich gehören würde,
+					würde ick vermutlick mehr bezahle, aber um di Ware loszuwerden kann
+					ick Ihnen nicht mehr als 5 Gulde biete. Ick glaube dat wärn guter Deal.
+					Sie können Sie jederzeit verkaufe.
+				}
+				event1=harald3
+			}
+		}
+	}
+}
+harald3{
+	type=event
+	once=false
+	cmd= af asa fjkdsaöfdskaölkf
+	diffs={
+		harald={
+			type=npc
+			dialog={
+				question1=Was würden Sie mir für diese Spieluhr bezahlen?
+				answer1={
+					Also wenn ick net wüsste dat dat Teil dem Könich gehören würde,
+					würde ick vermutlick mehr bezahle, aber um di Ware loszuwerden kann
+					ick Ihnen nicht mehr als 5 Gulde biete. Ick glaube dat wärn guter Deal.
+					Sie können Sie jederzeit verkaufe.
+				}
+				question2=Hier ist die Spieluhr.
+				answer2=Dat war ne jute Entscheidung. Hier dat Geld.
+				event2=harald4
+			}
+		}
+	}
+}
+harald4{
+	type=event
+	once=false
+	cmd= af asa fjksaöfdskaölkf
+	diffs={
+		harald={
+			type=npc
+			dialog={
+			}
+		}
+		Stefe={
+			type=player
+			addtools=geldbeutel
+			rmtools=spieluhr
+		}
+		horst={
+			type=npc
+			dialog={
+				question1=Ich habe hier 5 Gulden für die Schweinshaxe
+				answer1=Bittesehr.
+				event1=schweinshaxen1
+			}
+		}
+	}
+}
+schweinshaxen1{
+	type=event
+	once=true
+	cmd=f jsakf asjkfö sajkflö af
+	diffs={
+		schweinshaxen={
+			type=tool
+			container=player
+			description=Die Schweinshaxen von Horst
+			interactable=true
+		}
+		geldbeutel={
+			type=tool
+			container=nullroom1
+		}
+		horst={
+			type=npc
+			dialog={
+			}
+		}
+	}
+}
 
+geldbeutel{
+	container=nullroom1
+	type=tool
+	description=Die fünf Gulden von Harald für die vergoldete Spieluhr des Königs.
+}
+
+
+
+//Container
 Theke{
 	type=container
-	description=Andis Theke
 	room=kneipe
+	description=Andis Theke
 }
+Obststand{
+	type=container
+	room=marktplatz
+	description=Ein Obststand mit der Aufschrift Hildegard Gemüse und Co.
+}
+Fleischwarenstand{
+	type=container
+	room=marktplatz
+	description=Ein unscheinbarer Fleischwarenstand auf dem Marktplatz
+}
+
+
+KeineSchweishaxen{
+	type=event
+	once=false
+	cmd=nehme schweinshaxen fleischwarenstand
+	room=marktplatz
+	info=Horst hebt das Hackbeil. Horst: 5 Gulden, keine Weniger.
+	notdependent=schweinshaxen1
+}
+KeineTomaten{
+	type=event
+    once=false
+   	cmd=nehme tomaten obststand
+   	room=marktplatz
+   	info=Hildegard: Sie wollen die Tomaten doch nicht stehlen, hab ich recht?
+}
+Krämer{
+	type=container
+	description={
+		Ein kleiner Stand auf dem Marktplatz.
+		Auf dem Stand wurde ein Schild angebracht:
+		Krämer Günther - Ich kaufe alles!
+	}
+	room=marktplatz
+}
+Harald{
+	type=npc
+	description=Ein Krämer auf dem Marktplatz
+	room=marktplatz
+	dialog={
+		question1=Hallo, Stefe mein Name
+		answer1=Harald freut mick. Möchten Sie wat verkaufeen?
+		event1=harald1
+	}
+}
+harald1{
+	type=event
+	once=false
+	cmd= af asfllsöa fjkdsaö ffdskaölkf
+	diffs={
+		harald={
+			type=npc
+			dialog={
+				question1=Nein nicht wirklich.
+				answer1=Ok, dann ebe nickt.
+				event1=harald2
+			}
+		}
+	}
+}
+harald2{
+	type=event
+	once=false
+	cmd= af asa fjkdsaö ffdskaölkf
+	diffs={
+		harald={
+			type=npc
+			dialog={
+				question1=Hallo
+				answer1=Harald freut mick. Möchten Sie wat verkaufeen?
+				event1=harald1
+			}
+		}
+	}
+}
+
+
+
 
 
 

@@ -16,6 +16,8 @@ public class Event implements Serializable {
     private Collection<String> cmd;
     private final HashMap<String,Diff> differences=new HashMap<>();
     private Collection<String> dependent;
+    private Collection<String> notdependent;
+    private Collection<String> inventory;
     private boolean happened=false;
     private boolean once=true;
     private String music = null;
@@ -98,23 +100,51 @@ public class Event implements Serializable {
         differences.remove(diffstring);
     }
     private boolean applyDiffsToWorld(){
-        //TODO Musik bei Event ausführen
         try {
-            for (String i : dependent) {
+
+            if(happened&& once){
+                return false;
+            }
+            if(dependent!=null) {
+                for (String i : dependent) {
+                    try {
+                        if (!World.eventMap.get(World.eventKeyMap.get(i)).isHappened()) {
+                            return false;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if(notdependent!=null){
+            for (String i : notdependent) {
                 try {
-                    if (!World.eventMap.get(i).isHappened() || (happened && once)) {
+                    if (World.eventMap.get(World.eventKeyMap.get(i)).isHappened() ) {
                         return false;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        } catch (NullPointerException e) {
+            }
+            if(inventory!=null){
+                for(String i:inventory){
+                    try{
+                        if(!World.toolMap.get(i).getCurrentContainer().equals("player")){
+                            return false;
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
 
-        }
+        } catch (NullPointerException ignore){}
         if(info!=null){
             System.out.println(info);
         }
+        if (this.getMusic() != null)
+            World.player.getCurrentRoom().setMusic(this.getMusic(), true);
         for (Diff diff:differences.values()) {
             try {
                 diff.applyDiffToWorld();
@@ -135,9 +165,6 @@ public class Event implements Serializable {
         String hash = stringForHash(args);
         if(World.eventMap.containsKey(hash)){
             Event event = World.eventMap.get(hash);
-            if (event.getMusic() != null)
-                World.player.getCurrentRoom().setMusic(event.getMusic(), true);
-
             return event.applyDiffsToWorld();
         }
         return false;
@@ -185,6 +212,14 @@ public class Event implements Serializable {
                 }
             }
         }
+        if(notdependent!=null) {
+            for (String i : notdependent) {
+                if (!World.eventKeyMap.containsKey(i)) {
+                    System.out.printf("Element %s nicht gefunden. In %s von %s\n", notdependent, this.getClass().toString(), stringForHash(cmd));
+                    ret = false;
+                }
+            }
+        }
         for (Diff i: differences.values()) {
             if(!i.check()){
                 ret=false;
@@ -213,6 +248,9 @@ public class Event implements Serializable {
             case "tool":
                 diff=new ToolDiff(name);
                 break;
+            case "player":
+                diff=new PlayerDiff("player");
+                break;
             default:
                 throw new NullPointerException();
         }
@@ -226,6 +264,7 @@ public class Event implements Serializable {
         string+=String.format("Befehl: %s\n",cmd.toString());
         string+=String.format("Musik: %s\n",music);
         string+=String.format("Abhängig von: %s\n",dependent);
+        string+=String.format("Nicht Abhängig von: %s\n",notdependent);
         string+=String.format("Einmalig? %b\n",once);
         string+="Diffs:";
         for (Diff i: differences.values()) {
@@ -248,6 +287,12 @@ public class Event implements Serializable {
         }
         if(map.containsKey("dependent")){
             this.dependent=Input.splitInput(map.get("dependent"));
+        }
+        if(map.containsKey("notdependent")){
+            this.notdependent=Input.splitInput(map.get("notdependent"));
+        }
+        if(map.containsKey("inventory")){
+            this.inventory=Input.splitInput(map.get("inventory"));
         }
         if(map.containsKey("once")){
             try{

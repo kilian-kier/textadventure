@@ -31,6 +31,9 @@ public class ExitDiff extends Diff implements Serializable {
         if (description != null) { //Description
             exit.setDescription(description);
         }
+        if(interactable!=null){
+            exit.setInteractable(interactable);
+        }
         try {
             if (destination1 != null) {//Destination1
                     exit.changeDestination(getDestination1(), false);
@@ -75,12 +78,21 @@ public class ExitDiff extends Diff implements Serializable {
         if(map.containsKey("destination2")){
             destination2=map.get("destination2");
         }
+        if(map.containsKey("interactable")){
+            try {
+                interactable = Boolean.parseBoolean(map.get("interactable"));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+
     }
     @Override
     public String toString() {
         String string="";
         string+=String.format("Diff von %s\n",name);
         string+=String.format("Beschreibung: %s\n",getDescription());
+        string+=String.format("Interactable: %b\n",interactable);
         string+=String.format("Destination1: %s\n",getDestination1());
         string+=String.format("Destination2: %s",getDestination2());
         return string;

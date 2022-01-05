@@ -230,6 +230,8 @@ public class LoadStoreWorld {
 
         input=input.replace("\t","");
         input=input.replace("\\t","\t");
+        input=input.replaceAll("(?s)/\\*(.)*?\\*/","");
+        input=input.replaceAll("(?s)//(.)*?\n","");
 
         HashMap<String, String> split;
         try {

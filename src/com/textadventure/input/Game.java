@@ -10,6 +10,7 @@ import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.story.World;
 import com.textadventure.things.Container;
+import com.textadventure.things.Item;
 import com.textadventure.things.Tool;
 
 import java.util.LinkedList;
@@ -53,6 +54,7 @@ public class Game {
             Tool tool;
             Exit exit;
             Room room;
+            String error=null;
             switch (cmd.get(0)) {
                 case "nehme":
                     if (cmd.size() != 2 && cmd.size() != 3) {
@@ -65,54 +67,40 @@ public class Game {
                     }
                     tool = World.toolMap.get(cmd.get(1));
                     if (tool == null) {
-                        try {
-                            throw new ElementNotFoundException(cmd.get(1), "Tool");
-                        } catch (ElementNotFoundException e) {
-                            System.out.println(e.getMessage());
-                            continue;
-                        }
+                        System.out.println(new ElementNotFoundException(cmd.get(1), "Tool").getMessage());
+                        continue;
                     }
-                    if (cmd.size() == 2) {
-                        if (!tool.getCurrentContainer().equals(World.player.getCurrentRoom().getName())) {
+                    if(tool.isInteractable()) {
+                        if (cmd.size() == 2) {
+                            if (!tool.getCurrentContainer().equals(World.player.getCurrentRoom().getName())) {
+                                System.out.println(new ItemNotFoundException(tool.getName()).getMessage());
+                                continue;
+                            }
                             try {
-                                throw new ItemNotFoundException(tool.getName());
+                                tool.changeContainer("player");
+                            } catch (ItemNotFoundException e) {
+                                System.out.println(e.getMessage());
+                                continue;
+                            }
+                        } else {
+                            if (!World.player.getCurrentRoom().getContainers().contains(tool.getCurrentContainer())) {
+                                System.out.println(new ItemNotFoundException(tool.getName()).getMessage());
+                                continue;
+                            }
+                            try {
+                                tool.changeContainer("player");
                             } catch (ItemNotFoundException e) {
                                 System.out.println(e.getMessage());
                                 continue;
                             }
                         }
-                        try {
-                            tool.changeContainer("player");
-                        } catch (ItemNotFoundException e) {
-                            System.out.println(e.getMessage());
-                            continue;
-                        }
-                    } else {
-                        if (!World.player.getCurrentRoom().getContainers().contains(tool.getCurrentContainer())) {
-                            try {
-                                throw new ItemNotFoundException(tool.getName());
-                            } catch (ItemNotFoundException e) {
-                                System.out.println(e.getMessage());
-                                continue;
-                            }
-                        }
-                        try {
-                            tool.changeContainer("player");
-                        } catch (ItemNotFoundException e) {
-                            System.out.println(e.getMessage());
-                            continue;
-                        }
+                        System.out.println(firstCap(World.player.getName()) + " hat nun folgendes in seinem Rucksack: " + firstCap(tool.getName()));
                     }
-                    System.out.println(firstCap(World.player.getName()) + " hat nun folgendes in seinem Rucksack: " + firstCap(tool.getName()));
                     break;
                 case "gehe":
                     if (cmd.size() != 2) {
-                        try {
-                            throw new CommandSyntaxException(cmd.get(0));
-                        } catch (CommandSyntaxException e) {
-                            System.out.println(e.getMessage());
-                            continue;
-                        }
+                        System.out.println(new CommandSyntaxException(cmd.get(0)).getMessage());
+                        continue;
                     }
                     exit = World.exitMap.get(cmd.get(1));
                     room = World.roomMap.get(cmd.get(1));
@@ -131,32 +119,35 @@ public class Game {
                                 }
                                 for (String ex : World.player.getCurrentRoom().getExits()) {
                                     Exit roomExit = World.exitMap.get(ex);
-                                    if (roomExit.getDestination1().equals(room.getName()) || roomExit.getDestination2().equals(room.getName())) {
-                                        try {
-                                            World.player.changeRoom(ex);
-                                            found = true;
-                                            break;
-                                        } catch (ExitNotFoundException enf) {
-                                            System.out.println(enf.getMessage());
-                                            break;
-                                        }
+                                        if (roomExit.getDestination1().equals(room.getName()) || roomExit.getDestination2().equals(room.getName())) {
+                                            try {
+                                                if(roomExit.isInteractable()) {
+                                                    World.player.changeRoom(ex);
+                                                    World.musicPlayer.play();
+                                                    System.out.println(firstCap(World.player.getName()) + " geht zu " + firstCap(World.player.getCurrentRoom().getName()));
+                                                }
+                                                break;
+                                            } catch (ExitNotFoundException enf) {
+                                                System.out.println(enf.getMessage());
+                                                break;
+                                            }
                                     }
                                 }
-                                if (!found)
-                                    continue;
                             }
                         }
                     } else {
                         try {
-                            World.player.changeRoom(exit.getName());
+                            if(exit.isInteractable()) {
+                                World.player.changeRoom(exit.getName());
+                                World.musicPlayer.play();
+                                System.out.println(firstCap(World.player.getName()) + " geht zu " + firstCap(World.player.getCurrentRoom().getName()));
+                            }
                         } catch (ExitNotFoundException e) {
                             System.out.println(e.getMessage());
                             continue;
                         }
                     }
-                    World.musicPlayer.play();
-                    System.out.println(firstCap(World.player.getName()) + " geht zu " + firstCap(World.player.getCurrentRoom().getName()));
-                    break;
+                   break;
                 case "lege":
                     // NO BREAK
                 case "gebe":
@@ -169,26 +160,22 @@ public class Game {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
                         } catch (CommandSyntaxException e) {
-                            System.out.println(e.getMessage());
-                            continue;
+                            error=e.getMessage();
+                            break;
                         }
                     }
 
                     tool = World.toolMap.get(cmd.get(1));
                     if (cmd.size() == 2) {
                         if (tool == null) {
-                            try {
-                                throw new ElementNotFoundException(cmd.get(1), "Tool");
-                            } catch (ElementNotFoundException e) {
-                                System.out.println(e.getMessage());
-                                continue;
-                            }
+                            System.out.println(new ElementNotFoundException(cmd.get(1), "Tool").getMessage());
+                            break;
                         }
                         try {
                             tool.changeContainer(World.player.getCurrentRoom().getName());
                             System.out.println(firstCap(World.player.getName()) + " hat folgendes auf den Boden gelegt: " + firstCap(tool.getName()));
                         } catch (ItemNotFoundException e) {
-                            System.out.println(e.getMessage());
+                           error=e.getMessage();
                             continue;
                         }
                     } else {
@@ -196,19 +183,20 @@ public class Game {
                             try {
                                 throw new ElementNotFoundException(cmd.get(2), "Container");
                             } catch (ElementNotFoundException e) {
-                                System.out.println(e.getMessage());
-                                continue;
+                                error=e.getMessage();
+                                break;
                             }
                         }
                         try {
                             tool.changeContainer(cmd.get(2));
                             System.out.println(firstCap(World.player.getName()) + " hat folgendes in " + firstCap(cmd.get(2)) + " gegeben: " + firstCap(tool.getName()));
                         } catch (ItemNotFoundException e) {
-                            System.out.println(e.getMessage());
-                            continue;
+                            error=e.getMessage();
+                            break;
                         }
                     }
                 case "spreche":
+                    //TODO Eingabe von keiner Zahl, Keine Fragen
                     if (cmd.size() != 2) {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
@@ -424,7 +412,9 @@ public class Game {
                         continue;
                     }
             }
-            Event.execEvent(cmd);
+            if(!Event.execEvent(cmd)  && error!=null){
+                System.out.println(error);
+            }
         }
     }
 }

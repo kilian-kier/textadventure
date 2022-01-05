@@ -46,7 +46,11 @@ public class Exit extends GameElement implements Serializable {
         }else{
             newRoom.addExit(this.name);
         }
-        this.name=newRoomString;
+        if(!oneOrTwo){
+            destination1=newRoomString;
+        }else{
+            destination2=newRoomString;
+        }
     }
 
     public void setDescription1(String description1){
@@ -138,6 +142,7 @@ public class Exit extends GameElement implements Serializable {
         String string="";
         string+=String.format("Exit %s\n",name);
         string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Interactable: %b\n",interactable);
         string+=String.format("Destination1: %s\n",destination1);
         string+=String.format("Destination2: %s",destination2);
         return string;

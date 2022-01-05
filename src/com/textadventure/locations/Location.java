@@ -72,6 +72,7 @@ public class Location extends GameElement implements Serializable {
         String string = "";
         string += String.format("Location %s\n", name);
         string += String.format("Beschreibung: %s\n", getDescription());
+        string+=String.format("Interactable: %b\n",interactable);
         string += String.format("Räume: %s", rooms.toString());
         return string;
     }

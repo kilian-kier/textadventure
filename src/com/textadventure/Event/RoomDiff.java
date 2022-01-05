@@ -48,6 +48,9 @@ public class RoomDiff extends Diff implements Serializable {
         if(music!=null){
             room.setMusic(music, false);
         }
+        if(interactable!=null){
+            room.setInteractable(interactable);
+        }
         try{
             if (addTools != null) {
                 for (String i : addTools) {
@@ -350,6 +353,13 @@ public class RoomDiff extends Diff implements Serializable {
         }
         if(map.containsKey("rmnpcs")){
             rmNPCs=Input.splitInput(map.get("rmnpcs"));
+        }
+        if(map.containsKey("interactable")){
+            try {
+                interactable = Boolean.parseBoolean(map.get("interactable"));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
     @Override
