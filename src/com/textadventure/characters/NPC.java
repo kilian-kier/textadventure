@@ -95,6 +95,7 @@ public class NPC extends GameElement implements Serializable {
         String string="";
         string+=String.format("NPC %s\n",name);
         string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Interactable: %b\n",interactable);
         string+=String.format("Raum: %s\n",room);
         string+="Dialog:";
         string+=dialog.toString();

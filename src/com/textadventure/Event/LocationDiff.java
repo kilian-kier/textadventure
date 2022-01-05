@@ -30,6 +30,9 @@ public class LocationDiff extends Diff implements Serializable {
         if(description!=null){ //Description
             location.setDescription(getDescription());
         }
+        if(interactable!=null){
+            location.setInteractable(interactable);
+        }
         try {
             if (addRooms != null) {
                     for (String i : addRooms) {
@@ -81,6 +84,13 @@ public class LocationDiff extends Diff implements Serializable {
         }
         if(map.containsKey("rmrooms")){
             rmRooms=Input.splitInput(map.get("rmrooms"));
+        }
+        if(map.containsKey("interactable")){
+            try {
+                interactable = Boolean.parseBoolean(map.get("interactable"));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
     @Override

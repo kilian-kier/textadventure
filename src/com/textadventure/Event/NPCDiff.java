@@ -31,6 +31,9 @@ public class NPCDiff extends Diff implements Serializable {
         if(description!=null){//Description
             npc.setDescription(getDescription());
         }
+        if(interactable!=null){
+            npc.setInteractable(interactable);
+        }
         try {
             if (room != null) {
                     npc.changeContainer(room);
@@ -69,6 +72,13 @@ public class NPCDiff extends Diff implements Serializable {
             dialog=new Dialog();
             try {
                 dialog.loadFromHashMap(LoadStoreWorld.createMap(map.get("dialog")));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        if(map.containsKey("interactable")){
+            try {
+                interactable = Boolean.parseBoolean(map.get("interactable"));
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }

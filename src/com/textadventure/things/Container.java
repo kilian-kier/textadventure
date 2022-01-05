@@ -56,6 +56,7 @@ public class Container extends Item implements Serializable {
         String string="";
         string+=String.format("Container %s\n",name);
         string+=String.format("Beschreibung: %s\n",description);
+        string+=String.format("Interactable: %b\n",interactable);
         string+=String.format("Container/Raum: %s\n",currentContainer);
         string+=String.format("Tools: %s",tools);
         return string;

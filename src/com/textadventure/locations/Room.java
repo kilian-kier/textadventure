@@ -295,6 +295,7 @@ public class Room extends GameElement implements Serializable {
         String string = "";
         string += String.format("Raum %s\n", name);
         string += String.format("Beschreibung: %s\n", getDescription());
+        string+=String.format("Interactable: %b\n",interactable);
         string += String.format("Location: %s\n", getLocation());
         string += String.format("Musik: %s\n", music);
         string += String.format("Tools: %s\n", tools.getTools() != null ? tools.getTools().toString() : null);

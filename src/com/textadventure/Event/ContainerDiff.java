@@ -39,6 +39,10 @@ public class ContainerDiff extends Diff implements Serializable {
                System.out.println(e.getMessage());
            }
        }
+
+        if(interactable!=null){
+            container.setInteractable(interactable);
+        }
        try{
        if(addTools!=null){
                for (String i:addTools) {
@@ -52,6 +56,7 @@ public class ContainerDiff extends Diff implements Serializable {
                     container.removeTool(i);
                 }
         }}
+
         catch(Exception e){
            e.printStackTrace();
         }
@@ -204,6 +209,13 @@ public class ContainerDiff extends Diff implements Serializable {
         }
         if(map.containsKey("rmtools")){
             rmTools=Input.splitInput(map.get("rmtools"));
+        }
+        if(map.containsKey("interactable")){
+            try {
+                interactable = Boolean.parseBoolean(map.get("interactable"));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 

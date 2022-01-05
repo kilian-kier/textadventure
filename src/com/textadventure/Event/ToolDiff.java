@@ -28,6 +28,9 @@ public class ToolDiff extends Diff implements Serializable {
         if(description!=null){
             tool.setDescription(getDescription());
         }
+        if(interactable!=null){
+            tool.setInteractable(interactable);
+        }
         if(container!=null){
             try {
                 tool.changeContainer(getContainer());
@@ -43,7 +46,7 @@ public class ToolDiff extends Diff implements Serializable {
         boolean ret=true;
         stringTemp=getContainer();
         if(stringTemp!=null){
-            if(World.roomMap.get(stringTemp)==null && World.containerMap.get(stringTemp)==null){
+            if(World.containerMap.get(stringTemp)==null && !stringTemp.equals("player")){
                 System.out.printf("Raum/Container %s nicht gefunden. In %s von %s\n",stringTemp,this.getClass().toString(),name);
                 ret=false;
             }
@@ -133,6 +136,13 @@ public class ToolDiff extends Diff implements Serializable {
         }
         if(map.containsKey("container")){
             container=map.get("container");
+        }
+        if(map.containsKey("interactable")){
+            try {
+                interactable = Boolean.parseBoolean(map.get("interactable"));
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
     @Override
