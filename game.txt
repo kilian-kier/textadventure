@@ -13,12 +13,13 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=landstraße
+	room=grabkammer
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
 		Des Universums?
 	}
+	inventory=brecheisen hammer
 }
 Start{
 	type=event
@@ -232,6 +233,13 @@ Grabkammer{
 		in den Raum.
 	}
 }
+GangGrab{
+	type=exit
+	destination1=gang
+	destination2=grabkammer
+	description1=Ein Gang führt aus der Grabkammer.
+	description2=Der Gang führt zurück in die Grabkammer.
+}
 Gang{
 	type=room
 	location=katakomben
@@ -318,7 +326,7 @@ Sarg{
 Schwert{
 	type=tool
 	container=nullroom1
-	description=Das Magische Drachenbezwingerschwert.
+	description=Das Drachenbezwingerschwert.
 }
 Leiche{
 	type=tool
@@ -351,8 +359,30 @@ Entzünde{
 		}
 	}
 }
+HammerLoch2{
+	type=event
+	once=true
+	info=Die Ziegelmauer bricht durch.
+	cmd=aktion hammer ziegelmauer
+	inventory=hammer
+	room=gang
+	diffs={
+		ziegelmauer={
+			type=tool
+			room=nullroom1
+		}
+		Öffnung={
+			type=exit
+			destination1=gang
+			destination2=kellergewölbe
+		}
+		Rüstung={
+			type=tool
+			interactable=true
+		}
+	}
+}
 HammerLoch{
-	//TODO Sound Effekt Wand bricht ein
 	type=event
 	once=true
 	info=Die Wand bricht durch.
@@ -526,21 +556,102 @@ Kneipe{
 	sowie einem sympatischen Barista.}
 	location=dorfkneipe
 	music=music/kneipe.mp3
-
-
 }
 
 Hons{
 	type=npc
+	description=Ein älterer Herr in Lusinams Kneipe
 	room=kneipe
+	dialog={
+		question1=Hallo, ich bin Stefe.
+		answer1=D*oc**e. Wos mo- mo- moantn der iberhaupt. *hicks*
+	}
 }
-
 Joachim{
 	type=npc
 	room=kneipe
-
+	description=Ein weiterer Gast der Kneipe
+	dialog={
+		question1=Einen guten Tag, die Herren.
+		answer1={
+			Jo Hoi. Na wer bischen du? Na mit so an Piefke reid i net
+			oanfoch asö. Jo wou seimor denn? In an Gosthaus, ha?
+		}
+	}
 }
-
+GebeFlasche{
+	type=event
+	once=true
+	inventory=schnapsflasche
+	room=kneipe
+	info={
+		Joachim: A schau, so gfollsche mor schun eher. I hon schun gseign,
+		dass du lei an Andis Pudl bisch und dor di Flosche lei asö gnummen hosch,
+		obor hell isch mir nor eh gleich. Gsund.
+		Jo Hons, iatz loss mor amol de Flosch in ruah!
+	}
+	cmd=gebe schnapsflasche joachim
+	diffs={
+		Stefe={
+			type=player
+			rmtools=schnapsflasche
+		}
+	}
+}
+Andi{
+	type=npc
+	room=kneipe
+	description=Der Barmann der lokalen Trinkstube. Ein schlagsiger junger Mann in
+	dialog={
+		question1=Ich möchte ein Bier bestellen.
+		answer1={
+			Jo bitte, wos hettn Se den gearn? Weiß, blond oder sein Sie oanor ve de,
+            de des Zoig augleitert oidnlossn?
+		}
+		event1=andi1
+		question2={
+			Wer sind die beiden Herren da drüben? Glauben Sie die könnten mich über
+			diese Stadt hier etwas aufklären?
+		}
+		answer2={
+			Des warn dor Joachim und dor Hons. Iatz auklären werdn de Sie, wenn se sich net gonz
+			ungschickt unstelln und ihmene a bissl an unsporn gebn,
+			sicher iber olderhontiges. Sie derfn lai net jedn Stuss glabn
+			den se dorzehln. In Hons tat i ober nimmer gor zi viel tratzn,
+			weil sischt schnellt er Ihnen in sein Zuastond no oane.
+		}
+	}
+}
+andi1{
+	type=event
+	cmd=f sajkf dsajkf safklöds afjösad
+	once=true
+	room=kneipe
+	diffs={
+		andi={
+			type=npc
+			dialog={
+				question1=Ich möchte ein Bier bestellen.
+				answer1={
+					Jo bitte, wos hettn Se den gearn? Weiß, blond oder sein Sie oanor ve de,
+					de des Zoig augleitert Oidnlossn?
+				}
+				event1=andi1
+				question2={
+					Wer sind die beiden Herren da drüben? Glauben Sie die könnten mich über
+					diese Stadt hier etwas aufklären?
+				}
+				answer2={
+					Des warn dor Joachim und dor Hons. Iatz auklären werdn de Sie, wenn Se sich net gonz
+					ungschickt unstelln und ihmene a bissl an unsporn gebn,
+					sicher iber olderhontiges. Sie derfn lai net jedn Stuss glabn
+					den se dorzehln. In Hons tat i ober nimmer gor zi viel tratzn,
+					weil sischt schnellt er Ihnen in sein Zuastond no oane.
+				}
+			}
+		}
+	}
+}
 
 Stefeweiß{
 	type=event
@@ -949,8 +1060,6 @@ geldbeutel{
 }
 
 
-
-//Container
 Theke{
 	type=container
 	room=kneipe
