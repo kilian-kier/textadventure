@@ -130,7 +130,7 @@ public class Event implements Serializable {
             if(inventory!=null){
                 for(String i:inventory){
                     try{
-                        if(!World.toolMap.get(i).getCurrentContainer().equals("player")){
+                        if(!World.player.getToolsContainer().getTools().contains(i)){
                             return false;
                         }
                     }catch(Exception e){
@@ -268,6 +268,7 @@ public class Event implements Serializable {
         string+=String.format("Abhängig von: %s\n",dependent);
         string+=String.format("Nicht Abhängig von: %s\n",notdependent);
         string+=String.format("Einmalig? %b\n",once);
+        string+=String.format("Raum %s\n",room);
         string+="Diffs:";
         for (Diff i: differences.values()) {
             string+="\n";
@@ -290,18 +291,19 @@ public class Event implements Serializable {
         if(map.containsKey("dependent")){
             this.dependent=Input.splitInput(map.get("dependent"));
         }
+        if(map.containsKey("once")){
+            try {
+                once = Boolean.parseBoolean(map.get("once"));
+            }catch(Exception ignore){}
+        }
         if(map.containsKey("notdependent")){
             this.notdependent=Input.splitInput(map.get("notdependent"));
         }
         if(map.containsKey("inventory")){
             this.inventory=Input.splitInput(map.get("inventory"));
         }
-        if(map.containsKey("once")){
-            try{
-                this.once=Boolean.parseBoolean(map.get("once"));
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
+        if(map.containsKey("room")){
+            room=map.get("room");
         }
         if(map.containsKey("diffs")) {
             HashMap<String,String > diffs=null;

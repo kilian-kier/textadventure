@@ -1,6 +1,7 @@
 package com.textadventure.characters;
 
 import com.textadventure.GameElement;
+import com.textadventure.input.Input;
 import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ExitNotFoundException;
@@ -139,6 +140,11 @@ public class Player extends GameElement implements RoomChangeable {
         }
         if(map.containsKey("room")){
             currentRoom=World.roomMap.get(map.get("room"));
+        }
+        if(map.containsKey("inventory")){
+            try {
+                inventory.getTools().addAll(Input.splitInput(map.get("inventory")));
+            }catch(Exception ignore){}
         }
     }
 }
