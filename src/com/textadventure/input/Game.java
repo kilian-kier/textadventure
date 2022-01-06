@@ -232,7 +232,7 @@ public class Game {
                             }
                             scanner.nextLine();
                         } else {
-                            System.out.printf("%s hat zurzeit keine Zeit mit dir zu sprechen\n", n.getName());
+                            System.out.printf("%s hat zurzeit keine Zeit mit %s zu sprechen\n", firstCap(n.getName()),firstCap(World.player.getName()));
                         }
                     }
                     break;
@@ -410,6 +410,8 @@ public class Game {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
+                    break;
+                case "aktion":
                     break;
                 default:
                     try {
