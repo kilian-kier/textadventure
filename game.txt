@@ -88,7 +88,7 @@ Treppe{
 	destination1=kirchturm
 	destination2=kirche
 	description1=Eine schmale Holztreppe führt in den Kirchturm
-	description2=Eine Treppe führt zurück in das Kirchenschiff.
+	description2=Eine Treppe führt zurück in die Kirche.
 }
 Oberstadt{
 	type=room
@@ -115,7 +115,7 @@ Torbogen{
 }
 Holztür{
 	type=exit
-	destination1=haus
+	destination1=eingangsbereich
 	destination2=garten
 	description1=Eine große dunkle Holztür führt in das Innere des Hauses.
 	description2=Eine Tür führt zurück in den Garten.
@@ -147,10 +147,330 @@ Fass2{
 	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
 	notdependent=gebefleisch
 }
-Haus{
+Eingangsbereich{
 	type=room
-	description=Das Haus des Onkels. Es hat einige Jahre auf dem Buckel.
+	description={
+		Der Eingangsbereich vom Haus des Onkels.
+		Man sieht ihm an, dass er bereits einige Jahre auf dem Buckel hat.
+	}
 	location=anwesen
+}
+Wohnzimmer{
+	type=room
+	description=Ein gemütliches Wohnzimmer mit Kachelofen.
+	location=anwesen
+}
+WohnEing{
+	type=exit
+	destination1=eingangsbereich
+	destination2=wohnzimmer
+	description1=Man kann wieder zurück in den Eingangsbereich.
+	description2=Eine für Stefe zu niedrige Tür führt in das Wohnzimmer.
+}
+Kellertreppe{
+	type=exit
+	destination1=keller
+	destination2=eingangsbereich
+	description1=Eine Kellertreppe führt runter in den Keller.
+	description2=Eine Kellertreppe führt zurück in den Eingangsbereich.
+}
+Keller{
+	type=room
+	description=Ein geräumiges Kellergewölbe.
+	location=anwesen
+}
+Rückwand{
+	type=container
+	description=Eine Ziegelwand im Keller.
+	room=keller
+}
+Loch{
+	type=tool
+	interactable=false
+	container=rückwand
+	description=Im Keller gibt es ein etwa Faustdickes Loch in der Wand. Dahinter ist es dunkel.
+}
+Durchgang{
+	type=exit
+	destination1=nullroom1
+	destination2=nullroom2
+	description1=Ein nun größeres Loch in der Wand führt in eine dunkle Kammer.
+	description2=Etwas Licht aus dem Keller scheint vom Durchgang in die Kammer.
+}
+Katakomben{
+	type=location
+	description=Die Katakomben von Lusinam
+}
+Kammer{
+	type=room
+	location=katakomben
+	description={
+		Eine kleine finstere Kammer, welche an den Keller von Stefes Onkels Anwesen angrenzt.
+		Stefe kann ohne Licht kaum etwas sehen.
+	}
+}
+Fackel{
+	type=tool
+	interactable=false
+	description=Eine erloschene Fackel an einer Wand der Kammer.
+	container=kammer
+}
+Schacht{
+	type=exit
+	destination1=nullroom1
+	destination2=nullroom2
+	description1=Mit Hilfe des Lichts kann Stefe einen schmalen Schacht erkennen, der aus der Kammer führt.
+	description2=Ein Schacht führt wieder zurück zur Kammer.
+}
+Grabkammer{
+	type=room
+	location=katakomben
+	description={
+		Eine runde Grabkammer.
+		Die Wände sind mit Totenköpfen gespickt.
+		Durch einen Spalt in der Decke dringt etwas Licht
+		in den Raum.
+	}
+}
+Gang{
+	type=room
+	location=katakomben
+	description=Ein Gang, welcher von der Grabkammer wegführt.
+}
+Ziegelmauer{
+	type=tool
+	interactalbe=false
+	container=gang
+	description=Der Gang endet in einer Ziegelmauer.
+}
+Öffnung{
+	type=exit
+	destination1=nullroom1
+	destination2=nullroom2
+	description1=Die Öffnung in der Mauer führt in einen Gang der Katakomben.
+	description2=Die Öffnung in der Mauer führt in ein Kellergewölbe.
+}
+Kellergewölbe{
+	type=room
+	description=Ein von Spinnennetzen verseuchtes Kellergewölbe.
+	location=lusinam
+}
+Rüstung{
+	type=tool
+	description=Eine alte, vom Rost zerfressene Rüstung
+	container=kellergewölbe
+	interactable=false
+}
+Steintreppe{
+	type=exit
+	destination1=kellergewölbe
+	destination2=schmiede
+	description1=Eine Steintreppe führt in ein Kellergewölbe.
+	description2=Die Steintreppe führt wieder nach oben in die Schmiede.
+}
+Schmiede{
+	type=room
+	description={
+		Die Schmiede von Lusinam.
+		Ein Betrieb, welcher seit Generationen von derselben Familie geführt wird.
+		Sie soll die zuverlässigste Schmiede von Lusinam sein.
+		Sie ist aber auch die einzige.
+	}
+	location=lusinam
+}
+Schmunter{
+	type=exit
+	destination1=unterstadt
+	destination2=schmiede
+	description1=In der Unterstadt liegt eine Schmiede.
+	description2=Ein Weg führt wieder nach draußen in die Unterstadt.
+}
+
+Sarg{
+	type=container
+	interactable=false
+	room=grabkammer
+	description={
+		In der Mitte der Grabkammer befindet sich ein versiegelter Sarg.
+		Darauf ist in einer Plakette der Name des verstorbenen verewigt:
+
+		Schmiedi der Drachentöter
+	}
+}
+öffnesarg{
+	type=event
+	once=true
+	room=grabkammer
+	inventory=brecheisen
+	cmd=aktion brecheisen sarg
+	info={
+		Stefe nimmt all seine Kraft zusammen, setzt die Brechstange zwischen Deckel und Boden des Sargs an
+		uuund hops. Der Deckel spring nach oben und Schmiedi Seniors Leiche starrt ihn an.
+	}
+	diffs={
+		sarg={
+			type=container
+			interactable=true
+			addtools=leiche schwert
+		}
+	}
+}
+Schwert{
+	type=tool
+	container=nullroom1
+	description=Das Magische Drachenbezwingerschwert.
+}
+Leiche{
+	type=tool
+	container=nullroom1
+	interactable=false
+	description=Die Leiche von Schmiedis Vorfahre Schmiedi dem Drachenbezwinger.
+}
+NehmeLeiche{
+	type=event
+	once=false
+	room=grabkammer
+	cmd=nehme leiche sarg
+	info=Was genau soll Stefe mit einer vermoderten Leiche?
+}
+Entzünde{
+	type=event
+	inventory=schwefelhölzer
+	cmd=aktion schwefelhölzer fackel
+	info=Die Fackel brennt und erleuchtet den Raum.
+	room=kammer
+	diffs={
+		fackel={
+			type=tool
+			description=Eine brennende Fackel an der Wand der Kammer.
+		}
+		Schacht={
+			type=exit
+			destination1=grabkammer
+			destination2=kammer
+		}
+	}
+}
+HammerLoch{
+	//TODO Sound Effekt Wand bricht ein
+	type=event
+	once=true
+	info=Die Wand bricht durch.
+	cmd=aktion hammer rückwand
+	inventory=hammer
+	room=keller
+	diffs={
+		rückwand={
+			type=container
+			description=Nach Stefes Handlung, sind von der Rückwand nur noch ein paar Trümmer übrig.
+			rmtools=loch
+		}
+		durchgang={
+			type=exit
+			destination1=kammer
+			destination2=keller
+		}
+	}
+}
+Werkzeugkasten{
+	type=container
+	room=keller
+	description=Ein Werkzeugkasten von stattlicher Größe. Stefes Onkel scheint gern gewerkelt zu haben.
+}
+Hammer{
+	type=tool
+	container=werkzeugkasten
+	description=Ein massiver Hammer
+}
+Brecheisen{
+	type=tool
+	container=werkzeugkasten
+	description=Ein antikes Brecheisen.
+}
+Schraubenzieher{
+	type=tool
+	container=werkzeugkasten
+	description=Ein mittelgroßer Kreuzschraubenzieher.
+}
+Korkenzieher{
+	type=tool
+	container=werkzeugkasten
+	description=Ein Korkenzieher.
+}
+Weinlager{
+	type=container
+	room=keller
+	description=Stefes Onkel hat hier Wein gelagert. Bis auf eine Flasche ist nichts mehr übrig.
+}
+Weinflasche{
+//TODO Weinflasche öffnen
+	type=tool
+	container=weinlager
+	description=Ein 1773er Burgunder.
+}
+ZimmEing{
+	type=exit
+	destination1=eingangsbereich
+	destination2=zimmer
+	description1=Aus dem Zimmer kommt man direkt wieder in den Eingangsbereich
+	description2={
+		Vom Eingangsbereich kommt man in den hinteren Teil des Hauses,
+		in dem sich ein gemütliches Zimmer befindet.
+	}
+}
+Zimmer{
+	type=room
+	description=Ein gemütliches Zimmer des Anwesens. Alles wurde sorgfältig aufgeräumt.
+	location=anwesen
+}
+Bett{
+	type=container
+	description=Ein Bett im Zimmer des Hauses.
+	room=zimmer
+}
+Kleiderschrank{
+	type=container
+	description=Der hübsch verzierte Kleiderschrank des Onkels.
+	room=zimmer
+}
+Nachthemd{
+	type=tool
+	description=Ein von Motten zerfressenes Nachthemd
+	container=kleiderschrank
+}
+NachthemdStefe{
+	type=event
+	inventory=nachthemd
+	info=Stefe ist nicht gerade erpicht darauf in diese Lumpen zu schlüpfen.
+	cmd=aktion nachthemd stefe
+}
+Zigarren{
+	type=tool
+	description=Einige Zigarren. Stefes Onkel scheint gern geraucht zu haben.
+	container=kleiderschrank
+}
+Schwefelhölzer{
+	type=tool
+	description=Neben den Zigarren im Kleiderschrank befinden sich einige Schwefelhölzer.
+	container=kleiderschrank
+}
+EntzündeZigarren{
+	type=event
+	info=Stefe ist strenger Nichtraucher.
+	inventory=zigarren schwefelhölzer
+	cmd=aktion schwefelhölzer zigarren
+}
+Nehmeschwefelholz{
+	type=event
+	once=true
+	room=zimmer
+	cmd=nehme schwefelhölzer kleiderschrank
+	diffs={
+		schwefelhölzer={
+			type=tool
+			description=Schwefelhölzer aus dem Kleiderschrank
+		}
+	}
 }
 Hund{
 	type=npc
@@ -162,10 +482,10 @@ Hund{
 		event1=knurren
 		question2=Vermisst du dein Herrchen?
 		answer2=Grrrrr
-        event2=knurren
+		event2=knurren
 		question3=Braves Hündchen
 		answer3=Grrrrr
-        event3=knurren
+		event3=knurren
 	}
 }
 GebeFleisch{
@@ -185,10 +505,10 @@ GebeFleisch{
 			interactable=true
 		}
 		Bellen={
-		    //TODO: Eventdiff
-		    //type=event
-		    //once=true
-		    //music=music/garten.mp3
+			//TODO: Eventdiff
+			//type=event
+			//once=true
+			//music=music/garten.mp3
 		}
 	}
 }
@@ -206,9 +526,42 @@ Kneipe{
 	sowie einem sympatischen Barista.}
 	location=dorfkneipe
 	music=music/kneipe.mp3
+
+
+}
+
+Hons{
+	type=npc
+	room=kneipe
+}
+
+Joachim{
+	type=npc
+	room=kneipe
+
 }
 
 
+Stefeweiß{
+	type=event
+	cmd=fjsda ödskkf safjskaflö sa
+	once=true
+	diffs={
+		schmiedi={
+			type=npc
+			dialog={
+				question1={
+					Hallo,
+					Einige Anwohner in ihrer Dorfkneipe meinten, Sie würden sich
+					mit der Geschichte Lusinams sehr gut auskennen.
+				}
+				answer1=Na klar, was möchten Sie denn wissen?
+				event1=schmiedi1
+			}
+		}
+	}
+
+}
 Markober{
 	type=exit
 	destination1=nullroom1
@@ -225,6 +578,11 @@ Markober1{
 		markober={
 			destination1=marktplatz
 			destination2=oberstadt
+			type=exit
+		}
+		markunte={
+			destination1=marktplatz
+			destination2=unterstadt
 			type=exit
 		}
 		hildegard={
@@ -275,7 +633,7 @@ Quasimodo{
 	room=kirche
 	dialog={
 		question1=Hallo, mein Name ist Stefe.
-		answer1=Pssssssssst. Hörst du nicht, das unsere Chor singt.
+		answer1=Pssssssssst. Der Pfarrer betet.
 	}
 }
 Horst{
@@ -361,8 +719,8 @@ Hildegard1{
 				event1=hildegard2
 				question2=Ich habe von einem Onkel ein Anwesen hier geerbt, können Sie mir sagen, wo ich es finden kann?
 				answer2={
-					Das tut mir Leid für Sie. Natürlich weiß ich wo das Anwesen ist. Ich war schon oft dort. 
-					Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen. 
+					Das tut mir Leid für Sie. Natürlich weiß ich wo das Anwesen ist. Ich war schon oft dort.
+					Ich bin eine gute Freundin der Familie, so wie jeder hier. Letztes Jahr hat Ihr Onkel die ganze Stadt zum Weihnachtsessen eingeladen.
 					Habe ich Ihnen schon erzählt wie ich überhaupt dazu gekommen bin Obsthändlerin zu werden?
 				}
 				event2=hildegard3
@@ -386,9 +744,17 @@ Hildegard2{
 				}
 				event1=hildegard3
 				question2=Ich möchte nicht ungehobelt erscheinen, aber es ist Winter.
-				answer2=Ach, was verstehen Sie schon von Gemüse!
+				answer2={
+					Ach, was verstehen Sie schon von Gemüse! Mit viel Liebe wachsen Pflanzen überall
+					zu jeder Zeit. Sie werden es nicht glauben aber mit dieser fortschrittlichen
+					Methode ist es mir sogar gelungen Kartoffeln außerhalb der Erde zu züchten.
+				}
 				question3=Die Riesenkürbisse erinnern Sie an Ihre Tomaten?
-				answer3=Das hab' ich doch eben gesagt.
+				answer3={
+					Das hab' ich doch eben gesagt. Die Tomaten sind wie unsere Riesenkürbisse.
+					Nur etwas kleiner. Und sie schmecken unterschiedlich. Auch bei der Farbe gibt
+					es kleinere Unterschiede, aber ansonsten sind sie gleich.
+				}
 			}
 		}
 	}
@@ -408,12 +774,14 @@ Hildegard3{
 					Sie hat etwas außerord... den .. tlich ...
 					Vergiss es, du hörst mir doch nicht zu.
 					Das Anwesen befindet sich in der Oberstadt.
+					Aber auch in der Unterstadt gibt es viel zu sehen.
 				}
 				event1=markober1
 			}
 		}
 	}
 }
+
 
 Knurren{
     type=event
@@ -429,8 +797,6 @@ Bellen{
     room=oberstadt
     cmd=gehe garten
 }
-
-
 
 
 
@@ -666,10 +1032,134 @@ harald2{
 		}
 	}
 }
+Schmiedi{
+	type=npc
+	room=schmiede
+	description=Der Schmied von Lusinam
+	dialog={
+		question1=Guten Tag
+		answer1=Guten Tag
+	}
+}
+schmiedi1{
+	type=event
+	cmd=fdkas fjkasd öfjsak öfsajkökdlösafj
+	once=true
+	diffs={
+		schmiedi={
+			type=npc
+			dialog={
+				question1={
+					Haben Sie schon einmal etwas von Katakomben in der Stadt gehört?
+					In ihnen soll es spuken.
+				}
+				answer1={
+					Ja, das habe ich. Dabei handelt es sich nur um ein Gerücht,
+					eine Gruselgeschichte, mit der man hier pflegt Reisende zu erschrecken.
+					Es gab zwar einmal Katakomben in dieser Stadt, aber diese sind schon
+					seid mehreren Jahrzehnten eingebrochen.
+				}
+				question2={
+					Haben Sie schon einmal etwas von einem Drachen in dieser Stadt gehört?
+				}
+				answer2={
+					Das habe ich allerdings. Ich bin immerhin der Nachfahre desjenigen,
+					der ihn getötet hat. Schmiedi der Vater von Schmiedi der Vater von Günter
+					der Vater von mir, hat damals einen Drachen getötet.
+				}
+				event2=schmiedi2
+				}
+			}
+		}
+	}
+}
+schmiedi2{
+	type=event
+	cmd=fdkas fjkasd öföfkdlösafj
+	once=true
+	diffs={
+		schmiedi={
+			type=npc
+			dialog={
+				question1={
+					Haben Sie schon einmal etwas von Katakomben in der Stadt gehört?
+					In ihnen soll es spuken.
+				}
+				answer1={
+					Ja, das habe ich. Dabei handelt es sich nur um ein Gerücht,
+					eine Gruselgeschichte, mit der man hier pflegt Reisende zu erschrecken.
+					Es gab zwar einmal Katakomben in dieser Stadt, aber diese sind schon
+					seid mehreren Jahrzehnten eingebrochen.
+				}
+				question2={
+					Können Sie mir mehr über den Drachen erzählen?
+				}
+				answer2={
+					Kommen Sie mit.
+				}
+				event2=schmiedi3
+				}
+			}
+		}
+	}
+}
+schmiedi3{
+	type=event
+	cmd=fdkas fjkasd öföfsajkökdlössdfkölö
+	once=true
+	info={
+		Stefe und Schmiedi begeben sich gemeinsam in einen Keller
 
+		Schmiedi: Diese Rüstung ist die des Vaters, des Vate...
 
+		Stefe: Ihres Urgroßvaters
 
+		Schmiedi: ... ähhh genau. Das wusste ich natürlich. Mein Urgroßvater
+		hat vor vielen Jahren diese Rüstung geschmieded. Außerdem hat er ein
+		spezielles Schwert erschaffen. Beide Gegenstände verwendete er dazu einen
+		Drachen zu besiegen
 
+		Zur Zeit meines Urgroßvaters kam ein böser Zauberer nach Lusinam. Er hatte
+		einen Drachen bei sich. Das Tier war groß, grün, schwarz und hatte mächtige Flügel.
+		Doch das allerschlimmste: Er spieh Feuer. Mit dem Drachen machte sich der Zauberer
+		auf zum Schloss. Dort drohte er dem König, wen er ihm nicht das Amt übergebe, würde
+		er Lusinam zerstören. Der König, der auf seine Streitmacht vertraute, gab nicht nach.
+		Der Zauberer hielt sein Wort, der König hatte sich überschätzt
+		und der Drache legte Lusinam in Schutt und Asche...
+		vor allem in Asche.
+		Der Drache zog seine Runden und hatte jeden, den er erwischte in Flammen aufgehen
+		lassen. Die Überlebenden versteckten sich in Kellern und gruben Tunnel, die
+		Katakomben von Lusinam. Was ich dafür geben würde, sie einmal sehen zu können...
+		Schmiedi, dem damals diese Schmiede hier gehörte hatte, war der einzige, der
+		sich traute, sich dem Drachen entgegenzustellen. Mit Hilfe der schützensten Rüstung,
+		die je gescmiedet wurde und dem schärfsten Schwert, das je geschliffen wurde, war
+		er bestens ausgestattet.
+		Nachdem Schmiedi den Drachen besiegt hatte, kümmerte er sich um den Zauberer.
+		Wie sich herausstellte, hatte der Zauberer mehrere Königreiche und Städte erobert
+		oder verwüstet.
+		Den Zauberer sperrte er in eine Höhle im Berg. Dort sollte er für seine Vergehen büßen.
+		Mein Urgroßvater hat sich aber beim Kampf verletzt und ist kurz danach verstorben.
+		Er wurde in den Katakomben begraben. Die Rüstung hat sein Sohn hierher gebracht.
+		Die Gebeine meines Ahnen dürften irgendwo da unten verkümmern. Aber weiß der Geier wo.
+		Mein Leben lang hab ich nach den Katakomben gesucht und gegraben, aber ich habe nichts
+		gefunden. Na ja.
+		Jedenfalls endet die Geschichte auf diese Weise.
+		Die Bürger trauten sich wieder an die Oberwelt,
+		bauten Lusinam neu auf, und nun, Sie dich um, wir sind glücklicher den je.
+
+		Stefe: Puh. Dankesehr.
+		}
+	diffs={
+		schmiedi={
+			type=npc
+			room=kellergewölbe
+		}
+		Stefe={
+			type=player
+			room=kellergewölbe
+		}
+	}
+}
 
 
 
