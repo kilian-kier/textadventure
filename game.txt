@@ -64,6 +64,7 @@ Marktplatz{
 	type=room
 	description=Der Marktpllatz liegt im zentrum von Lusinam.
 	location=lusinam
+	music=music/marktplatz.mp3
 }
 Kirche{
 	type=room
@@ -80,6 +81,7 @@ Kirchturm{
 		Der Kirchturm von Lusinam. Vor einem kleinen Fenster steht ein Fernrohr.
 		Man kann damit die ganze Stadt überblicken.
 	}
+	music=music/kirchturm.mp3
 }
 Treppe{
 	type=exit
@@ -92,6 +94,7 @@ Oberstadt{
 	type=room
 	description=Die Oberstadt von Lusinam
 	location=lusinam
+	music=music/oberstadt.mp3
 }
 Anwesen{
 	type=location
@@ -101,6 +104,7 @@ Garten{
 	type=room
 	description=Ein verwucherter alter Garten
 	location=anwesen
+	music=music/garten.mp3
 }
 Torbogen{
 	type=exit
@@ -117,10 +121,18 @@ Holztür{
 	description2=Eine Tür führt zurück in den Garten.
 	interactable=false
 }
+Türknarren{
+    type=event
+    once=false
+    music=music/haustür.mp3
+    cmd=gehe haus
+    depends=gebefleisch
+}
 Fass{
 	type=event
 	once=false
 	room=garten
+	music=music/knurren.mp3
 	cmd=gehe haus
 	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
 	notdependent=gebefleisch
@@ -129,6 +141,7 @@ Fass2{
 	type=event
 	once=false
 	room=garten
+	music=music/knurren.mp3
 	cmd=gehe holztür
 	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
 	notdependent=gebefleisch
@@ -145,10 +158,13 @@ Hund{
 	dialog={
 		question1=Hallo mein kleiner
 		answer1=Grrrrr
+		event1=knurren
 		question2=Vermisst du dein Herrchen?
 		answer2=Grrrrr
+        event2=knurren
 		question3=Braves Hündchen
 		answer3=Grrrrr
+        event3=knurren
 	}
 }
 GebeFleisch{
@@ -252,7 +268,7 @@ Quasimodo{
 	room=kirche
 	dialog={
 		question1=Hallo, mein Name ist Stefe.
-		answer1=Pssssssssst. Der Pfarrer betet.
+		answer1=Pssssssssst. Hörst du nicht, das unsere Chor singt.
 	}
 }
 Horst{
@@ -390,6 +406,22 @@ Hildegard3{
 			}
 		}
 	}
+}
+
+Knurren{
+    type=event
+    once=false
+	music=music/knurren.mp3
+    cmd=sjkfhjks hsdjkfhj kshfjksdhfjk hjkshdfjkhf jk
+}
+
+Bellen{
+    type=event
+    once=false
+	music=music/bellen.mp3
+    room=oberstadt
+    cmd=gehe garten
+    //TODO: solong man in hund nix gib
 }
 
 
