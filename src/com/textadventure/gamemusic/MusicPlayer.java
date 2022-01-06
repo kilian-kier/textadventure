@@ -1,6 +1,7 @@
 package com.textadventure.gamemusic;
 
 import com.textadventure.input.Input;
+import com.textadventure.locations.Room;
 import com.textadventure.story.World;
 
 import javax.sound.sampled.*;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class MusicPlayer {
+public class MusicPlayer extends Thread {
     private Clip clip;
     private AudioInputStream audioInputStream;
     private String filePath;
@@ -24,7 +25,7 @@ public class MusicPlayer {
     public static byte[] readFile(String filepath) {
         byte[] ret = null;
         try {
-            ret = Files.readAllBytes(Path.of(World.tempDir+"/"+filepath));
+            ret = Files.readAllBytes(Path.of(World.tempDir + "/" + filepath));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,17 +38,34 @@ public class MusicPlayer {
      * @param path Dateiname
      * @return Neuer Dateiname mit .wav
      */
-    private static String getWavPath(String path){
+    private static String getWavPath(String path) {
         File file = new File(path);
-        path= Input.getFileType(file.getName(),false);
-        return path+".wav";
+        path = Input.getFileType(file.getName(), false);
+        return path + ".wav";
+    }
+
+    @Override
+    public void run() {
+        try {
+            Room tmp = World.player.getCurrentRoom();
+            Thread.sleep(1000);
+            while (clip.isRunning())
+                Thread.sleep(100);
+            if (World.player.getCurrentRoom() == tmp) {
+                clip.close();
+                clip = null;
+                play();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void play() {
         try {
             stop(true);
             if (World.player.getCurrentRoom().getMusic() != null) {
-                String filename=getWavPath(World.player.getCurrentRoom().getMusic());
+                String filename = getWavPath(World.player.getCurrentRoom().getMusic());
                 filePath = World.tempDir + "/" + filename;
                 audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
                 clip = AudioSystem.getClip();
@@ -62,6 +80,7 @@ public class MusicPlayer {
                 clip.start();
                 if (World.player.getCurrentRoom().isEventMusic()) {
                     World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
+                    new Thread(this).start();
                 }
             }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
