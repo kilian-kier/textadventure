@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class MusicPlayer extends Thread {
+public class MusicPlayer {
     private Clip clip;
     private AudioInputStream audioInputStream;
     private String filePath;
@@ -43,21 +43,6 @@ public class MusicPlayer extends Thread {
         return path+".wav";
     }
 
-    @Override
-    public void run() {
-        try {
-            while (clip == null)
-                Thread.sleep(100);
-            while (!clip.isRunning())
-                Thread.sleep(100);
-            while (clip.isRunning())
-                Thread.sleep(100);
-            World.musicPlayer.play();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void play() {
         try {
             stop(true);
@@ -69,21 +54,14 @@ public class MusicPlayer extends Thread {
                 clip.open(audioInputStream);
                 if (!World.player.getCurrentRoom().isEventMusic())
                     clip.loop(Clip.LOOP_CONTINUOUSLY);
+                else
+                    clip.loop(0);
                 int frame = World.player.getCurrentRoom().getMusicFrame();
                 if (frame != 0)
                     clip.setFramePosition(frame);
                 clip.start();
                 if (World.player.getCurrentRoom().isEventMusic()) {
                     World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
-                    try {
-                        if (thread != null)
-                            if (thread.isAlive())
-                                thread.interrupt();
-                        thread = new Thread(new MusicPlayer());
-                        thread.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {

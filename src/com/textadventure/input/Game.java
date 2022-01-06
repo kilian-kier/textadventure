@@ -38,8 +38,6 @@ public class Game {
         LinkedList<String> cmd;
         String input;
 
-        World.musicPlayer.play();
-
         while (true) {
             System.out.printf("%s@%s >>> ", firstCap(World.player.getName()), firstCap(World.player.getCurrentRoom().getName()));
             input = scanner.nextLine();

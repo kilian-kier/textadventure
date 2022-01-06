@@ -126,7 +126,8 @@ Türknarren{
     once=false
     music=music/haustür.mp3
     cmd=gehe haus
-    depends=gebefleisch
+    room=garten
+    dependent=gebefleisch
 }
 Fass{
 	type=event
@@ -182,6 +183,12 @@ GebeFleisch{
 		Holztür={
 			type=exit
 			interactable=true
+		}
+		Bellen={
+		    //TODO: Eventdiff
+		    //type=event
+		    //once=true
+		    //music=music/garten.mp3
 		}
 	}
 }
@@ -421,7 +428,6 @@ Bellen{
 	music=music/bellen.mp3
     room=oberstadt
     cmd=gehe garten
-    //TODO: solong man in hund nix gib
 }
 
 
