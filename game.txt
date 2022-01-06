@@ -117,7 +117,7 @@ Holztür{
 	type=exit
 	destination1=eingangsbereich
 	destination2=garten
-	description1=Eine große dunkle Holztür führt in das Innere des Hauses.
+	description1=Eine große dunkle Holztür führt in den Eingangsbereich des Hauses.
 	description2=Eine Tür führt zurück in den Garten.
 	interactable=false
 }
@@ -352,13 +352,13 @@ Entzünde{
 	}
 }
 HammerLoch{
-	//TODO Sound Effekt Wand bricht ein
 	type=event
 	once=true
 	info=Die Wand bricht durch.
 	cmd=aktion hammer rückwand
 	inventory=hammer
 	room=keller
+	music=music/mauer.mp3
 	diffs={
 		rückwand={
 			type=container
@@ -403,11 +403,19 @@ Weinlager{
 	description=Stefes Onkel hat hier Wein gelagert. Bis auf eine Flasche ist nichts mehr übrig.
 }
 Weinflasche{
-//TODO Weinflasche öffnen
 	type=tool
 	container=weinlager
 	description=Ein 1773er Burgunder.
 }
+
+NimmWein{
+    type=event
+    once=true
+    cmd=nehme weinflasche
+    room=keller
+    music=music/weinflasche.mp3
+}
+
 ZimmEing{
 	type=exit
 	destination1=eingangsbereich
@@ -633,7 +641,7 @@ Quasimodo{
 	room=kirche
 	dialog={
 		question1=Hallo, mein Name ist Stefe.
-		answer1=Pssssssssst. Der Pfarrer betet.
+		answer1=Pssssssssst. Hörst du nicht, dass unser Pfarrchor singt.
 	}
 }
 Horst{
@@ -851,7 +859,7 @@ Spieluhr1{
 	once=true
 	room=marktplatz
 	cmd=nehme spieluhr
-	//TODO Spieluhr Balletmusik
+	music=music/spieluhr.mp3
 	diffs={
 		spieluhr={
 			type=tool
