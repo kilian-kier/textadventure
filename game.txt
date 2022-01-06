@@ -13,13 +13,12 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=grabkammer
+	room=landstraße
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
 		Des Universums?
 	}
-	inventory=brecheisen hammer
 }
 Start{
 	type=event
@@ -126,7 +125,15 @@ Türknarren{
     type=event
     once=false
     music=music/haustür.mp3
-    cmd=gehe haus
+    cmd=gehe eingangsbereich
+    room=garten
+    dependent=gebefleisch
+}
+Türknarren{
+    type=event
+    once=false
+    music=music/haustür.mp3
+    cmd=gehe holztür
     room=garten
     dependent=gebefleisch
 }

@@ -12,8 +12,6 @@ import java.nio.file.Path;
 
 public class MusicPlayer extends Thread {
     private Clip clip;
-    private AudioInputStream audioInputStream;
-    private String filePath;
     private Thread thread;
 
     /**
@@ -57,17 +55,21 @@ public class MusicPlayer extends Thread {
                 play();
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //DO NOTHING
         }
     }
 
     public void play() {
         try {
+            if (thread != null) {
+                thread.interrupt();
+                thread = null;
+            }
             stop(true);
             if (World.player.getCurrentRoom().getMusic() != null) {
                 String filename = getWavPath(World.player.getCurrentRoom().getMusic());
-                filePath = World.tempDir + "/" + filename;
-                audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+                String filePath = World.tempDir + "/" + filename;
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
                 if (!World.player.getCurrentRoom().isEventMusic())
@@ -80,7 +82,8 @@ public class MusicPlayer extends Thread {
                 clip.start();
                 if (World.player.getCurrentRoom().isEventMusic()) {
                     World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
-                    new Thread(this).start();
+                    thread = new Thread(this);
+                    thread.start();
                 }
             }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
