@@ -9,10 +9,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class MusicPlayer {
+public class MusicPlayer extends Thread {
     private Clip clip;
     private AudioInputStream audioInputStream;
     private String filePath;
+    private Thread thread;
 
     /**
      * Liest eine Audiodatei ein und gibt die Bytes der Datei zurück
@@ -42,6 +43,21 @@ public class MusicPlayer {
         return path+".wav";
     }
 
+    @Override
+    public void run() {
+        try {
+            while (clip == null)
+                Thread.sleep(100);
+            while (!clip.isRunning())
+                Thread.sleep(100);
+            while (clip.isRunning())
+                Thread.sleep(100);
+            World.musicPlayer.play();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void play() {
         try {
             stop(true);
@@ -51,13 +67,23 @@ public class MusicPlayer {
                 audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
+                if (!World.player.getCurrentRoom().isEventMusic())
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
                 int frame = World.player.getCurrentRoom().getMusicFrame();
                 if (frame != 0)
                     clip.setFramePosition(frame);
                 clip.start();
                 if (World.player.getCurrentRoom().isEventMusic()) {
                     World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
+                    try {
+                        if (thread != null)
+                            if (thread.isAlive())
+                                thread.interrupt();
+                        thread = new Thread(new MusicPlayer());
+                        thread.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
