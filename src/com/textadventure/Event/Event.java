@@ -143,8 +143,10 @@ public class Event implements Serializable {
         if(info!=null){
             System.out.println(info);
         }
-        if (this.getMusic() != null)
+        if (this.getMusic() != null) {
             World.player.getCurrentRoom().setMusic(this.getMusic(), true);
+            World.musicPlayer.play();
+        }
         for (Diff diff:differences.values()) {
             try {
                 diff.applyDiffToWorld();
