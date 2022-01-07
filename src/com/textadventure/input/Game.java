@@ -422,6 +422,9 @@ public class Game {
                         continue;
                     }
             }
+
+            if (cmd.get(1).equals("eingangsbereich"))
+                System.out.println("Du gehst zum Eingangsbereich.");
             if (!Event.execEvent(cmd) && error != null) {
                 System.out.println(error);
             }
