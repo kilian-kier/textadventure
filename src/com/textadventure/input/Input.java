@@ -13,7 +13,7 @@ import java.util.Scanner;
  * Sammlung verschiedener Eingabe Funktionen
  */
 public class Input {
-    private static String editor = "kate";
+    private static String editor = null;
 
     /**
      * Öffnet einen String in einem Editor

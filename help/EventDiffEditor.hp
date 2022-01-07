@@ -1,0 +1,26 @@
+//TODO Event Diff Editor
+
+std=\
+Befehle zum Editieren von EventDiffs: add, rm, adddiff, rmdiff, show, back
+
+add=\
+Befehl fügt Änderung hinzu.\n\
+Benutzung: add [description/addrooms/rmrooms]\n\
+Mit Eingabeaufforderung:\n\
+description - Setzt Beschreibung\n\
+Ohne Eingabeaufforderung:\n\
+addrooms [|room1|] [|room2|] ... - Setzt Räume, die hinzugefügt werden sollen\n\
+rmtools [|room1|] [|room2|] ... - Setzt Räume, die entfernt werden sollen
+
+rm=\
+Befehl entfernt Änderung.\n\
+Benutzung: rm [description/addrooms/rmrooms]\n\
+description - Entfernt Beschreibung\n\
+addrooms - Entfernt Räume, die hinzugefügt werden sollen\n\
+rmrooms - Entfernt Räume, die entfernt werden sollen
+
+show=\
+Befehl zeigt die Eigenschaften des LocationDiffs.
+
+back=\
+Befehl zum verlassen des Editors.

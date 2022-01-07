@@ -142,7 +142,7 @@ Fass{
 	once=false
 	room=garten
 	music=music/knurren.mp3
-	cmd=gehe haus
+	cmd=gehe eingangsbereich
 	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
 	notdependent=gebefleisch
 }
@@ -304,7 +304,8 @@ Schmunter{
 Sarg{
 	type=container
 	interactable=false
-	room=grabkammer
+	room=oberstadt
+
 	description={
 		In der Mitte der Grabkammer befindet sich ein versiegelter Sarg.
 		Darauf ist in einer Plakette der Name des verstorbenen verewigt:
@@ -595,6 +596,13 @@ Joachim{
 		}
 	}
 }
+NehmeFlasche{
+	type=event
+	once=false
+	notdependent=andi2
+	info=Andi: Sie werdn decht net oanfoch so an Schnops mitgien lossn.
+	cmd=nehme schnapsflasche theke
+}
 GebeFlasche{
 	type=event
 	once=true
@@ -612,6 +620,10 @@ GebeFlasche{
 			type=player
 			rmtools=schnapsflasche
 		}
+		Schnapsflasche={
+			type=tool
+			interactable=true
+		}
 	}
 }
 Andi{
@@ -622,7 +634,7 @@ Andi{
 		question1=Ich möchte ein Bier bestellen.
 		answer1={
 			Jo bitte, wos hettn Se den gearn? Weiß, blond oder sein Sie oanor ve de,
-            de des Zoig augleitert oidnlossn?
+			de des Zoig augleitert oidnlossn?
 		}
 		event1=andi1
 		question2={
@@ -647,14 +659,50 @@ andi1{
 		andi={
 			type=npc
 			dialog={
-				question1=Ich möchte ein Bier bestellen.
+				question1=Blond mit Schuss bitteschön.
 				answer1={
-					Jo bitte, wos hettn Se den gearn? Weiß, blond oder sein Sie oanor ve de,
-					de des Zoig augleitert Oidnlossn?
+					Bittschien. Frisch ausn Schnea.
+					Jo iatz mochn Se amol longsom do. Wer hotn gsog, dass Sie den Liter iatz
+					oidn exn miassn. I glabs Ihn -  Na kennen Sie des bitte lossn.
+					Na iatz tu - naa mir werd letz, i muass amol außn awia ze speibm.
 				}
-				event1=andi1
+				event1=andi2
 				question2={
 					Wer sind die beiden Herren da drüben? Glauben Sie die könnten mich über
+					diese Stadt hier etwas aufklären?
+				}
+				answer2={
+					Des warn dor Joachim und dor Hons. Iatz auklären werdn de Sie, wenn Se sich net gonz
+					ungschickt unstelln und ihmene a bissl an unsporn gebn,
+					sicher iber olderhontiges. Sie derfn lai net jedn Stuss glabn
+					den se dorzehln. In Hons tat i ober nimmer gor zi viel tratzn,
+					weil sischt schnellt er Ihnen in sein Zuastond no oane.
+				}
+			}
+		}
+	}
+}
+andi2{
+	type=event
+	cmd=f sajkf dsajkffkljkkäö afjösad
+	once=true
+	room=kneipe
+	diffs={
+		schnapsflasche={
+			type=tool
+			interactable=true
+		}
+		andi={
+			type=npc
+			room=unterstadt
+			dialog={
+				question1=Geht es Ihnen schon besser?
+				answer1={
+					Lossn Sie mi bitte in Ruah.
+				}
+				event1=andi2
+				question2={
+					Wer sind die beiden Herren in der Kneipe? Glauben Sie die könnten mich über
 					diese Stadt hier etwas aufklären?
 				}
 				answer2={
@@ -954,6 +1002,7 @@ Schnapsflasche{
 	type=tool
 	container=theke
 	description=Ein Gesöff, welches, dem Gestank nach zu urteilen, Putzalkohol sehr nahekommen muss.
+	interactable=false
 }
 Tomaten{
 	type=tool

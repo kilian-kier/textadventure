@@ -1,5 +1,6 @@
 package com.textadventure.Event;
 
+import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.input.Input;
 import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
@@ -21,6 +22,22 @@ public class Event implements Serializable {
     private boolean happened=false;
     private boolean once=true;
     private String music = null;
+
+    public Collection<String> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Collection<String> inventory) {
+        this.inventory = inventory;
+    }
+
+    public Collection<String> getNotdependent() {
+        return notdependent;
+    }
+
+    public void setNotdependent(Collection<String> notdependent) {
+        this.notdependent = notdependent;
+    }
 
     public String getMusic() {
         return music;
@@ -101,7 +118,9 @@ public class Event implements Serializable {
     }
     private boolean applyDiffsToWorld(){
         try {
-
+            if(!room.equals(World.player.getCurrentRoom().getName())){
+                return false;
+            }
             if(happened&& once){
                 return false;
             }
@@ -204,12 +223,11 @@ public class Event implements Serializable {
     }
 
     public boolean check(){
-        //TODO Musik
         boolean ret=true;
         if(dependent!=null) {
             for (String i : dependent) {
                 if (!World.eventKeyMap.containsKey(i)) {
-                    System.out.printf("Element %s nicht gefunden. In %s von %s\n", dependent, this.getClass().toString(), stringForHash(cmd));
+                    System.out.printf("Event %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), stringForHash(cmd));
                     ret = false;
                 }
             }
@@ -217,7 +235,15 @@ public class Event implements Serializable {
         if(notdependent!=null) {
             for (String i : notdependent) {
                 if (!World.eventKeyMap.containsKey(i)) {
-                    System.out.printf("Element %s nicht gefunden. In %s von %s\n", notdependent, this.getClass().toString(), stringForHash(cmd));
+                    System.out.printf("Event %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), stringForHash(cmd));
+                    ret = false;
+                }
+            }
+        }
+        if(inventory!=null) {
+            for (String i : inventory) {
+                if (!World.toolMap.containsKey(i)) {
+                    System.out.printf("Tool %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), stringForHash(cmd));
                     ret = false;
                 }
             }
@@ -229,6 +255,13 @@ public class Event implements Serializable {
         }
         return ret;
     }
+
+    /**
+     * Gibt eines neues Diff zurück
+     * @param name Name des Diffs
+     * @param type Typ des Diffs
+     * @return Das neue Diff
+     */
     public static Diff newDiff(String name, String type){
         Diff diff;
         switch(type){
@@ -250,6 +283,9 @@ public class Event implements Serializable {
             case "tool":
                 diff=new ToolDiff(name);
                 break;
+            case "event":
+                diff=new EventDiff(name);
+                break;
             case "player":
                 diff=new PlayerDiff("player");
                 break;
@@ -267,6 +303,7 @@ public class Event implements Serializable {
         string+=String.format("Musik: %s\n",music);
         string+=String.format("Abhängig von: %s\n",dependent);
         string+=String.format("Nicht Abhängig von: %s\n",notdependent);
+        string+=String.format("Inventar: %s\n",inventory);
         string+=String.format("Einmalig? %b\n",once);
         string+=String.format("Raum %s\n",room);
         string+="Diffs:";

@@ -57,7 +57,7 @@ Es ist möglich Events abhängig von anderen Events zu machen, sodass\n\
 sie nur dann ausgelöst werden, wenn alle vorherigen ausgelöst wurden\n\
 \n\
 Alle Änderungen in den Events werden mit Diffs angegeben.\n\
-Es gibt Diffs für container, exits, locations, npcs, rooms, tools\n\
+Es gibt Diffs für container, exits, locations, npcs, rooms, tools, events\n\
 Die Diffs beinhalten die Änderungen gegenüber, den echten Elementen.\n\
 So kann z.B. ein NPC Diff einen anderen Dialog enthalten\n\
 Diffs können im Event editor mit add erstellt werden

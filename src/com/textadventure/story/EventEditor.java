@@ -111,6 +111,17 @@ public class EventEditor {
                     event.setDependent(commands.isEmpty()?null:commands);
                     System.out.println("Abhängigkeiten gesetzt");
                     break;
+                case "inventory": // Inventar Abhängigkeiten
+                    commands.removeFirst();
+                    event.setInventory(commands.isEmpty()?null:commands);
+                    System.out.println("Inventar Abhängigkeiten gesetzt");
+                    break;
+                case "!needs":
+                case "notneeds":
+                    commands.removeFirst();
+                    event.setNotdependent(commands.isEmpty()?null:commands);
+                    System.out.println("Abhängigkeiten gesetzt");
+                    break;
                 case "info": //Erzähler Text
                     String info = event.getInfo();
                     if (info == null) {
