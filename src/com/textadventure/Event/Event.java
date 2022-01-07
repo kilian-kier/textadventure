@@ -23,6 +23,13 @@ public class Event implements Serializable {
     private boolean once=true;
     private String music = null;
 
+    public static void setRememberRoom(String rememberRoom) {
+        Event.rememberRoom = rememberRoom;
+    }
+
+    private static String rememberRoom;
+
+
     public Collection<String> getInventory() {
         return inventory;
     }
@@ -118,9 +125,16 @@ public class Event implements Serializable {
     }
     private boolean applyDiffsToWorld(){
         try {
-            if(!room.equals(World.player.getCurrentRoom().getName())){
-                return false;
+            if(rememberRoom==null){
+                if(room!=null && !room.equals(World.player.getCurrentRoom().getName())){
+                    return false;
+                }
+            }else{
+                if(room!=null && !room.equals(rememberRoom)){
+                    return false;
+                }
             }
+
             if(happened&& once){
                 return false;
             }
@@ -175,6 +189,7 @@ public class Event implements Serializable {
             }
         }
         setHappened(true);
+        rememberRoom=null;
         return true;
     }
 

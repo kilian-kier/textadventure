@@ -100,6 +100,7 @@ public class Game {
                     }
                     break;
                 case "gehe":
+                    Event.setRememberRoom(World.player.getCurrentRoom().getName());
                     if (cmd.size() != 2) {
                         System.out.println(new CommandSyntaxException(cmd.get(0)).getMessage());
                         continue;
