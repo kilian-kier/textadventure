@@ -129,7 +129,7 @@ Türknarren{
     room=garten
     dependent=gebefleisch
 }
-Türknarren{
+Türknarren1{
     type=event
     once=false
     music=music/haustür.mp3
@@ -551,12 +551,6 @@ GebeFleisch{
 			type=exit
 			interactable=true
 		}
-		Bellen={
-			//TODO: Eventdiff
-			//type=event
-			//once=true
-			//music=music/garten.mp3
-		}
 	}
 }
 
@@ -971,6 +965,7 @@ Bellen{
 	music=music/bellen.mp3
     room=oberstadt
     cmd=gehe garten
+    notdependent=gebefleisch
 }
 
 
