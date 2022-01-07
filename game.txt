@@ -550,12 +550,6 @@ GebeFleisch{
 			type=exit
 			interactable=true
 		}
-		Bellen={
-			//TODO: Eventdiff
-			//type=event
-			//once=true
-			//music=music/garten.mp3
-		}
 	}
 }
 
@@ -923,6 +917,7 @@ Bellen{
 	music=music/bellen.mp3
     room=oberstadt
     cmd=gehe garten
+    notdependent=gebefleisch
 }
 
 
