@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class NPCDiff extends Diff implements Serializable {
+public class NPCDiff extends ElementDiff implements Serializable {
     private static final long serialVersionUID = -7301250524416056665L;
     public NPCDiff(String name) {
         super(name);

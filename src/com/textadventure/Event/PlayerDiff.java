@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class PlayerDiff extends Diff implements Serializable {
+public class PlayerDiff extends ElementDiff implements Serializable {
     private static final long serialVersionUID = -7301250516056665L;
     private String room=null;
     private Collection<String> addTools =null;

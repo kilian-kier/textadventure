@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class ContainerDiff extends Diff implements Serializable {
+public class ContainerDiff extends ElementDiff implements Serializable {
     private static final long serialVersionUID = 9672883399970462L;
     public ContainerDiff(String name){
         super(name);
@@ -98,6 +98,7 @@ public class ContainerDiff extends Diff implements Serializable {
 
     @Override
     public void edit() {
+           //TODO doppeltes Remove First
             boolean exit = false;
             Scanner scanner = new Scanner(System.in);
             LinkedList<String> commands;
@@ -128,6 +129,7 @@ public class ContainerDiff extends Diff implements Serializable {
                                 break;
                             case "addtools":
                                 commands.removeFirst();
+                                commands.removeFirst();
                                 if(commands.isEmpty()){
                                     System.out.println("Zu wenig Parameter");
                                     break;
@@ -136,6 +138,7 @@ public class ContainerDiff extends Diff implements Serializable {
                                 System.out.println("Addtools hinzugefügt");
                                 break;
                             case "rmtools":
+                                commands.removeFirst();
                                 commands.removeFirst();
                                 if(commands.isEmpty()){
                                     System.out.println("Zu wenig Parameter");
