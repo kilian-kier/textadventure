@@ -65,20 +65,22 @@ public class MusicPlayer extends Thread {
                 thread.interrupt();
                 thread = null;
             }
-            stop(true);
+            stopMusic(!World.player.getCurrentRoom().isEventMusic());
             if (World.player.getCurrentRoom().getMusic() != null) {
                 String filename = getWavPath(World.player.getCurrentRoom().getMusic());
                 String filePath = World.tempDir + "/" + filename;
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
-                if (!World.player.getCurrentRoom().isEventMusic())
-                    clip.loop(Clip.LOOP_CONTINUOUSLY);
-                else
+                if (World.player.getCurrentRoom().isEventMusic()) {
                     clip.loop(0);
-                int frame = World.player.getCurrentRoom().getMusicFrame();
-                if (frame != 0)
-                    clip.setFramePosition(frame);
+                    clip.setFramePosition(0);
+                } else {
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    int frame = World.player.getCurrentRoom().getMusicFrame();
+                    if (frame != 0)
+                        clip.setFramePosition(frame);
+                }
                 clip.start();
                 if (World.player.getCurrentRoom().isEventMusic()) {
                     World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
@@ -91,7 +93,7 @@ public class MusicPlayer extends Thread {
         }
     }
 
-    public void stop(boolean changedRoom) {
+    public void stopMusic(boolean changedRoom) {
         if (this.clip != null) {
             if (changedRoom) {
                 if (World.player.getPreviousRoom() != null)

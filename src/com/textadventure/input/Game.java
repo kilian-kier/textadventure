@@ -45,7 +45,7 @@ public class Game {
             if (cmd == null)
                 continue;
             if (cmd.get(0).equals("exit")) {
-                World.musicPlayer.stop(false);
+                World.musicPlayer.stopMusic(false);
                 break;
             }
             Tool tool;
@@ -393,7 +393,7 @@ public class Game {
                     if (cmd.get(1).equals("start")) {
                         World.musicPlayer.play();
                     } else if (cmd.get(1).equals("stop")) {
-                        World.musicPlayer.stop(false);
+                        World.musicPlayer.stopMusic(false);
                     }
                     break;
                 case "clear":
