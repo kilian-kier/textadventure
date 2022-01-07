@@ -65,7 +65,7 @@ public class MusicPlayer extends Thread {
                 thread.interrupt();
                 thread = null;
             }
-            stopMusic(!World.player.getCurrentRoom().isEventMusic());
+            stopMusic(true);
             if (World.player.getCurrentRoom().getMusic() != null) {
                 String filename = getWavPath(World.player.getCurrentRoom().getMusic());
                 String filePath = World.tempDir + "/" + filename;
