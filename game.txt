@@ -129,7 +129,7 @@ Türknarren{
     room=garten
     dependent=gebefleisch
 }
-Türknarren{
+Türknarren1{
     type=event
     once=false
     music=music/haustür.mp3
