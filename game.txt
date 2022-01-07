@@ -13,7 +13,7 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=unterstadt
+	room=eingangsbereich
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
@@ -147,6 +147,34 @@ Eingangsbereich{
 	}
 	location=anwesen
 }
+Karte{
+	type=tool
+	interactable=false
+	container=eingangsbereich
+	description={
+		An der Wand des Eingangsbereiches hängt eine Stadtkarte.
+		In der Mitte zeigt sie den Marktplatz und die Kirche.
+		Rechts die Oberstadt. In ihr ist das Haus eingezeichnet
+		Von der Oberstadt entfernt sich ein Weg, der auf den Berg führt,
+		den man überall von Lusiam aus betrachten kann.
+		Links auf der Karte entfernt sich die Unterstadt vom Marktplatz.
+		Dort gibt es noch eine Schmiede und eine Kneipe.
+		Vielleicht kann Stefe dort noch etwas über die Stadt erfahren.
+	}
+}
+SchaueKarte={
+	cmd=schaue karte
+	type=once
+	type=event
+	room=eingangsbereich
+	diffs={
+		markunte={
+			destination1=marktplatz
+			destination2=unterstadt
+			type=exit
+		}
+    }
+}
 Wohnzimmer{
 	type=room
 	description=Ein gemütliches Wohnzimmer mit Kachelofen.
@@ -158,9 +186,37 @@ WohnEing{
 	destination2=wohnzimmer
 	description1=Man kann wieder zurück in den Eingangsbereich.
 	description2=Eine für Stefe zu niedrige Tür führt in das Wohnzimmer.
+	interactable=false
 }
+
+GeheWohnzimmer{
+	type=event
+	cmd=gehe wohnzimmer
+	notdependent=drachekommt
+	info=Stefe weiß wie ein Wohnzimmer aussieht.
+}
+GeheKeller{
+	type=event
+	cmd=gehe keller
+	notdependent=drachekommt
+	info=Stefe ist nicht nach Lusinam gekommen, um zu Hause rumzulungern.
+}
+GeheKellertreppe{
+	type=event
+	cmd=gehe kellertreppe
+	notdependent=drachekommt
+	info=Stefe ist nicht nach Lusinam gekommen, um zu Hause rumzulungern.
+}
+GeheZimmer{
+	type=event
+	cmd=gehe zimmer
+	notdependent=drachekommt
+	info=Zum Schlafen ist es noch zu früh.
+}
+
 Kellertreppe{
 	type=exit
+	interactable=false
 	destination1=keller
 	destination2=eingangsbereich
 	description1=Eine Kellertreppe führt runter in den Keller.
@@ -443,6 +499,7 @@ ZimmEing{
 	type=exit
 	destination1=eingangsbereich
 	destination2=zimmer
+	interactable=false
 	description1=Aus dem Zimmer kommt man direkt wieder in den Eingangsbereich
 	description2={
 		Vom Eingangsbereich kommt man in den hinteren Teil des Hauses,
@@ -859,11 +916,6 @@ Markober1{
 			destination2=oberstadt
 			type=exit
 		}
-		markunte={
-			destination1=marktplatz
-			destination2=unterstadt
-			type=exit
-		}
 		hildegard={
 			type=npc
 			dialog={
@@ -1051,9 +1103,8 @@ Hildegard3{
 					Die Jugend von heute, hat einfach keine Geduld. Ts, ts,ts.
 					Es ist aber wirklich eine gute Geschichte, die sich lohnt.
 					Sie hat etwas außerord... den .. tlich ...
-					Vergiss es, du hörst mir doch nicht zu.
+					Vergessen Sie es, Sie hären mir doch nicht zu.
 					Das Anwesen befindet sich in der Oberstadt.
-					Aber auch in der Unterstadt gibt es viel zu sehen.
 				}
 				event1=markober1
 			}
@@ -1400,7 +1451,7 @@ schmiedi3{
 
 		Stefe: Ihres Urgroßvaters
 
-		Schmiedi: ... ähhh genau. Das wusste ich natürlich. Mein Urgroßvater
+		Schmiedi: ... ähhh genau. Mein Urgroßvater
 		hat vor vielen Jahren diese Rüstung geschmieded. Außerdem hat er ein
 		spezielles Schwert erschaffen. Beide Gegenstände verwendete er dazu einen
 		Drachen zu besiegen
@@ -1432,6 +1483,7 @@ schmiedi3{
 		Jedenfalls endet die Geschichte auf diese Weise.
 		Die Bürger trauten sich wieder an die Oberwelt,
 		bauten Lusinam neu auf, und nun, Sie dich um, wir sind glücklicher den je.
+		Und der Zauberer schmort immer noch irgendwo in den Tiefen des Berges.
 
 		Stefe: Puh. Dankesehr.
 		}
@@ -1476,7 +1528,120 @@ schmiedi3{
 		}
 	}
 }
+Drachekommt{
+	type=event
+	dependent=schmiedi3
+	room=schmiede
+	once=true
+	cmd=gehe unterstadt
+	info={
+		Hilfeee! Hilfeee!
 
+		Du Hons konnsch glei wieder innerkemmen. Nix nor mit hoamgien.
+		Kimm trink mor no oans.
+
+		Hildegard!!! Dat kanste knicke! Hör auf dat Grünzeuch
+        zusammenzutrache. Lauuuuuuf!!!
+
+		Stefe: Was ist passiert?
+
+		Andi: Jo reiß di Augn au. Do entn isch a Droche und do siztz oaner drau
+		und der fliag direkt ze ins. Hel isch passiert.
+
+		Schmiedi: Er ist entkommen. Wie hat er das geschafft?
+
+		Zauberer: Wie håd er dås geschåffd? Wie håd er dås geschåffd?
+		Gånz ynfach, ich der große Bergkønig bin dåmåls in iner Drollhøhle gelånded.
+		Im Gegensådz zu euch håben die Drolle mich åls Kønig åkzeptierd.
+		Und jedzt bin ich hier um Råche zu nehmen. Wissd ihr wie långe
+		ich gebråuchd håbe, den ersden Dråchen zu beschwøren. Hunderdunddrizehn
+		Jåhre. Und dånn kommd so in Dåugenichds fon Schmied und innerhålb
+		ines dåges zersdørd er min Mysderwerk. Dåfür werded ihr büsen.
+		Und bei dir min Lieber Schmiedi wyrd min Schådzchen beginnen.
+		Ha ha haaa, Ua ha ha ha haa. Soo hop Mylady Jyhåååaaa.
+		
+		Schmiedi: Stefe, versteck dich!
+		
+		Zauberer: Jåaaa Stefe, versteg dich. Zig mir wo du wohnsd,
+		dann komm ich dych holen, wenn ich hier ferdig bin.
+
+		-------------------------------------------------------------------
+
+		Puh. Stefe hat es gerade noch in das Anwesen geschafft.
+		Die Schmiede, die Kneipe brennen bereits lichterloh.
+	}
+
+	diffs={
+		Holztür={
+			type=exit
+			interactable=false
+		}
+		Stefe={
+			type=player
+			room=eingangsbereich
+		}
+		Schmunter={
+			type=exit
+			interactable=false
+		}
+	}
+}
+Gehegarten{
+	type=event
+	dependent=drachekommt
+	notdependent=nehmerüstung
+	info={
+		Stefe ist doch nicht lebensmüde. Ohne eine nützliche Waffe
+		und einen Schutz kann er sich dem Bösen Zauberer
+		auf seinem Drachen auf keinen Fall entgegenstellen.
+	}
+}
+Geheunterstadt{
+	room=schmiede
+	type=event
+	dependent=drachekommt
+	info={
+		Stefe ist doch nicht lebensmüde. Ohne eine nützliche Waffe
+		und einen Schutz kann er sich dem Bösen Zauberer
+		auf seinem Drachen auf keinen Fall entgegenstellen.
+	}
+}
+Nehmerüstung{
+	type=event
+	once=true
+	dependent=drachekommt
+	cmd=nehme rüstung
+	room=grabkammer
+	info=Stefe zieht die Rüstung an.
+	diffs={
+		rüstung={
+			type=tool
+			interactable=false
+		}
+		holztür={
+			type=exit
+			interactable=true
+		}
+		schmunter={
+			type=exit
+			interactable=true
+		}
+	}
+}
+Nehmeschwert{
+	type=event
+	once=true
+	dependent=drachekommt
+	cmd=nehme schwert sarg
+	room=grabkammer
+	info=Stefe nimmt das immer noch scharfe Schwert an sich
+	diffs={
+		schwert={
+			type=tool
+			interactable=false
+		}
+	}
+}
 
 
 
