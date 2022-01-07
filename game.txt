@@ -19,6 +19,7 @@ Stefe{
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
 		Des Universums?
 	}
+	inventory=schweinshaxen
 }
 Start{
 	type=event
@@ -125,15 +126,7 @@ Türknarren{
     type=event
     once=false
     music=music/haustür.mp3
-    cmd=gehe eingangsbereich
-    room=garten
-    dependent=gebefleisch
-}
-Türknarren1{
-    type=event
-    once=false
-    music=music/haustür.mp3
-    cmd=gehe holztür
+    cmd=asjfdhjkashdfh adfhkjasdhfkjdfgd wwer wefd
     room=garten
     dependent=gebefleisch
 }
@@ -143,15 +136,6 @@ Fass{
 	room=garten
 	music=music/knurren.mp3
 	cmd=gehe eingangsbereich
-	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
-	notdependent=gebefleisch
-}
-Fass2{
-	type=event
-	once=false
-	room=garten
-	music=music/knurren.mp3
-	cmd=gehe holztür
 	info=Grrrrrrrrrrrrrrrrrrrrrrrrrr. Solange der Hund den Eingang versperrt, kann Stefe das Haus nicht erreichen.
 	notdependent=gebefleisch
 }
@@ -537,7 +521,7 @@ Hund{
 }
 GebeFleisch{
 	type=event
-	cmd=gebe schweinshaxen Hund
+	cmd=gebe schweinshaxen hund
 	info=Der Hund beschäftigt sich mit dem Fleisch
 	once=true
 	room=garten
@@ -550,6 +534,16 @@ GebeFleisch{
 		Holztür={
 			type=exit
 			interactable=true
+		}
+		Hund={
+		    type=npc
+		    dialog={}
+		}
+		Fass={
+		    type=event
+		    music=music/haustür.mp3
+		    info=rminfo
+		    rmnotdependent=gebefleisch
 		}
 	}
 }

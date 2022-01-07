@@ -7,37 +7,42 @@ import com.textadventure.input.Input;
 import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Scanner;
 
-public class EventDiff extends Diff{
-    private Collection<String> cmd=null;
-    private Collection<String> rmdiffs=null;
-    private HashMap<String,Diff> adddiffs=null;
-    private Collection<String> adddependent=null;
-    private Collection<String> rmdependent=null;
-    private Collection<String> addnotdependent=null;
-    private Collection<String> rmnotdependent=null;
-    private Collection<String> addinventory=null;
-    private Collection<String> rminventory=null;
-    private Boolean happened=null;
-    private Boolean once=null;
+public class EventDiff extends Diff {
+    private Collection<String> cmd = null;
+    private Collection<String> rmdiffs = null;
+    private HashMap<String, Diff> adddiffs = null;
+    private Collection<String> adddependent = null;
+    private Collection<String> rmdependent = null;
+    private Collection<String> addnotdependent = null;
+    private Collection<String> rmnotdependent = null;
+    private Collection<String> addinventory = null;
+    private Collection<String> rminventory = null;
+    private Boolean happened = null;
+    private Boolean once = null;
     private String music = null;
-    private String info=null;
-    private String room=null;
+    private String info = null;
+    private String room = null;
+
     public EventDiff(String name) {
         super(name);
     }
 
-    public void addAddDiff(Diff diff){
-        adddiffs.put(diff.getName(),diff);
+    public void addAddDiff(Diff diff) {
+        adddiffs.put(diff.getName(), diff);
     }
+
     public Diff getAddDiff(String diffstring) {
         return adddiffs.get(diffstring);
     }
+
     public void rmAddDiff(String diffstring) throws ElementNotFoundException {
         Diff diff = adddiffs.get(diffstring);
-        if(diff==null){
+        if (diff == null) {
             throw new ElementNotFoundException(diffstring, "Diff");
         }
         adddiffs.remove(diffstring);
@@ -46,67 +51,67 @@ public class EventDiff extends Diff{
     @Override
     public void applyDiffToWorld() throws GameElementNotFoundException {
         Event event;
-        try{
-            event= World.eventMap.get(World.eventKeyMap.get(name));
-        }catch(Exception e){
-            throw new GameElementNotFoundException(name,"event");
+        try {
+            event = World.eventMap.get(World.eventKeyMap.get(name));
+        } catch (Exception e) {
+            throw new GameElementNotFoundException(name, "event");
         }
-        if(cmd!=null){
+        if (cmd != null) {
             event.storeEvent(cmd);
         }
-        if(rmdiffs!=null){
-            for (String i:rmdiffs ) {
+        if (rmdiffs != null) {
+            for (String i : rmdiffs) {
                 try {
                     event.rmDiff(i);
-                }catch(Exception e){
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
         }
-        if(adddiffs!=null){
-            for(Diff i:adddiffs.values()){
+        if (adddiffs != null) {
+            for (Diff i : adddiffs.values()) {
                 event.addDiff(i);
             }
         }
-        if(adddependent!=null){
+        if (adddependent != null) {
             event.getDependent().addAll(adddependent);
         }
-        if(rmdependent!=null){
+        if (rmdependent != null) {
             event.getDependent().removeAll(rmdependent);
         }
-        if(rmnotdependent!=null){
+        if (rmnotdependent != null) {
             event.getNotdependent().removeAll(rmnotdependent);
         }
-        if(addnotdependent!=null){
+        if (addnotdependent != null) {
             event.getNotdependent().addAll(addnotdependent);
         }
-        if(addinventory!=null){
+        if (addinventory != null) {
             event.getInventory().addAll(addinventory);
         }
-        if(rminventory!=null){
+        if (rminventory != null) {
             event.getInventory().removeAll(rminventory);
         }
-        if(once!=null){
+        if (once != null) {
             event.setOnce(once);
         }
-        if(happened!=null){
+        if (happened != null) {
             event.setHappened(happened);
         }
-        if(music!=null){
+        if (music != null) {
             event.setMusic(music);
         }
-        if(info!=null){
+        if (info != null) {
             event.setInfo(info);
         }
-        if(room!=null){
+        if (room != null) {
             event.setRoom(room);
         }
     }
 
     @Override
     public boolean check() {
-        boolean ret=true;
-        if(adddependent!=null) {
+        boolean ret = true;
+        if (adddependent != null) {
             for (String i : adddependent) {
                 if (!World.eventKeyMap.containsKey(i)) {
                     System.out.printf("Event %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
@@ -114,7 +119,7 @@ public class EventDiff extends Diff{
                 }
             }
         }
-        if(addnotdependent!=null) {
+        if (addnotdependent != null) {
             for (String i : addnotdependent) {
                 if (!World.eventKeyMap.containsKey(i)) {
                     System.out.printf("Event %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
@@ -122,7 +127,7 @@ public class EventDiff extends Diff{
                 }
             }
         }
-        if(addinventory!=null) {
+        if (addinventory != null) {
             for (String i : addinventory) {
                 if (!World.toolMap.containsKey(i)) {
                     System.out.printf("Tool %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
@@ -130,14 +135,14 @@ public class EventDiff extends Diff{
                 }
             }
         }
-        if(adddiffs!=null){
-            for (Diff i: adddiffs.values()) {
-                if(!i.check()){
-                    ret=false;
+        if (adddiffs != null) {
+            for (Diff i : adddiffs.values()) {
+                if (!i.check()) {
+                    ret = false;
                 }
             }
         }
-        if(rmdependent!=null) {
+        if (rmdependent != null) {
             for (String i : rmdependent) {
                 if (!World.eventKeyMap.containsKey(i)) {
                     System.out.printf("Event %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
@@ -145,7 +150,7 @@ public class EventDiff extends Diff{
                 }
             }
         }
-        if(rmnotdependent!=null) {
+        if (rmnotdependent != null) {
             for (String i : rmnotdependent) {
                 if (!World.eventKeyMap.containsKey(i)) {
                     System.out.printf("Event %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
@@ -153,7 +158,7 @@ public class EventDiff extends Diff{
                 }
             }
         }
-        if(rminventory!=null) {
+        if (rminventory != null) {
             for (String i : rminventory) {
                 if (!World.toolMap.containsKey(i)) {
                     System.out.printf("Tool %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
@@ -161,11 +166,11 @@ public class EventDiff extends Diff{
                 }
             }
         }
-        if(room!=null){
-            if(!World.roomMap.containsKey(room)){
+        if (room != null) {
+            if (!World.roomMap.containsKey(room)) {
                 System.out.printf("Raum %s nicht gefunden. In %s von %s\n", room, this.getClass().toString(), name);
 
-                ret=false;
+                ret = false;
             }
         }
         return ret;
@@ -177,8 +182,8 @@ public class EventDiff extends Diff{
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
         String input;
-        while(!exit) {
-            System.out.print("Event Diff " + getName()  + ">> ");
+        while (!exit) {
+            System.out.print("Event Diff " + getName() + ">> ");
             input = scanner.nextLine();
             commands = Input.splitInput(input);
             if (commands == null) continue;
@@ -199,60 +204,60 @@ public class EventDiff extends Diff{
                                 break;
                             case "happened":
                                 happened = Boolean.parseBoolean(commands.get(2));
-                                System.out.printf("Happened wurde auf %b gesetzt",happened);
+                                System.out.printf("Happened wurde auf %b gesetzt", happened);
                                 break;
                             case "once":
                                 once = Boolean.parseBoolean(commands.get(2));
-                                System.out.printf("Once wurde auf %b gesetzt",happened);
+                                System.out.printf("Once wurde auf %b gesetzt", happened);
                                 break;
                             case "info":
-                                info=Input.input("Info:",false);
+                                info = Input.input("Info:", false);
                                 System.out.println("Info wurde gesetzt");
                                 break;
                             case "music":
-                                music=Input.input("Musik Pfad:",false);
+                                music = Input.input("Musik Pfad:", false);
                                 System.out.println("Musik wurde gesetzt");
                                 break;
                             case "rmdiffs":
                                 commands.removeFirst();
                                 commands.removeFirst();
-                                rmdiffs=commands;
+                                rmdiffs = commands;
                                 System.out.println("Rmdiffs gesetzt");
                                 break;
                             case "adddependent":
                                 commands.removeFirst();
                                 commands.removeFirst();
-                                adddependent=commands;
+                                adddependent = commands;
                                 System.out.println("Adddependent gesetzt");
                                 break;
                             case "rmdependent":
                                 commands.removeFirst();
                                 commands.removeFirst();
-                                rmdependent=commands;
+                                rmdependent = commands;
                                 System.out.println("Rmdependent gesetzt");
                                 break;
                             case "rmnotdependent":
                                 commands.removeFirst();
                                 commands.removeFirst();
-                                rmnotdependent=commands;
+                                rmnotdependent = commands;
                                 System.out.println("Rmnotdependent gesetzt");
                                 break;
                             case "addnotdependent":
                                 commands.removeFirst();
                                 commands.removeFirst();
-                                addnotdependent=commands;
+                                addnotdependent = commands;
                                 System.out.println("Addnotdependent gesetzt");
                                 break;
                             case "addinventory":
                                 commands.removeFirst();
                                 commands.removeFirst();
-                                addinventory=commands;
+                                addinventory = commands;
                                 System.out.println("Addinventory gesetzt");
                                 break;
                             case "rminventory":
                                 commands.removeFirst();
                                 commands.removeFirst();
-                                rminventory=commands;
+                                rminventory = commands;
                                 System.out.println("Rminventory gesetzt");
                                 break;
                             default:
@@ -261,72 +266,72 @@ public class EventDiff extends Diff{
                         }
                         break;
                     case "adddiff":
-                        Diff diff=null;
-                        diff=Event.newDiff(name,commands.get(1));
-                        if(adddiffs==null){
-                            adddiffs=new HashMap<>();
+                        Diff diff = null;
+                        diff = Event.newDiff(name, commands.get(1));
+                        if (adddiffs == null) {
+                            adddiffs = new HashMap<>();
                         }
                         addAddDiff(diff);
                         diff.edit();
                         break;
                     case "rmdiff":
                         adddiffs.remove(commands.get(1));
-                        if(adddiffs.isEmpty()){
-                            adddiffs=null;
+                        if (adddiffs.isEmpty()) {
+                            adddiffs = null;
                         }
                         break;
                     case "rm":
                         switch (commands.get(1)) {
                             case "cmd":
-                                cmd=null;
+                                cmd = null;
                                 System.out.println("Befehl entfernt");
                                 break;
                             case "room":
-                                room=(null);
+                                room = (null);
                                 System.out.println("Raum entfernt");
                                 break;
                             case "happened":
-                                happened=null;
+                                happened = null;
                                 System.out.println("Happened entfernt");
                                 break;
                             case "once":
-                                once=null;
+                                once = null;
                                 System.out.println("Once entfernt");
                                 break;
                             case "music":
-                                music=null;
+                                music = null;
                                 System.out.println("Musik entfernt");
                                 break;
                             case "rmdiffs":
-                                rmdiffs=null;
+                                rmdiffs = null;
                                 System.out.println("Rmdiffs entfernt");
                                 break;
                             case "adddiffs":
-                                adddiffs=null;
+                                adddiffs = null;
                                 System.out.println("Adddiffs entfernt");
                                 break;
                             case "adddependent":
-                                adddependent=null;
+                                adddependent = null;
                                 System.out.println("Adddependent entfernt");
                                 break;
                             case "rmdependent":
-                                rmdependent=null;
+                                rmdependent = null;
                                 System.out.println("Rmdependent entfernt");
                                 break;
                             case "addnotdependent":
-                                addnotdependent=null;
+                                addnotdependent = null;
                                 System.out.println("Addnotdependent entfernt");
                                 break;
                             case "rmnotdependent":
-                                rmnotdependent=null;
+                                rmnotdependent = null;
                                 System.out.println("Rmnotdependent entfernt");
                                 break;
                             case "addinventory":
-                                addinventory=null;
+                                addinventory = null;
                                 System.out.println("Addinventory entfernt");
                                 break;
                             case "rminventory":
-                                rminventory=null;
+                                rminventory = null;
                                 System.out.println("Rminventory entfernt");
                                 break;
                             default:
@@ -335,7 +340,7 @@ public class EventDiff extends Diff{
                         }
                         break;
                     case "show":
-                        System.out.println(this.toString());
+                        System.out.println(this);
                         break;
                     case "back":
                         return;
@@ -354,7 +359,7 @@ public class EventDiff extends Diff{
                         System.out.println("Befehl nicht gefunden");
                         break;
                 }
-            }catch(IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("Zu wenig Argumente");
             }
         }
@@ -362,32 +367,38 @@ public class EventDiff extends Diff{
 
     @Override
     public String toString() {
-        String string="";
-        string+=String.format("Event Name: %s\n",name);
-        string+=String.format("Info: %s\n",info);
-        string+=String.format("Befehl: %s\n",cmd);
-        string+=String.format("Musik: %s\n",music);
-        string+=String.format("Hinzufügen zu Inventar Abhängigkeiten: %s\n",addinventory);
-        string+=String.format("Entfernen von Inventar Abhängigkeiten: %s\n",rminventory);
-        string+=String.format("Hinzufügen folgender Abhängigkeiten: %s\n",adddependent);
-        string+=String.format("Entfernnen folgender Abhängigkeiten: %s\n",rmdependent);
-        string+=String.format("Hinzufügen folgender Abhängigkeiten, welche nicht erfüllt sein müssen: %s\n",addnotdependent);
-        string+=String.format("Entfernen folgender Abhängigkeiten, welche nicht erfüllt sein müssen: %s\n",rmnotdependent);
-        string+=String.format("Einmalig? %b\n",once);
-        string+=String.format("Raum %s\n",room);
-        string+=String.format("Diffs zum Entfernen: %s\n",rmdiffs);
-        string+="Diffs zum Hinzufügen:";
-        if(adddiffs!=null){
-        for (Diff i: adddiffs.values()) {
-            string+="\n";
-            string+=i.toString();
-        }}
+        String string = "";
+        string += String.format("Event Name: %s\n", name);
+        string += String.format("Info: %s\n", info);
+        string += String.format("Befehl: %s\n", cmd);
+        string += String.format("Musik: %s\n", music);
+        string += String.format("Hinzufügen zu Inventar Abhängigkeiten: %s\n", addinventory);
+        string += String.format("Entfernen von Inventar Abhängigkeiten: %s\n", rminventory);
+        string += String.format("Hinzufügen folgender Abhängigkeiten: %s\n", adddependent);
+        string += String.format("Entfernnen folgender Abhängigkeiten: %s\n", rmdependent);
+        string += String.format("Hinzufügen folgender Abhängigkeiten, welche nicht erfüllt sein müssen: %s\n", addnotdependent);
+        string += String.format("Entfernen folgender Abhängigkeiten, welche nicht erfüllt sein müssen: %s\n", rmnotdependent);
+        string += String.format("Einmalig? %b\n", once);
+        string += String.format("Raum %s\n", room);
+        string += String.format("Diffs zum Entfernen: %s\n", rmdiffs);
+        string += "Diffs zum Hinzufügen:";
+        if (adddiffs != null) {
+            for (Diff i : adddiffs.values()) {
+                string += "\n";
+                string += i.toString();
+            }
+        }
         return string;
     }
+
     @Override
     public void loadFromHashMap(HashMap<String, String> map) {
-       if (map.containsKey("info")) {
-            this.info = map.get("info");
+        if (map.containsKey("info")) {
+            String info = map.get("info");
+            if (info.equals("rminfo"))
+                this.info = "null";
+            else
+                this.info = info;
         }
         if (map.containsKey("cmd")) {
             this.cmd = Input.splitInput(map.get("cmd"));
@@ -423,10 +434,11 @@ public class EventDiff extends Diff{
         if (map.containsKey("room")) {
             this.room = map.get("room");
         }
-        if(map.containsKey("rmdiffs")){
+        if (map.containsKey("rmdiffs")) {
             try {
-                rmdiffs=Input.splitInput(map.get("rmdiffs"));
-            }catch(Exception ignore){}
+                rmdiffs = Input.splitInput(map.get("rmdiffs"));
+            } catch (Exception ignore) {
+            }
         }
         if (map.containsKey("adddiffs")) {
             HashMap<String, String> diffs = null;
