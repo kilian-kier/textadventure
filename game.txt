@@ -13,7 +13,7 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=landstraße
+	room=oberstadt
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
