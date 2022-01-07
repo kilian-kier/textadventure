@@ -57,7 +57,7 @@ public class NPC extends GameElement implements Serializable {
 
     public void changeContainer(String newRoomString) throws ItemNotFoundException, NullPointerException{
         Room newRoom= World.roomMap.get(newRoomString);
-        if(this.room!=null) {
+        if(room!=null) {
             Room oldRoom = World.roomMap.get(room);
             if (oldRoom.getNpcs().contains(this.name)) {
                 oldRoom.getNpcs().remove(name);
@@ -68,7 +68,7 @@ public class NPC extends GameElement implements Serializable {
         }else{
             newRoom.addNpcs(this.name);
         }
-        this.name=newRoomString;
+        this.room=newRoomString;
     }
 
     public boolean check(boolean fix){

@@ -12,7 +12,6 @@ public class Main {
         diff.setRoom("meinRaum");
         diff.checkValidity();
         System.out.println(diff);*/
-
         Help.load();
         World.worldEditor("music.world");
 

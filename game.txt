@@ -13,7 +13,7 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=oberstadt
+	room=eingangsbereich
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
@@ -147,6 +147,34 @@ Eingangsbereich{
 	}
 	location=anwesen
 }
+Karte{
+	type=tool
+	interactable=false
+	container=eingangsbereich
+	description={
+		An der Wand des Eingangsbereiches hängt eine Stadtkarte.
+		In der Mitte zeigt sie den Marktplatz und die Kirche.
+		Rechts die Oberstadt. In ihr ist das Haus eingezeichnet
+		Von der Oberstadt entfernt sich ein Weg, der auf den Berg führt,
+		den man überall von Lusiam aus betrachten kann.
+		Links auf der Karte entfernt sich die Unterstadt vom Marktplatz.
+		Dort gibt es noch eine Schmiede und eine Kneipe.
+		Vielleicht kann Stefe dort noch etwas über die Stadt erfahren.
+	}
+}
+SchaueKarte={
+	cmd=schaue karte
+	type=once
+	type=event
+	room=eingangsbereich
+	diffs={
+		markunte={
+			destination1=marktplatz
+			destination2=unterstadt
+			type=exit
+		}
+    }
+}
 Wohnzimmer{
 	type=room
 	description=Ein gemütliches Wohnzimmer mit Kachelofen.
@@ -158,9 +186,37 @@ WohnEing{
 	destination2=wohnzimmer
 	description1=Man kann wieder zurück in den Eingangsbereich.
 	description2=Eine für Stefe zu niedrige Tür führt in das Wohnzimmer.
+	interactable=false
 }
+
+GeheWohnzimmer{
+	type=event
+	cmd=gehe wohnzimmer
+	notdependent=drachekommt
+	info=Stefe weiß wie ein Wohnzimmer aussieht.
+}
+GeheKeller{
+	type=event
+	cmd=gehe keller
+	notdependent=drachekommt
+	info=Stefe ist nicht nach Lusinam gekommen, um zu Hause rumzulungern.
+}
+GeheKellertreppe{
+	type=event
+	cmd=gehe kellertreppe
+	notdependent=drachekommt
+	info=Stefe ist nicht nach Lusinam gekommen, um zu Hause rumzulungern.
+}
+GeheZimmer{
+	type=event
+	cmd=gehe zimmer
+	notdependent=drachekommt
+	info=Zum Schlafen ist es noch zu früh.
+}
+
 Kellertreppe{
 	type=exit
+	interactable=false
 	destination1=keller
 	destination2=eingangsbereich
 	description1=Eine Kellertreppe führt runter in den Keller.
@@ -262,8 +318,8 @@ Rüstung{
 }
 Steintreppe{
 	type=exit
-	destination1=kellergewölbe
-	destination2=schmiede
+	destination1=nullroom1
+	destination2=nullroom2
 	description1=Eine Steintreppe führt in ein Kellergewölbe.
 	description2=Die Steintreppe führt wieder nach oben in die Schmiede.
 }
@@ -443,6 +499,7 @@ ZimmEing{
 	type=exit
 	destination1=eingangsbereich
 	destination2=zimmer
+	interactable=false
 	description1=Aus dem Zimmer kommt man direkt wieder in den Eingangsbereich
 	description2={
 		Vom Eingangsbereich kommt man in den hinteren Teil des Hauses,
@@ -570,6 +627,57 @@ Hons{
 	dialog={
 		question1=Hallo, ich bin Stefe.
 		answer1=D*oc**e. Wos mo- mo- moantn der iberhaupt. *hicks*
+		event1=hons1
+	}
+}
+Hons1{
+	type=event
+	cmd=fjsdaköf sdajkfö dsajkf
+	diffs={
+		hons={
+			type=npc
+			dialog={
+				question1={
+					Könnte ich Sie ein paar fragn über die Stadt stellen?
+					Ich bin neu hier und möchte mich etwas informieren.
+				}
+				answer1=Du Sch***z du. Iats geaaaaah mor net l -l -l    Ong.
+				event1=hons2
+			}
+		}
+	}
+}
+Hons2{
+	type=event
+	cmd=fjsdaköf sdasfdffdajkfö dsajkf
+	diffs={
+		hons={
+			type=npc
+			dialog={
+				question1={
+					Könnten Sie nicht etwas höflicher mit anderen Leuten umgehen?
+				}
+				answer1=J- jo joooooo keen-n-nen tat i sellllll schun. Gonz leicht t- t- tat i sel ll lll dorichtn.
+				event1=hons3
+			}
+		}
+	}
+}
+Hons3{
+	type=event
+	cmd=fjsdaköf sdsafdajkfö dsajkf
+	diffs={
+		hons={
+			type=npc
+			dialog={
+				question1={
+					Ok, dann will ich vergessen was eben passiert ist. Und versuche es nochmal.
+					Hallo, ich bin Stefe.
+				}
+				answer1=D*oc**e. Wos mo- mo- moantn der iberhaupt. *hicks*
+				event1=hons1
+			}
+		}
 	}
 }
 Joachim{
@@ -580,7 +688,8 @@ Joachim{
 		question1=Einen guten Tag, die Herren.
 		answer1={
 			Jo Hoi. Na wer bischen du? Na mit so an Piefke reid i net
-			oanfoch asö. Jo wou seimor denn? In an Gosthaus, ha?
+			oanfoch asö. Jo wou seimor denn? Schaug, wenne mor des Wasserle
+			ven Pudl ummertasch, lossets sich vielleicht a bissl leichter redn.
 		}
 	}
 }
@@ -590,6 +699,30 @@ NehmeFlasche{
 	notdependent=andi2
 	info=Andi: Sie werdn decht net oanfoch so an Schnops mitgien lossn.
 	cmd=nehme schnapsflasche theke
+	diffs={
+		andi={
+			type=npc
+			dialog={
+				question1=Ich möchte ein Bier bestellen.
+				answer1={
+					Jo bitte, wos hettn Se den gearn? Weiß, blond oder sein Sie oanor ve de,
+					de des Zoig augleitert oidnlossn?
+				}
+				event1=andi1
+				question2={
+					Wer sind die beiden Herren da drüben? Glauben Sie die könnten mich über
+					diese Stadt hier etwas aufklären?
+				}
+				answer2={
+					Des warn dor Joachim und dor Hons. Iatz auklären werdn de Sie, wenn Se
+					sich net gonz ungschickt unstelln und ihmene a bissl an unsporn gebn,
+					sicher iber olderhontiges. Sie derfn lai net jedn Stuss glabn
+					den se dorzehln. In Hons tat i ober nimmer gor zi viel tratzn,
+					weil sischt schnellt er Ihnen in sein Zuastond no oane.
+				}
+			}
+		}
+	}
 }
 GebeFlasche{
 	type=event
@@ -597,9 +730,7 @@ GebeFlasche{
 	inventory=schnapsflasche
 	room=kneipe
 	info={
-		Joachim: A schau, so gfollsche mor schun eher. I hon schun gseign,
-		dass du lei an Andis Pudl bisch und dor di Flosche lei asö gnummen hosch,
-		obor hell isch mir nor eh gleich. Gsund.
+		Joachim: A schau, so gfollsche mor schun eher. Gsund!
 		Jo Hons, iatz loss mor amol de Flosch in ruah!
 	}
 	cmd=gebe schnapsflasche joachim
@@ -612,6 +743,45 @@ GebeFlasche{
 			type=tool
 			interactable=true
 		}
+		Joachim={
+			type=npc
+			dialog={
+				question1=Können Sie mir etwas über die Stadt erzählen?
+				answer1={
+					Jo logisch. Do hots amol an Schied a- a- an Schmmmied
+					gebn, und an Drochn und mein Opa hot Löch gaschauflt.
+					Dor Ritter hot in Drochn kaputt. Hi hi hi. Jo g- g-
+					genau kaput gmocht. Und nor isch er in a Löch gekugelt und
+					nimmer außer kemmen. Und iatz isch er a Gspenst. Huuuuuuh huh.
+					Und iatz bin i gewaltig miade. I tat longsom hoamfohrn.
+				}
+				event1=joachim2
+			}
+		}
+	}
+}
+Joachim2{
+	type=event
+	cmd=fjdsa öfjdsaklö fdsakejqpreiwq
+	once=true
+	diffs={
+		joachim={
+			type=npc
+			dialog={
+				question1=Wissen Sie noch mehr über diese Vorfälle?
+				answer1={
+					Schaug i so aus? Un wenn nor wisset is grod net.
+					Ober oan kenn i schun. Jo hel kenn isch schun,
+					der woaß wos des isch des war dor Schied--
+					Schmmmmiedi.
+				}
+				event1=stefeweiß
+				question2=Können Sie mir sonst noch was über Lusinam berichten.
+				answer2=Moansch du a so a Schnops heb ewig?
+				question3=Glauben Sie wirklich an ein Gespenst?
+				answer3=Lous amol. An ehrlichern M- M- Mensch als mi wersche net findn.
+			}
+		}
 	}
 }
 Andi{
@@ -619,31 +789,34 @@ Andi{
 	room=kneipe
 	description=Der Barmann der lokalen Trinkstube. Ein schlagsiger junger Mann in
 	dialog={
-		question1=Ich möchte ein Bier bestellen.
+		question1=Kennen Sie sich in dieser Stadt aus?
 		answer1={
-			Jo bitte, wos hettn Se den gearn? Weiß, blond oder sein Sie oanor ve de,
-			de des Zoig augleitert oidnlossn?
+			I bin selber net von do, hebm konn i Ihnen net weiterhelfen.
 		}
-		event1=andi1
 		question2={
 			Wer sind die beiden Herren da drüben? Glauben Sie die könnten mich über
 			diese Stadt hier etwas aufklären?
 		}
 		answer2={
-			Des warn dor Joachim und dor Hons. Iatz auklären werdn de Sie, wenn se sich net gonz
-			ungschickt unstelln und ihmene a bissl an unsporn gebn,
+			Des warn dor Joachim und dor Hons. Iatz auklären werdn de Sie, wenn Se
+			sich net gonz ungschickt unstelln und ihmene a bissl an unsporn gebn,
 			sicher iber olderhontiges. Sie derfn lai net jedn Stuss glabn
 			den se dorzehln. In Hons tat i ober nimmer gor zi viel tratzn,
 			weil sischt schnellt er Ihnen in sein Zuastond no oane.
 		}
 	}
 }
+
 andi1{
 	type=event
 	cmd=f sajkf dsajkf safklöds afjösad
 	once=true
 	room=kneipe
 	diffs={
+		nehmeflasche={
+			type=event
+			rmdiffs=andi
+		}
 		andi={
 			type=npc
 			dialog={
@@ -741,11 +914,6 @@ Markober1{
 		markober={
 			destination1=marktplatz
 			destination2=oberstadt
-			type=exit
-		}
-		markunte={
-			destination1=marktplatz
-			destination2=unterstadt
 			type=exit
 		}
 		hildegard={
@@ -935,9 +1103,8 @@ Hildegard3{
 					Die Jugend von heute, hat einfach keine Geduld. Ts, ts,ts.
 					Es ist aber wirklich eine gute Geschichte, die sich lohnt.
 					Sie hat etwas außerord... den .. tlich ...
-					Vergiss es, du hörst mir doch nicht zu.
+					Vergessen Sie es, Sie hären mir doch nicht zu.
 					Das Anwesen befindet sich in der Oberstadt.
-					Aber auch in der Unterstadt gibt es viel zu sehen.
 				}
 				event1=markober1
 			}
@@ -1027,10 +1194,10 @@ Spieluhr1{
 			dialog={
 				question1=Was würden Sie mir für diese Spieluhr bezahlen?
 				answer1={
-					Also wenn ick net wüsste dat dat Teil dem Könich gehören würde,
-					würde ick vermutlick mehr bezahle, aber um di Ware loszuwerden kann
-					ick Ihnen nicht mehr als 5 Gulde biete. Ick glaube dat wärn guter Deal.
-					Sie können Sie jederzeit verkaufe.
+					Also wenn ick net wüsste dat dat Teil mit Messing überzogen wäre
+					und nickt aus gold ist würde ick vermutlick mehr bezahle,
+					aber um di Ware loszuwerden kann ick Ihnen net mehr als 5 Gulde biete.
+					Ick glaube dat wärn guter Deal. Sie können Sie jederzeit verkaufe.
 				}
 				event1=harald3
 			}
@@ -1047,12 +1214,15 @@ harald3{
 			dialog={
 				question1=Was würden Sie mir für diese Spieluhr bezahlen?
 				answer1={
-					Also wenn ick net wüsste dat dat Teil dem Könich gehören würde,
-					würde ick vermutlick mehr bezahle, aber um di Ware loszuwerden kann
-					ick Ihnen nicht mehr als 5 Gulde biete. Ick glaube dat wärn guter Deal.
-					Sie können Sie jederzeit verkaufe.
+					Also wenn ick net wüsste dat dat Teil mit Messing überzogen wäre
+					und nickt aus gold ist würde ick vermutlick mehr bezahle,
+					aber um di Ware loszuwerden kann ick Ihnen net mehr als 5 Gulde biete.
+					Ick glaube dat wärn guter Deal. Sie können Sie jederzeit verkaufe.
 				}
-				question2=Hier ist die Spieluhr.
+				question2={
+					Hier ist die Spieluhr. Ich dachte sie wäre vergoldet.
+					Sie haben Recht. Sie wurde nur mit Messing überzogen.
+				}
 				answer2=Dat war ne jute Entscheidung. Hier dat Geld.
 				event2=harald4
 			}
@@ -1072,7 +1242,11 @@ harald4{
 		Stefe={
 			type=player
 			addtools=geldbeutel
-			rmtools=spieluhr
+		}
+		Spieluhr={
+			type=tool
+			interactable=false
+			room=kellergewölbe
 		}
 		horst={
 			type=npc
@@ -1213,7 +1387,7 @@ schmiedi1{
 			type=npc
 			dialog={
 				question1={
-					Haben Sie schon einmal etwas von Katakomben in der Stadt gehört?
+					Haben Sie schon einmal etwas von irgendwelchen Löchern in der Stadt gehört?
 					In ihnen soll es spuken.
 				}
 				answer1={
@@ -1277,7 +1451,7 @@ schmiedi3{
 
 		Stefe: Ihres Urgroßvaters
 
-		Schmiedi: ... ähhh genau. Das wusste ich natürlich. Mein Urgroßvater
+		Schmiedi: ... ähhh genau. Mein Urgroßvater
 		hat vor vielen Jahren diese Rüstung geschmieded. Außerdem hat er ein
 		spezielles Schwert erschaffen. Beide Gegenstände verwendete er dazu einen
 		Drachen zu besiegen
@@ -1309,6 +1483,7 @@ schmiedi3{
 		Jedenfalls endet die Geschichte auf diese Weise.
 		Die Bürger trauten sich wieder an die Oberwelt,
 		bauten Lusinam neu auf, und nun, Sie dich um, wir sind glücklicher den je.
+		Und der Zauberer schmort immer noch irgendwo in den Tiefen des Berges.
 
 		Stefe: Puh. Dankesehr.
 		}
@@ -1316,14 +1491,157 @@ schmiedi3{
 		schmiedi={
 			type=npc
 			room=kellergewölbe
+			dialog={
+				question1={
+					Haben Sie schon einmal etwas von Katakomben in der Stadt gehört?
+					In ihnen soll es spuken.
+				}
+				answer1={
+					Ja, das habe ich. Dabei handelt es sich nur um ein Gerücht,
+					eine Gruselgeschichte, mit der man hier pflegt Reisende zu erschrecken.
+					Es gab zwar einmal Katakomben in dieser Stadt, aber diese sind schon
+					seid mehreren Jahrzehnten eingebrochen.
+				}
+				question2=Sie haben hier ja eine schöne Spieluhr.
+				answer2={
+					Danke. Die habe ich von Harald. Sie hat mich ein Vermögen gekostet.
+					1200 Gulden wollte er für das Stück. Ich konnte ihn zum Glück auf
+					800 runterhandeln. Und nun gehört das tolle Ding mir.
+				}
+				question3=Wer ist heute hier König?
+				answer3={
+					Niemand. Nach der Tragödie ist der König zurückgetreten.
+					Seitdem ist das Königreich Lusinam ein freies Land in dem
+					jeder sein eigner König ist. Auch das Schloss wurde nicht
+					wieder aufgebaut.
+				}
+			}
 		}
 		Stefe={
 			type=player
 			room=kellergewölbe
 		}
+		Steintreppe={
+			type=exit
+			destination1=kellergewölbe
+			destination2=schmiede
+		}
 	}
 }
+Drachekommt{
+	type=event
+	dependent=schmiedi3
+	room=schmiede
+	once=true
+	cmd=gehe unterstadt
+	info={
+		Hilfeee! Hilfeee!
 
+		Du Hons konnsch glei wieder innerkemmen. Nix nor mit hoamgien.
+		Kimm trink mor no oans.
+
+		Hildegard!!! Dat kanste knicke! Hör auf dat Grünzeuch
+        zusammenzutrache. Lauuuuuuf!!!
+
+		Stefe: Was ist passiert?
+
+		Andi: Jo reiß di Augn au. Do entn isch a Droche und do siztz oaner drau
+		und der fliag direkt ze ins. Hel isch passiert.
+
+		Schmiedi: Er ist entkommen. Wie hat er das geschafft?
+
+		Zauberer: Wie håd er dås geschåffd? Wie håd er dås geschåffd?
+		Gånz ynfach, ich der große Bergkønig bin dåmåls in iner Drollhøhle gelånded.
+		Im Gegensådz zu euch håben die Drolle mich åls Kønig åkzeptierd.
+		Und jedzt bin ich hier um Råche zu nehmen. Wissd ihr wie långe
+		ich gebråuchd håbe, den ersden Dråchen zu beschwøren. Hunderdunddrizehn
+		Jåhre. Und dånn kommd so in Dåugenichds fon Schmied und innerhålb
+		ines dåges zersdørd er min Mysderwerk. Dåfür werded ihr büsen.
+		Und bei dir min Lieber Schmiedi wyrd min Schådzchen beginnen.
+		Ha ha haaa, Ua ha ha ha haa. Soo hop Mylady Jyhåååaaa.
+		
+		Schmiedi: Stefe, versteck dich!
+		
+		Zauberer: Jåaaa Stefe, versteg dich. Zig mir wo du wohnsd,
+		dann komm ich dych holen, wenn ich hier ferdig bin.
+
+		-------------------------------------------------------------------
+
+		Puh. Stefe hat es gerade noch in das Anwesen geschafft.
+		Die Schmiede, die Kneipe brennen bereits lichterloh.
+	}
+
+	diffs={
+		Holztür={
+			type=exit
+			interactable=false
+		}
+		Stefe={
+			type=player
+			room=eingangsbereich
+		}
+		Schmunter={
+			type=exit
+			interactable=false
+		}
+	}
+}
+Gehegarten{
+	type=event
+	dependent=drachekommt
+	notdependent=nehmerüstung
+	info={
+		Stefe ist doch nicht lebensmüde. Ohne eine nützliche Waffe
+		und einen Schutz kann er sich dem Bösen Zauberer
+		auf seinem Drachen auf keinen Fall entgegenstellen.
+	}
+}
+Geheunterstadt{
+	room=schmiede
+	type=event
+	dependent=drachekommt
+	info={
+		Stefe ist doch nicht lebensmüde. Ohne eine nützliche Waffe
+		und einen Schutz kann er sich dem Bösen Zauberer
+		auf seinem Drachen auf keinen Fall entgegenstellen.
+	}
+}
+Nehmerüstung{
+	type=event
+	once=true
+	dependent=drachekommt
+	cmd=nehme rüstung
+	room=grabkammer
+	info=Stefe zieht die Rüstung an.
+	diffs={
+		rüstung={
+			type=tool
+			interactable=false
+		}
+		holztür={
+			type=exit
+			interactable=true
+		}
+		schmunter={
+			type=exit
+			interactable=true
+		}
+	}
+}
+Nehmeschwert{
+	type=event
+	once=true
+	dependent=drachekommt
+	cmd=nehme schwert sarg
+	room=grabkammer
+	info=Stefe nimmt das immer noch scharfe Schwert an sich
+	diffs={
+		schwert={
+			type=tool
+			interactable=false
+		}
+	}
+}
 
 
 
