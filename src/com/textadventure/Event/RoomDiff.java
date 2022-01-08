@@ -61,19 +61,17 @@ public class RoomDiff extends ElementDiff implements Serializable {
             if (rmTools != null) {
                 for (String i : rmTools) {
                     World.toolMap.get(i).setContainer(null);
-                    room.getToolsContainer().removeTool(i);
                 }
             }
             if (addContainer != null) {
                 for (String i : addContainer) {
                     World.containerMap.get(i).changeContainer(this.name);
-                    room.addContainer(i);
                 }
             }
             if (rmContainer!=null){
+
                     for (String i : rmContainer) {
                         World.containerMap.get(i).changeContainer(null);
-                        room.getContainers().remove(i);
                     }
                 }
            if(addNPCs!=null){
@@ -84,8 +82,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
             }
             if(rmNPCs!=null){
                 for (String i : rmNPCs) {
-                    World.containerMap.get(i).changeContainer(null);
-                    room.getNpcs().remove(i);
+                    World.npcMap.get(i).changeContainer(null);
                 }
             }
             if(location!=null){
@@ -130,10 +127,12 @@ public class RoomDiff extends ElementDiff implements Serializable {
         collTemp=getAddContainer();
         if(collTemp!=null){
             for (String i:collTemp) {
-                if(World.containerMap.get(i)==null){
-                    System.out.printf("Container (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
-                    ret=false;
-                }
+
+                    if (World.containerMap.get(i) == null) {
+                        System.out.printf("Container (Add) %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
+                        ret = false;
+                    }
+
             }
         }
         collTemp=getRmContainer();
@@ -358,6 +357,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
             try {
                 interactable = Boolean.parseBoolean(map.get("interactable"));
             }catch(Exception e){
+                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
         }

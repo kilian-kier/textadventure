@@ -1,5 +1,7 @@
 package com.textadventure.things;
 
+import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.locations.Room;
 import com.textadventure.story.World;
 
 import java.io.Serializable;
@@ -98,6 +100,39 @@ public class Container extends Item implements Serializable {
         return tools.remove(name);
     }
 
+    @Override /**
+     * Ändert den Container in dem sich ein Item befindet.
+     * @param newContainerString neuer Container
+     * @throws ItemNotFoundException Wenn neuer Container nicht existiert
+     * @throws NullPointerException Wenn ein ungültiger Parameter übergeben wird.
+     */
+    public void changeContainer(String newContainerString) throws ItemNotFoundException , NullPointerException{
+        if(newContainerString!=null){
+            Room newContainer=World.roomMap.get(newContainerString);
+
+            if(this.currentContainer!=null) {
+                Room oldContainer = World.roomMap.get(this.currentContainer);
+                if (oldContainer.getContainers().contains(this.name)) {
+                    oldContainer.removeContainer(this.name);
+                    newContainer.addContainer(this.name);
+                } else {
+                    throw new ItemNotFoundException(name);
+                }
+            }else{
+                newContainer.addContainer(this.name);
+            }
+        }else{
+            if(this.currentContainer!=null) {
+                Room oldContainer = World.roomMap.get(this.currentContainer);
+                if (oldContainer.getContainers().contains(this.name)) {
+                    oldContainer.removeContainer(this.name);
+                } else {
+                    throw new ItemNotFoundException(name);
+                }
+            }
+        }
+        this.currentContainer=newContainerString;
+    }
 
     @Override
     public void loadFromHashMap(HashMap<String, String> map) {

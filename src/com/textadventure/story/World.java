@@ -265,18 +265,26 @@ public class World {
                         System.out.println(e.getMessage());
                     }
                     break;
+                case "execute":
+                    try {
+                        System.out.println("Rückgabe: "+Event.execSingleEvent(commands.get(1)));
+                    }catch(Exception e){
+                        System.out.println("Zu wenig Argumente");
+                    }
+                    break;
                 case "start":
+                    /*
                     if (!Checker.check(false)) {
                         System.out.println("Es gibt Fehler in der Welt");
                         break;
-                    }
-                    LoadStoreWorld.store("temp.world");
+                    }*/
+                    //LoadStoreWorld.store("temp.world");
                     Game.start();
-                    try {
+                    /*try {
                         LoadStoreWorld.load("temp.world");
                     } catch (Exception e) {
                         System.out.println("Someone messed with the temp.world file");
-                    }
+                    }*/
                     break;
                 case "exit":
                     exit = true;
