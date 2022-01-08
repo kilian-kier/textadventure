@@ -33,6 +33,9 @@ public class EventDiff extends Diff {
     }
 
     public void addAddDiff(Diff diff) {
+        if(adddiffs==null){
+            adddiffs=new HashMap<>();
+        }
         adddiffs.put(diff.getName(), diff);
     }
 
@@ -189,7 +192,6 @@ public class EventDiff extends Diff {
             if (commands == null) continue;
             try {
                 switch (commands.get(0)) {
-                    //TODO adddiffs
                     case "add":
                         switch (commands.get(1)) {
                             case "cmd":
@@ -372,6 +374,7 @@ public class EventDiff extends Diff {
         string += String.format("Info: %s\n", info);
         string += String.format("Befehl: %s\n", cmd);
         string += String.format("Musik: %s\n", music);
+        string += String.format("Passiert: %b\n", happened);
         string += String.format("Hinzufügen zu Inventar Abhängigkeiten: %s\n", addinventory);
         string += String.format("Entfernen von Inventar Abhängigkeiten: %s\n", rminventory);
         string += String.format("Hinzufügen folgender Abhängigkeiten: %s\n", adddependent);
@@ -402,6 +405,11 @@ public class EventDiff extends Diff {
         }
         if (map.containsKey("cmd")) {
             this.cmd = Input.splitInput(map.get("cmd"));
+        }
+        if (map.containsKey("happened")) {
+            try {
+                this.happened = Boolean.parseBoolean(map.get("happened"));
+            }catch(Exception ignore){}
         }
         if (map.containsKey("music")) {
             this.music = map.get("music");

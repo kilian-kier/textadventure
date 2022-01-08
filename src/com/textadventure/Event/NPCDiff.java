@@ -140,6 +140,7 @@ public class NPCDiff extends ElementDiff implements Serializable {
                                 break;
                             case "dialog":
                                 commands.removeFirst();
+                                commands.removeFirst();
                                 if (commands.isEmpty()) {
                                     System.out.println("Zu wenig Parameter");
                                     break;

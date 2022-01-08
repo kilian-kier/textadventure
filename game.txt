@@ -13,7 +13,7 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=eingangsbereich
+	room=landstraße
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
@@ -63,7 +63,7 @@ Landstraße{
 }
 Marktplatz{
 	type=room
-	description=Der Marktpllatz liegt im zentrum von Lusinam.
+	description=Der Marktpllatz liegt im Zentrum von Lusinam.
 	location=lusinam
 	music=music/marktplatz.mp3
 }
@@ -192,6 +192,7 @@ WohnEing{
 GeheWohnzimmer{
 	type=event
 	cmd=gehe wohnzimmer
+	room=eingangsbereich
 	notdependent=drachekommt
 	info=Stefe weiß wie ein Wohnzimmer aussieht.
 }
@@ -337,15 +338,14 @@ Schmunter{
 	type=exit
 	destination1=unterstadt
 	destination2=schmiede
-	description1=In der Unterstadt liegt eine Schmiede.
-	description2=Ein Weg führt wieder nach draußen in die Unterstadt.
+	description2=In der Unterstadt liegt eine Schmiede.
+	description1=Ein Weg führt wieder nach draußen in die Unterstadt.
 }
 
 Sarg{
 	type=container
 	interactable=false
-	room=oberstadt
-
+	room=grabkammer
 	description={
 		In der Mitte der Grabkammer befindet sich ein versiegelter Sarg.
 		Darauf ist in einer Plakette der Name des verstorbenen verewigt:
@@ -887,8 +887,7 @@ Stefeweiß{
 			type=npc
 			dialog={
 				question1={
-					Hallo,
-					Einige Anwohner in ihrer Dorfkneipe meinten, Sie würden sich
+					Hallo, Einige Anwohner in ihrer Dorfkneipe meinten, Sie würden sich
 					mit der Geschichte Lusinams sehr gut auskennen.
 				}
 				answer1=Na klar, was möchten Sie denn wissen?
@@ -1188,6 +1187,7 @@ Spieluhr1{
 		spieluhr={
 			type=tool
 			description=Eine vergoldete Spieluhr, mit einer Balletttänzerin, die sich mit der Walze dreht.
+			container=kellergewölbe
 		}
 		harald={
 			type=npc
@@ -1391,8 +1391,9 @@ schmiedi1{
 					In ihnen soll es spuken.
 				}
 				answer1={
-					Ja, das habe ich. Dabei handelt es sich nur um ein Gerücht,
-					eine Gruselgeschichte, mit der man hier pflegt Reisende zu erschrecken.
+					Ja, das habe ich. Sowohl von den Löchern, als auch vom Spuk. Beim Spuk
+					handelt es sich nur um ein Gerücht, eine Gruselgeschichte, mit der man
+					hier pflegt Reisende zu erschrecken.
 					Es gab zwar einmal Katakomben in dieser Stadt, aber diese sind schon
 					seid mehreren Jahrzehnten eingebrochen.
 				}
@@ -1469,7 +1470,7 @@ schmiedi3{
 		Katakomben von Lusinam. Was ich dafür geben würde, sie einmal sehen zu können...
 		Schmiedi, dem damals diese Schmiede hier gehörte hatte, war der einzige, der
 		sich traute, sich dem Drachen entgegenzustellen. Mit Hilfe der schützensten Rüstung,
-		die je gescmiedet wurde und dem schärfsten Schwert, das je geschliffen wurde, war
+		die je geschmiedet wurde und dem schärfsten Schwert, das je geschliffen wurde, war
 		er bestens ausgestattet.
 		Nachdem Schmiedi den Drachen besiegt hatte, kümmerte er sich um den Zauberer.
 		Wie sich herausstellte, hatte der Zauberer mehrere Königreiche und Städte erobert
@@ -1541,7 +1542,7 @@ Drachekommt{
 		Kimm trink mor no oans.
 
 		Hildegard!!! Dat kanste knicke! Hör auf dat Grünzeuch
-        zusammenzutrache. Lauuuuuuf!!!
+		zusammenzutrache. Lauuuuuuf!!!
 
 		Stefe: Was ist passiert?
 
@@ -1556,33 +1557,64 @@ Drachekommt{
 		Und jedzt bin ich hier um Råche zu nehmen. Wissd ihr wie långe
 		ich gebråuchd håbe, den ersden Dråchen zu beschwøren. Hunderdunddrizehn
 		Jåhre. Und dånn kommd so in Dåugenichds fon Schmied und innerhålb
-		ines dåges zersdørd er min Mysderwerk. Dåfür werded ihr büsen.
+		ines dåges zersdørd er min Mysderwerk. Dåfür werded ihr büßen.
 		Und bei dir min Lieber Schmiedi wyrd min Schådzchen beginnen.
 		Ha ha haaa, Ua ha ha ha haa. Soo hop Mylady Jyhåååaaa.
 		
 		Schmiedi: Stefe, versteck dich!
 		
-		Zauberer: Jåaaa Stefe, versteg dich. Zig mir wo du wohnsd,
+		Zauberer: Jaaaå Stefe, versteg dich. Zig mir wo du wohnsd,
 		dann komm ich dych holen, wenn ich hier ferdig bin.
 
 		-------------------------------------------------------------------
 
 		Puh. Stefe hat es gerade noch in das Anwesen geschafft.
-		Die Schmiede, die Kneipe brennen bereits lichterloh.
+		Die Schmiede und die Kneipe brennen bereits lichterloh.
 	}
-
 	diffs={
-		Holztür={
-			type=exit
-			interactable=false
-		}
 		Stefe={
 			type=player
 			room=eingangsbereich
 		}
+		Holztür={
+			type=exit
+			interactable=false
+		}
 		Schmunter={
 			type=exit
 			interactable=false
+		}
+		Schmiede={
+			type=room
+			description=Das was von der Schmiede noch übrig ist.
+		}
+		Schmiedi={
+			type=npc
+			dialog={
+				question1=Ich hab das Schwert gefunden.
+				answer1=Wozu stehen Sie dann hier noch dumm rum?
+			}
+		}
+		Unterstadt={
+			type=room
+			rmnpcs=andi
+		}
+		Marktplatz={
+			type=room
+			rmnpcs=hildegard horst harald
+			rmcontainer=obststand fleischwarenstand krämer
+		}
+		Wohneing={
+			type=exit
+			interactable=true
+		}
+		zimmeing={
+			type=exit
+			interactable=true
+		}
+		kellertreppe={
+			type=exit
+			interactable=true
 		}
 	}
 }
@@ -1590,28 +1622,20 @@ Gehegarten{
 	type=event
 	dependent=drachekommt
 	notdependent=nehmerüstung
+	cmd=gehe garten
 	info={
 		Stefe ist doch nicht lebensmüde. Ohne eine nützliche Waffe
 		und einen Schutz kann er sich dem Bösen Zauberer
 		auf seinem Drachen auf keinen Fall entgegenstellen.
 	}
 }
-Geheunterstadt{
-	room=schmiede
-	type=event
-	dependent=drachekommt
-	info={
-		Stefe ist doch nicht lebensmüde. Ohne eine nützliche Waffe
-		und einen Schutz kann er sich dem Bösen Zauberer
-		auf seinem Drachen auf keinen Fall entgegenstellen.
-	}
-}
+
 Nehmerüstung{
 	type=event
 	once=true
 	dependent=drachekommt
 	cmd=nehme rüstung
-	room=grabkammer
+	room=kellergewölbe
 	info=Stefe zieht die Rüstung an.
 	diffs={
 		rüstung={
@@ -1625,6 +1649,96 @@ Nehmerüstung{
 		schmunter={
 			type=exit
 			interactable=true
+		}
+		drachekommt={
+			type=event
+			once=true
+			room=schmiede
+			happened=false
+			info={
+				Hållooo Stefeeee.
+				So siehd mån sych wieder.
+				Ich sehe. Dy håst etwås Schrott åusgegråben,
+				åber die Rüstung ållyn wyrd dir nichts nützen.
+				Zuuum Ångriiiiiiiiffff!!!
+			}
+			rmdiffs=player schmiede schmiedi unterstadt marktplatz wohneing zimmeing kellertreppe
+			adddiffs={
+				drache={
+					type=npc
+					room=unterstadt
+				}
+				tür={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				markunte={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				schmunter={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				torbogen={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				holztür={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+
+			}
+		}
+		gehegarten={
+			type=event
+			once=true
+			room=schmiede
+			happened=false
+			info={
+				Hållooo Stefeeee.
+				So siehd mån sych wieder.
+				Ich sehe. Dy håst etwås Schrott åusgegråben,
+				åber die Rüstung ållyn wyrd dir nichts nützen.
+				Zuuum Ångriiiiiiiiffff!!!
+			}
+			adddiffs={
+				drache={
+					type=npc
+					room=garten
+				}
+				tür={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				markunte={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				schmunter={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				torbogen={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+				holztür={
+					type=exit
+					destination1=nullroom1
+					destination2=nullroom2
+				}
+			}
 		}
 	}
 }
@@ -1642,6 +1756,48 @@ Nehmeschwert{
 		}
 	}
 }
+Drache{
+	type=npc
+	room=nullroom1
+	description={
+		Ein furchteinflößender Drache, der eben halb Lusinam dem Erdboden gleichgemacht hat.
+		Stefe muss etwas gegen ihn unternehmen.
+	}
+}
+besiegedrache={
+	type=event
+	cmd=aktion schwert drache
+	inventory=schwert
+	room=unterstadt
+	info={
+		Neyyyyyyyyn. Daß wyrst du mir büßen.
+		Myn Drache ist weg aber mich kriegst du nicht.
+		O neiin.
 
+		Der Zauberer löst sich in Luft auf.
 
+		Schmiedi: Der Zauberer ist sicher wieder auf dem Berg.
+		Schnell, machen Sie sich auf ihn zu finden!
+	}
+	diffs={
+		markunte={
+			type=exit
+			destination1=marktplatz
+			destination2=unterstadt
+		}
+		torbogen={
+			type=exit
+			destination1=garten
+			destination2=oberstadt
+		}
+		schmiedi={
+			type=npc
+			room=unterstadt
+			dialog={
+				question1=Ähhh. Wie komme ich zum Berg?
+				answer1=Begeben Sie sich in Richtung Oberstadt.
+			}
+		}
+	}
+}
 

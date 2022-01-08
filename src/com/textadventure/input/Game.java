@@ -198,8 +198,8 @@ public class Game {
                             break;
                         }
                     }
+                    break;
                 case "spreche":
-                    //TODO Eingabe von keiner Zahl, Keine Fragen
                     if (cmd.size() != 2) {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
@@ -217,24 +217,41 @@ public class Game {
                             System.out.printf("Es gibt hier niemanden mit dem Namen %s\n", firstCap(n.getName()));
                             break;
                         }
+                        while(true){
                         if (n.getDialog().getDialog().size() != 0) {
-                            System.out.print("Wähle eine Frage: \n");
+                            System.out.print("Wähle eine Frage (-1 zum Abbrechen): \n");
                             for (int i = 0; i < n.getDialog().getDialog().size(); i++) {
                                 System.out.printf("[%d] ", i + 1);
                                 System.out.println(n.getDialog().getDialog().get(i)[0]);
                             }
                             int x;
                             do {
-                                x = scanner.nextInt();
+                                try {
+                                    x = (int)scanner.nextDouble();
+
+                                }catch(Exception e){
+                                    scanner.next();
+                                    x=-2;
+                                }
+                                if(x==-1){
+                                    break;
+                                }
                             } while (x <= 0 || x > n.getDialog().getDialog().size());
+                            if(x==-1){
+                                scanner.nextLine();
+                                break;
+                            }
                             System.out.println(n.getDialog().getDialog().get(x - 1)[1]);
                             if (n.getDialog().getDialog().get(x - 1)[2] != null) {
                                 Event.execSingleEvent(n.getDialog().getDialog().get(x - 1)[2]);
                             }
                             scanner.nextLine();
+                            System.out.println();
                         } else {
                             System.out.printf("%s hat zurzeit keine Zeit mit %s zu sprechen\n", firstCap(n.getName()),firstCap(World.player.getName()));
+                            break;
                         }
+                    }
                     }
                     break;
                 case "schaue":
@@ -328,13 +345,8 @@ public class Game {
                                 Tool t = World.toolMap.get(cmd.get(1));
                                 System.out.println(firstCap(t.getName()) + ": " + t.getDescription());
                             } else if (World.npcMap.containsKey(cmd.get(1))) {
-                                //TODO: NPCs
-                                try {
-                                    throw new CommandSyntaxException(cmd.get(0));
-                                } catch (CommandSyntaxException e) {
-                                    System.out.println(e.getMessage());
-                                    continue;
-                                }
+                                NPC npc=World.npcMap.get(cmd.get(1));
+                                System.out.println(firstCap(npc.getName()) + ": " + npc.getDescription());
                             }
 
                     }

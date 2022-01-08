@@ -23,7 +23,7 @@ public class MusicPlayer extends Thread {
     public static byte[] readFile(String filepath) {
         byte[] ret = null;
         try {
-            ret = Files.readAllBytes(Path.of(World.tempDir + "/" + filepath));
+            ret = Files.readAllBytes(Path.of( filepath));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,7 +36,7 @@ public class MusicPlayer extends Thread {
      * @param path Dateiname
      * @return Neuer Dateiname mit .wav
      */
-    private static String getWavPath(String path) {
+    public static String getWavPath(String path) {
         File file = new File(path);
         path = Input.getFileType(file.getName(), false);
         return path + ".wav";

@@ -20,7 +20,7 @@ public class Event implements Serializable {
     private Collection<String> notdependent;
     private Collection<String> inventory;
     private boolean happened=false;
-    private boolean once=true;
+    private boolean once=false;
     private String music = null;
 
     public static void setRememberRoom(String rememberRoom) {
@@ -189,7 +189,6 @@ public class Event implements Serializable {
             }
         }
         setHappened(true);
-        rememberRoom=null;
         return true;
     }
 
@@ -201,14 +200,21 @@ public class Event implements Serializable {
         String hash = stringForHash(args);
         if(World.eventMap.containsKey(hash)){
             Event event = World.eventMap.get(hash);
-            return event.applyDiffsToWorld();
+            boolean ret= event.applyDiffsToWorld();
+            rememberRoom=null;
+            return ret;
         }
+        rememberRoom=null;
         return false;
     }
 
     public static boolean execSingleEvent(String eventName){
         ArrayList<String> args = new ArrayList<>();
-        args.add(World.eventKeyMap.get(eventName));
+        try {
+            args.addAll(World.eventMap.get(World.eventKeyMap.get(eventName)).getCmd());
+        }catch(Exception e){
+            return false;
+        }
         return execEvent(args);
     }
 

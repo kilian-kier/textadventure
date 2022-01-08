@@ -16,6 +16,7 @@ import javazoom.jl.decoder.JavaLayerException;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class LoadStoreWorld {
     private static void createMusicFiles(HashMap<String, Object> map) {
        try {
            ArrayList<String> keys = (ArrayList<String>) map.get("musicKeys");
+           World.musicList=keys;
            Converter c = new Converter();
             if (keys != null) {
                 Path tempDir = Files.createTempDirectory("tmp");
@@ -51,9 +53,7 @@ public class LoadStoreWorld {
                         if(Input.getFileType(file.getName(),true).equals("mp3")){
                             c.convert(file.getAbsolutePath(), World.tempDir + "/" + Input.getFileType(key,false) + ".wav");
                         }
-                        if (!file.delete()) {
                             file.deleteOnExit();
-                        }
                         file = new File(World.tempDir + "/" + Input.getFileType(key,false) + ".wav");
                         file.deleteOnExit();
 
@@ -193,11 +193,17 @@ public class LoadStoreWorld {
             map.put("musicKeys", World.musicList);
             for (String key : World.musicList) {
                 File file = new File(key);
-                if(!file.exists()){
-                    System.out.println("File "+file.getAbsolutePath()+" does not exist");
-                    continue;
+                String path2=key;
+                if (!file.exists()) {
+                    System.out.println(file.getName());
+                    path2=World.tempDir + "/" + file.getName();
+                    file = new File(path2);
+                    if (!file.exists()) {
+                        System.out.println("File " + file.getAbsolutePath() + " does not exist");
+                        continue;
+                    }
                 }
-                byte[] musicBytes = MusicPlayer.readFile(key);
+                byte[] musicBytes = MusicPlayer.readFile(path2);
                 map.put(file.getName(), musicBytes);
             }
 
