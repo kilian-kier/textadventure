@@ -141,6 +141,7 @@ public class LocationDiff extends ElementDiff implements Serializable {
                             break;
                         case "addrooms":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -149,6 +150,7 @@ public class LocationDiff extends ElementDiff implements Serializable {
                             System.out.println("Addrooms hinzugefügt");
                             break;
                         case "rmrooms":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");

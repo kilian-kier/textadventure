@@ -63,7 +63,7 @@ Landstraße{
 }
 Marktplatz{
 	type=room
-	description=Der Marktpllatz liegt im zentrum von Lusinam.
+	description=Der Marktpllatz liegt im Zentrum von Lusinam.
 	location=lusinam
 	music=music/marktplatz.mp3
 }
@@ -1557,7 +1557,7 @@ Drachekommt{
 		Und jedzt bin ich hier um Råche zu nehmen. Wissd ihr wie långe
 		ich gebråuchd håbe, den ersden Dråchen zu beschwøren. Hunderdunddrizehn
 		Jåhre. Und dånn kommd so in Dåugenichds fon Schmied und innerhålb
-		ines dåges zersdørd er min Mysderwerk. Dåfür werded ihr büsen.
+		ines dåges zersdørd er min Mysderwerk. Dåfür werded ihr büßen.
 		Und bei dir min Lieber Schmiedi wyrd min Schådzchen beginnen.
 		Ha ha haaa, Ua ha ha ha haa. Soo hop Mylady Jyhåååaaa.
 		

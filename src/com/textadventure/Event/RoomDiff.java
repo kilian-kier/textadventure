@@ -95,7 +95,6 @@ public class RoomDiff extends ElementDiff implements Serializable {
 
     @Override
     public boolean check() {
-        //TODO Musik
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;
@@ -197,6 +196,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
                             break;
                         case "addtools":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -205,6 +205,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
                             System.out.println("Addtools hinzugefügt");
                             break;
                         case "rmtools":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
@@ -227,6 +228,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
                             break;
                         case "addcontainer":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -235,6 +237,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
                             System.out.println("Addcontainer hinzugefügt");
                             break;
                         case "rmcontainer":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
@@ -245,6 +248,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
                             break;
                         case "addnpcs":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -253,6 +257,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
                             System.out.println("AddNPCs hinzugefügt");
                             break;
                         case "rmnpcs":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");

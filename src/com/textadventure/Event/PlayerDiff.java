@@ -92,7 +92,6 @@ public class PlayerDiff extends ElementDiff implements Serializable {
 
     @Override
     public void edit() {
-        //TODO Player Diff help
         boolean exit = false;
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
@@ -123,6 +122,7 @@ public class PlayerDiff extends ElementDiff implements Serializable {
                             break;
                         case "addtools":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -131,6 +131,7 @@ public class PlayerDiff extends ElementDiff implements Serializable {
                             System.out.println("Addtools hinzugefügt");
                             break;
                         case "rmtools":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
@@ -175,7 +176,7 @@ public class PlayerDiff extends ElementDiff implements Serializable {
                 case "help":
                     try{
                         if(commands.size()>1) {
-                            System.out.println(Help.help("PlyerDiffEditor", commands.get(1)));
+                            System.out.println(Help.help("PlayerDiffEditor", commands.get(1)));
                         }else{
                             System.out.println(Help.help("PlayerDiffEditor", null));
                         }

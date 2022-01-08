@@ -98,7 +98,6 @@ public class ContainerDiff extends ElementDiff implements Serializable {
 
     @Override
     public void edit() {
-           //TODO doppeltes Remove First
             boolean exit = false;
             Scanner scanner = new Scanner(System.in);
             LinkedList<String> commands;

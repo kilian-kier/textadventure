@@ -1,6 +1,13 @@
 std=\
 Es gibt folgende Befehle\n\
-nehme, gehe, spreche, schaue, untersuche oder info, gebe oder lege, musik, clear, hilfe
+nehme, gehe, spreche, schaue, untersuche oder info, gebe oder lege, musik, clear, hilfe, aktion
+
+
+aktion=\
+Der Spieler kann über Sonderfunktionen mit der Welt interagieren.\n\
+So kann er z.B. den Befehl\n\
+aktion hammer rückwand\n\
+verwenden
 
 nehme=\
 Der Spieler nimmt Dinge von einem Behälter oder \
@@ -33,8 +40,7 @@ Zeigt zu welchen Raum der Ausgang führt.\n\n\
 Benutzung bei Dingen: schaue [|Ding|]\n\
 Gibt die Beschreibung des Dings aus.\n\n\
 \
-Benutzung bei Charakteren: schaue [|Charakter|]\n\
-TODO: schaue NPCs
+Benutzung bei Charakteren: schaue [|Charakter|]
 
 info=\
 Benutzung: info [|Spiel-Element|]\n\
