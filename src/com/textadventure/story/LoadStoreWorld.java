@@ -26,6 +26,7 @@ import java.util.Scanner;
  * Lädt und Speichert Welt
  */
 public class LoadStoreWorld {
+    private static String oldTempDir=null;
     /**
      * Lädt und erstellt die Musikdateien aus der Weltdatei und speichert die Dateipfäde in der Musikliste.
      * Die tempörären Dateien und Ordner werden beim Beenden des Programms gelöscht.
@@ -41,6 +42,21 @@ public class LoadStoreWorld {
                 Path tempDir = Files.createTempDirectory("tmp");
                 tempDir.toFile().deleteOnExit();
                 World.tempDir = tempDir.toString();
+                if(oldTempDir!=null){
+                    try {
+                        File file = new File(oldTempDir);
+                        File[] contents = file.listFiles();
+                        if (contents != null) {
+                            for (File f : contents) {
+                                f.delete();
+                            }
+                        }
+                        file.delete();
+                    }catch(Exception ignore){
+
+                    }
+                    }
+                oldTempDir=World.tempDir;
                 for (String key : keys) {
                     File getName = new File(key);
                     key=getName.getName();
@@ -155,7 +171,7 @@ public class LoadStoreWorld {
     /**
      * Schließt alle Elemente der Welt
      */
-    protected static void close() {
+    public static void close() {
         World.roomMap.clear();
         World.locationMap.clear();
         World.toolMap.clear();
@@ -173,7 +189,7 @@ public class LoadStoreWorld {
      *
      * @param path Datei zum Speichern
      */
-    protected static void store(String path) {
+    public static void store(String path) {
         try {
             FileOutputStream fileOut;
             ObjectOutputStream out;

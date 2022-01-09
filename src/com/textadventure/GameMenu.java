@@ -14,7 +14,6 @@ public class GameMenu {
 
 
     public static void gameMenu() {
-        Scanner scanner = new Scanner(System.in);
         int input;
         String path = null;
         Help.load();
@@ -28,11 +27,11 @@ public class GameMenu {
                     System.out.println("3. Zurück");
                     System.out.printf("\nEingabe: ");
                     do {
-                        input = scanner.nextInt();
+                            input = getInt();
                     } while (input > 3 || input < 1);
                     switch(input){
                         case 1:
-                            path = "music.world";
+                            path = "game.world";
                             break;
                         case 2:
                             path = getPath();
@@ -66,7 +65,7 @@ public class GameMenu {
                     System.out.println("3. Zurück");
                     System.out.printf("\nEingabe: ");
                     do {
-                        input = scanner.nextInt();
+                        input = getInt();
                     } while (input > 3 || input < 1);
                     switch (input) {
                         case 1:
@@ -117,7 +116,6 @@ public class GameMenu {
 
 
     private static int menu() {
-        Scanner scanner = new Scanner(System.in);
         int retValue;
         System.out.println("\033[2J");
         System.out.println("\033[H");
@@ -129,8 +127,21 @@ public class GameMenu {
         System.out.println("5. Beenden");
         System.out.printf("\nEingabe: ");
         do {
-            retValue = scanner.nextInt();
+            retValue = getInt();
         } while (retValue > 5 || retValue < 1);
         return retValue;
+    }
+
+    private static int getInt(){
+        Scanner scanner = new Scanner(System.in);
+        Integer x=null;
+        while(x==null){
+            try{
+                x=scanner.nextInt();
+            }catch(Exception e){
+                scanner.next();
+            }
+        }
+        return x;
     }
 }
