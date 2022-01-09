@@ -3,92 +3,134 @@ package com.textadventure;
 import com.textadventure.help.Help;
 import com.textadventure.input.Game;
 import com.textadventure.story.LoadStoreWorld;
+import com.textadventure.story.World;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class GameMenu {
 
 
-    public static void gameMenu(){
+    public static void gameMenu() {
+        Scanner scanner = new Scanner(System.in);
+        int input;
+        String path = null;
         Help.load();
-        while(true){
-             switch(menu()){
-                 case 1:
-                     try {
-                         LoadStoreWorld.load("music.world");
-                     }catch(FileNotFoundException e){
-                         System.out.println(e.getMessage());
-                     }
-                     Game.start();
-                     break;
-                 case 2:
-                     String y = getPath();
-                     Scanner scanner = new Scanner(System.in);
-                     System.out.println("Gib den Dateinamen ein:");
-                     String file = scanner.nextLine();
-                     try {
-                         LoadStoreWorld.load(file);
-                     }catch(FileNotFoundException e){
-                         System.out.println(e.getMessage());
-                     }
-                     Game.start();
-                     break;
-                 case 3:
-                     System.out.println(getPath());
-                     //World.worldEditor();
-                     break;
-                 case 4:
-                     showCredits();
-                     break;
-                 case 5: return;
-                 default:
-                     System.out.println("Falsche Eingabe");
+        while (true) {
+            switch (menu()) {
+                case 1:
+                    System.out.println("\033[2J");
+                    System.out.println("\033[H");
+                    System.out.println("1. Story spielen");
+                    System.out.println("2. Eigene Welt spielen");
+                    System.out.println("3. Zurück");
+                    System.out.printf("\nEingabe: ");
+                    do {
+                        input = scanner.nextInt();
+                    } while (input > 3 || input < 1);
+                    switch(input){
+                        case 1:
+                            path = "music.world";
+                            break;
+                        case 2:
+                            path = getPath();
+                            break;
+                        case 3:
+                            break;
+                        default:
+                            System.out.println("Falsche Eingabe");
+                    }
+                    try{
+                        LoadStoreWorld.load(path);
+                    }catch (FileNotFoundException e){
+                        System.out.println(e.getMessage());
+                    }
+                    Game.start();
+                    break;
+                case 2:
+                    path = getPath();
+                    try {
+                        LoadStoreWorld.load(path);
+                    } catch (FileNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    Game.start();
+                    break;
+                case 3:
+                    System.out.println("\033[2J");
+                    System.out.println("\033[H");
+                    System.out.println("1. Neue Welt erstellen");
+                    System.out.println("2. Welt bearbeiten");
+                    System.out.println("3. Zurück");
+                    System.out.printf("\nEingabe: ");
+                    do {
+                        input = scanner.nextInt();
+                    } while (input > 3 || input < 1);
+                    switch (input) {
+                        case 1:
+                            //Todo Neue Datei erstellen für Editor (path = )
+                            break;
+                        case 2:
+                            path = getPath();
+                            break;
+                        case 3:
+                            break;
+                        default:
+                            System.out.println("Falsche Eingabe");
+                    }
+                    World.worldEditor(path);
+                    break;
+                case 4:
+                    showCredits();
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Falsche Eingabe");
             }
         }
     }
 
 
     private static String getPath() {
+        World.setExplorer(true);
         FileDialog fd = new FileDialog(new Frame(), "Welt laden", FileDialog.LOAD);
-        /*try {
-            fd.setDirectory();
+        try {
+            fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+        } catch (Exception e) {
+            System.out.println("Pfad nicht gefunden");
         }
-        catch (Exception e){
-
-        }*/
         fd.setFile("*.world");
         fd.setVisible(true);
-        String x = fd.getFile();
-        System.out.println(x);
-        return x;
+        return fd.getFile();
     }
 
 
-        private static void showCredits(){
+    private static void showCredits() {
         //Todo Credits herschreibm
         Scanner scanner = new Scanner(System.in);
         System.out.println("Mit Enter zum Menu zurückkehren");
-        if(scanner.hasNextLine()) return;
+        if (scanner.hasNextLine()) return;
     }
 
 
-    private static int menu(){
-       Scanner scanner = new Scanner(System.in);
-       int retValue;
+    private static int menu() {
+        Scanner scanner = new Scanner(System.in);
+        int retValue;
         System.out.println("\033[2J");
         System.out.println("\033[H");
         System.out.println("Herzlich Willkommen im Textadventure\n");
-        System.out.println("1. Story spielen");
-        System.out.println("2. Eigene Welt spielen");
+        System.out.println("1. Neues Spiel starten");
+        System.out.println("2. Savegame laden");
         System.out.println("3. Welt Editor");
         System.out.println("4. Credits");
         System.out.println("5. Beenden");
         System.out.printf("\nEingabe: ");
-        do{
+        do {
             retValue = scanner.nextInt();
-        }while (retValue > 5 || retValue < 1);
+        } while (retValue > 5 || retValue < 1);
         return retValue;
     }
 }
