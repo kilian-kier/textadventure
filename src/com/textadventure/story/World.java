@@ -56,8 +56,7 @@ public class World {
     static public ArrayList<String> musicList = new ArrayList<>();
     static public String tempDir=".";
 
-    static boolean explorer = false;
-
+    static boolean explorer = true;
 
     public static boolean isJar() {
         try {
