@@ -1,19 +1,28 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.help.Help;
+import com.textadventure.input.Input;
+import com.textadventure.interfaces.Editable;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.awt.*;
+import java.io.File;
 import java.io.Serializable;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Enthält eine Liste mit Ausgängen, Tools, Containern, NPCs und Orten.
  */
-public class Room extends GameElement implements Serializable {
+public class Room extends GameElement implements Serializable, Editable {
     private static final long serialVersionUID = -4799777339562754102L;
 
     private final ArrayList<String> exits = new ArrayList<>();
@@ -317,4 +326,157 @@ public class Room extends GameElement implements Serializable {
             this.location=map.get("location");
         }
     }
+
+    /**
+     * Mit dieser Methode können Beschreibung und Location eines Rooms geändert werden. Zudem können Container, Tools, NOCs und Exits ninzugefügt bzw. entfernt werden.
+     *
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
+    @Override
+    public boolean edit() {
+        while (true) {
+            System.out.print("Room " + this.name + ">>");
+            LinkedList<String> command = Input.getCommand();
+            try {
+                switch (command.get(0)) {
+                    case "help":
+                        try {
+                            if (command.size() > 1) {
+                                System.out.println(Help.help("RoomEditor", command.get(1)));
+                            } else {
+                                System.out.println(Help.help("RoomEditor", null));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case "back":
+                        return true;
+                    case "show":
+                        System.out.println(this);
+                        break;
+                    case "set":
+                        switch (command.get(1)) {
+                            case "description" -> this.description = Input.input("description", false);
+                            case "location" -> {
+                                if (World.locationMap.containsKey(command.get(2))) this.location = command.get(2);
+                                else System.out.println(command.get(2) + " nicht gefunden");
+                            }
+                            case "interactable" -> {
+                                this.setInteractable(!this.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
+                            }
+                            case "music" -> {
+                                if (command.size() > 2) {
+                                    this.setMusic(command.get(2), false);
+                                    World.addMusic(command.get(2));
+                                } else {
+                                    if (World.explorer) {
+                                        FileDialog fd = new FileDialog(new Frame(), "Musikdatei laden", FileDialog.LOAD);
+                                        fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+                                        fd.setFile("*.mp3");
+                                        fd.setVisible(true);
+                                        String filename = fd.getFile();
+                                        if (filename != null) {
+                                            this.setMusic(filename, false);
+                                            World.addMusic(filename);
+                                        } else
+                                            System.out.println("Keine Datei ausgewählt");
+                                    } else {
+                                        String filename = Input.input("Musikdatei", false);
+                                        if (filename != null) {
+                                            File musicFile = new File(filename);
+                                            if (musicFile.exists()) {
+                                                this.setMusic(musicFile.getName(), false);
+                                                World.addMusic(musicFile.getName());
+                                            } else
+                                                System.out.println("Datei nicht gefunden");
+                                        }
+                                    }
+                                }
+                            }
+                            default -> System.out.println("command not found");
+                        }
+                        break;
+                    case "add":
+                        command.removeFirst();
+                        switch (command.get(0)) {
+                            case "exit":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (World.exitMap.containsKey(x)) this.addExit(x);
+                                    else System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            case "npc":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (World.npcMap.containsKey(x)) this.addNpcs(x);
+                                    else System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            case "tool":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (World.toolMap.containsKey(x)) this.addTool(x);
+                                    else System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            case "container":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (World.containerMap.containsKey(x)) this.addContainer(x);
+                                    else System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            default:
+                                System.out.println("command not found");
+                                break;
+                        }
+                        break;
+                    case "rm":
+                        command.removeFirst();
+                        switch (command.get(0)) {
+                            case "exit":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (!this.removeExit(x)) System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            case "npc":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (!this.removeNpc(x)) System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            case "tool":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (!this.removeToolsKey(x)) System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            case "container":
+                                command.removeFirst();
+                                for (String x : command) {
+                                    if (!this.removeContainer(x)) System.out.println(x + " nicht gefunden");
+                                }
+                                break;
+                            default:
+                                System.out.println("command not found");
+                                break;
+                        }
+                        break;
+                    default:
+                        System.out.println("command not found");
+                        break;
+                }
+            } catch (IndexOutOfBoundsException | URISyntaxException e) {
+                try {
+                    Help.help("RoomEditor", command.get(0));
+                } catch (NoHelpFoundException ignored) {
+                }
+            }
+        }
+    }
+
 }

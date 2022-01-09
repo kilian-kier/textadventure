@@ -6,6 +6,7 @@ import com.textadventure.exeptions.ElementExistsException;
 import com.textadventure.exeptions.ElementNotFoundException;
 import com.textadventure.help.Help;
 import com.textadventure.input.Input;
+import com.textadventure.interfaces.Editable;
 
 import java.awt.*;
 import java.io.File;

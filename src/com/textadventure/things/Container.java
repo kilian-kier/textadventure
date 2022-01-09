@@ -1,17 +1,22 @@
 package com.textadventure.things;
 
 import com.textadventure.exeptions.ItemNotFoundException;
+import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.help.Help;
+import com.textadventure.input.Input;
+import com.textadventure.interfaces.Editable;
 import com.textadventure.locations.Room;
 import com.textadventure.story.World;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Ein Item welches es ermöglicht Tools zu speichern. Tools befinden sich in einer Liste (tools).
  */
-public class Container extends Item implements Serializable {
+public class Container extends Item implements Serializable, Editable {
     private static final long serialVersionUID = 7218620408718730599L;
     private final ArrayList<String> tools = new ArrayList<>();
 
@@ -139,6 +144,74 @@ public class Container extends Item implements Serializable {
         super.loadFromHashMap(map);
         if(map.containsKey("room")){
             currentContainer=map.get("room");
+        }
+    }
+
+    /**
+     * Mit dieser Methode können Beschreibung und Raum eines Containers geändert werden. Zudem können Objekte der Klasse Tools zum Container hinzugefügt bzw. entfernt werden
+     *
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
+    @Override
+    public boolean edit() {
+        while (true) {
+            System.out.print("Container " + this.name + ">>");
+            LinkedList<String> command = Input.getCommand();
+            try {
+                switch (command.get(0)) {
+                    case "help":
+                        try {
+                            if (command.size() > 1) {
+                                System.out.println(Help.help("ContainerEditor", command.get(1)));
+                            } else {
+                                System.out.println(Help.help("ContainerEditor", null));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case "back":
+                        return true;
+                    case "show":
+                        System.out.println(this);
+                        break;
+                    case "add":
+                        command.removeFirst();
+                        for (String x : command) {
+                            if (World.toolMap.containsKey(x)) this.addTool(x);
+                            else System.out.println(x + " nicht gefunden");
+                        }
+                        break;
+                    case "rm":
+                        command.removeFirst();
+                        for (String x : command) {
+                            if (!this.tools.remove(x)) System.out.println(x + " nicht gefunden!");
+                        }
+                        break;
+                    case "set":
+                        switch (command.get(1)) {
+                            case "description" -> this.description = Input.input("description", false);
+                            case "room" -> {
+                                if (World.roomMap.containsKey(command.get(2))) this.currentContainer = command.get(2);
+                                else System.out.println(command.get(2) + "nicht gefunden");
+                            }
+                            case "interactable" -> {
+                                this.setInteractable(!this.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
+                            }
+                            default -> System.out.println("command not found");
+                        }
+                        break;
+                    default:
+                        System.out.println("command not found");
+                        break;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                try {
+                    Help.help("ContainerEditor", command.get(0));
+                } catch (NoHelpFoundException ignored) {
+                }
+            }
         }
     }
 }
