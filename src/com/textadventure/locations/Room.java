@@ -76,7 +76,7 @@ public class Room extends GameElement implements Serializable {
         return exits.remove(exit);
     }
 
-    //TODO: vielleicht amol löschen wenns do Herr Gamper nt braucht
+
     public void addExit(String exit) {
         exits.add(exit);
     }

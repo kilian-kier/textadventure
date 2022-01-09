@@ -1,6 +1,14 @@
 std=\
 Dies ist der Event Editor\n\
-Befehle zum Editieren von Events: cmd, needs, once,  info, room, add, edit, rm, show, back
+Befehle zum Editieren von Events: cmd, needs, !needs, inventory, once,  info, room, add, edit, rm, show, back
+
+inventory=\
+Dinge, die sich im Inventar befinden müssen, dass das Event ausgeführt wird.\n\
+Benutzung: inventory [|tool1|] [|tool2|] ...
+
+!needs=\
+Befehl setzt die Events, NACH deren Ausführung dieses Event nicht ausgeführt wird\n\
+Benutzung: needs [||event1] [|event2|] ...
 
 once=\
 Mit dem Befehl, kann ein Event, so eingestellt werden, dass es \n\

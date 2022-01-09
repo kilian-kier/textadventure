@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class RoomDiff extends Diff implements Serializable {
+public class RoomDiff extends ElementDiff implements Serializable {
     private static final long serialVersionUID = 9672883399970462L;
     public RoomDiff(String name)  {
         super(name);
@@ -61,19 +61,17 @@ public class RoomDiff extends Diff implements Serializable {
             if (rmTools != null) {
                 for (String i : rmTools) {
                     World.toolMap.get(i).setContainer(null);
-                    room.getToolsContainer().removeTool(i);
                 }
             }
             if (addContainer != null) {
                 for (String i : addContainer) {
                     World.containerMap.get(i).changeContainer(this.name);
-                    room.addContainer(i);
                 }
             }
             if (rmContainer!=null){
+
                     for (String i : rmContainer) {
                         World.containerMap.get(i).changeContainer(null);
-                        room.getContainers().remove(i);
                     }
                 }
            if(addNPCs!=null){
@@ -84,8 +82,7 @@ public class RoomDiff extends Diff implements Serializable {
             }
             if(rmNPCs!=null){
                 for (String i : rmNPCs) {
-                    World.containerMap.get(i).changeContainer(null);
-                    room.getNpcs().remove(i);
+                    World.npcMap.get(i).changeContainer(null);
                 }
             }
             if(location!=null){
@@ -98,7 +95,6 @@ public class RoomDiff extends Diff implements Serializable {
 
     @Override
     public boolean check() {
-        //TODO Musik
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;
@@ -130,10 +126,12 @@ public class RoomDiff extends Diff implements Serializable {
         collTemp=getAddContainer();
         if(collTemp!=null){
             for (String i:collTemp) {
-                if(World.containerMap.get(i)==null){
-                    System.out.printf("Container (Add) %s nicht gefunden. In %s von %s\n",i,this.getClass().toString(),name);
-                    ret=false;
-                }
+
+                    if (World.containerMap.get(i) == null) {
+                        System.out.printf("Container (Add) %s nicht gefunden. In %s von %s\n", i, this.getClass().toString(), name);
+                        ret = false;
+                    }
+
             }
         }
         collTemp=getRmContainer();
@@ -198,6 +196,7 @@ public class RoomDiff extends Diff implements Serializable {
                             break;
                         case "addtools":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -206,6 +205,7 @@ public class RoomDiff extends Diff implements Serializable {
                             System.out.println("Addtools hinzugefügt");
                             break;
                         case "rmtools":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
@@ -228,6 +228,7 @@ public class RoomDiff extends Diff implements Serializable {
                             break;
                         case "addcontainer":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -236,6 +237,7 @@ public class RoomDiff extends Diff implements Serializable {
                             System.out.println("Addcontainer hinzugefügt");
                             break;
                         case "rmcontainer":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
@@ -246,6 +248,7 @@ public class RoomDiff extends Diff implements Serializable {
                             break;
                         case "addnpcs":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -254,6 +257,7 @@ public class RoomDiff extends Diff implements Serializable {
                             System.out.println("AddNPCs hinzugefügt");
                             break;
                         case "rmnpcs":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
@@ -358,6 +362,7 @@ public class RoomDiff extends Diff implements Serializable {
             try {
                 interactable = Boolean.parseBoolean(map.get("interactable"));
             }catch(Exception e){
+                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
         }

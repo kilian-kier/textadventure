@@ -1,0 +1,29 @@
+std=\
+Befehle zum Editieren von Spieler Diffs: add, rom, show, back
+
+
+
+add=\
+Befehl fügt Änderung hinzu.\n\
+Benutzung: add [description/room/addtools/rmtools]\n\
+Mit Eingabeaufforderung:\n\
+description - Setzt Beschreibung\n\
+room - Setzt einen Raum\n\
+addtools [|tool1|] [|tool2|] ... - Setzt Tools, die hinzugefügt werden sollen\n\
+rmtools [|tool1|] [|tool2|] ... - Setzt Tools, die entfernt werden sollen
+
+
+
+rm=\
+Befehl entfernt Änderung.\n\
+Benutzung: rm [description/location/addtools/rmtools]\n\
+description - Entfernt Beschreibung\n\
+room - Entfernt Raum.\n\
+addtools - Entfernt Tools, die hinzugefügt werden sollen\n\
+rmtools - Entfernt Tools, die entfernt werden sollen.\n\
+
+show=\
+Befehl zeigt die Eigenschaften des Spieler Diffs.
+
+back=\
+Befehl zum verlassen des Editors.

@@ -10,7 +10,6 @@ import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
 import com.textadventure.story.World;
 import com.textadventure.things.Container;
-import com.textadventure.things.Item;
 import com.textadventure.things.Tool;
 
 import java.util.LinkedList;
@@ -39,8 +38,6 @@ public class Game {
         LinkedList<String> cmd;
         String input;
 
-        World.musicPlayer.play();
-
         while (true) {
             System.out.printf("%s@%s >>> ", firstCap(World.player.getName()), firstCap(World.player.getCurrentRoom().getName()));
             input = scanner.nextLine();
@@ -48,13 +45,13 @@ public class Game {
             if (cmd == null)
                 continue;
             if (cmd.get(0).equals("exit")) {
-                World.musicPlayer.stop(false);
+                World.musicPlayer.stopMusic(false);
                 break;
             }
             Tool tool;
             Exit exit;
             Room room;
-            String error=null;
+            String error = null;
             switch (cmd.get(0)) {
                 case "nehme":
                     if (cmd.size() != 2 && cmd.size() != 3) {
@@ -70,16 +67,21 @@ public class Game {
                         System.out.println(new ElementNotFoundException(cmd.get(1), "Tool").getMessage());
                         continue;
                     }
-                    if(tool.isInteractable()) {
+                    if (tool.isInteractable()) {
                         if (cmd.size() == 2) {
-                            if (!tool.getCurrentContainer().equals(World.player.getCurrentRoom().getName())) {
-                                System.out.println(new ItemNotFoundException(tool.getName()).getMessage());
-                                continue;
-                            }
-                            try {
-                                tool.changeContainer("player");
-                            } catch (ItemNotFoundException e) {
-                                System.out.println(e.getMessage());
+                            if (tool.getCurrentContainer() != null) {
+                                if (!tool.getCurrentContainer().equals(World.player.getCurrentRoom().getName())) {
+                                    System.out.println(new ItemNotFoundException(tool.getName()).getMessage());
+                                    continue;
+                                }
+                                try {
+                                    tool.changeContainer("player");
+                                } catch (ItemNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                    continue;
+                                }
+                            } else {
+                                //TODO: Exception
                                 continue;
                             }
                         } else {
@@ -98,6 +100,7 @@ public class Game {
                     }
                     break;
                 case "gehe":
+                    Event.setRememberRoom(World.player.getCurrentRoom().getName());
                     if (cmd.size() != 2) {
                         System.out.println(new CommandSyntaxException(cmd.get(0)).getMessage());
                         continue;
@@ -119,25 +122,25 @@ public class Game {
                                 }
                                 for (String ex : World.player.getCurrentRoom().getExits()) {
                                     Exit roomExit = World.exitMap.get(ex);
-                                        if (roomExit.getDestination1().equals(room.getName()) || roomExit.getDestination2().equals(room.getName())) {
-                                            try {
-                                                if(roomExit.isInteractable()) {
-                                                    World.player.changeRoom(ex);
-                                                    World.musicPlayer.play();
-                                                    System.out.println(firstCap(World.player.getName()) + " geht zu " + firstCap(World.player.getCurrentRoom().getName()));
-                                                }
-                                                break;
-                                            } catch (ExitNotFoundException enf) {
-                                                System.out.println(enf.getMessage());
-                                                break;
+                                    if (roomExit.getDestination1().equals(room.getName()) || roomExit.getDestination2().equals(room.getName())) {
+                                        try {
+                                            if (roomExit.isInteractable()) {
+                                                World.player.changeRoom(ex);
+                                                World.musicPlayer.play();
+                                                System.out.println(firstCap(World.player.getName()) + " geht zu " + firstCap(World.player.getCurrentRoom().getName()));
                                             }
+                                            break;
+                                        } catch (ExitNotFoundException enf) {
+                                            System.out.println(enf.getMessage());
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
                     } else {
                         try {
-                            if(exit.isInteractable()) {
+                            if (exit.isInteractable()) {
                                 World.player.changeRoom(exit.getName());
                                 World.musicPlayer.play();
                                 System.out.println(firstCap(World.player.getName()) + " geht zu " + firstCap(World.player.getCurrentRoom().getName()));
@@ -147,7 +150,7 @@ public class Game {
                             continue;
                         }
                     }
-                   break;
+                    break;
                 case "lege":
                     // NO BREAK
                 case "gebe":
@@ -160,7 +163,7 @@ public class Game {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
                         } catch (CommandSyntaxException e) {
-                            error=e.getMessage();
+                            error = e.getMessage();
                             break;
                         }
                     }
@@ -175,7 +178,7 @@ public class Game {
                             tool.changeContainer(World.player.getCurrentRoom().getName());
                             System.out.println(firstCap(World.player.getName()) + " hat folgendes auf den Boden gelegt: " + firstCap(tool.getName()));
                         } catch (ItemNotFoundException e) {
-                           error=e.getMessage();
+                            error = e.getMessage();
                             continue;
                         }
                     } else {
@@ -183,7 +186,7 @@ public class Game {
                             try {
                                 throw new ElementNotFoundException(cmd.get(2), "Container");
                             } catch (ElementNotFoundException e) {
-                                error=e.getMessage();
+                                error = e.getMessage();
                                 break;
                             }
                         }
@@ -191,12 +194,12 @@ public class Game {
                             tool.changeContainer(cmd.get(2));
                             System.out.println(firstCap(World.player.getName()) + " hat folgendes in " + firstCap(cmd.get(2)) + " gegeben: " + firstCap(tool.getName()));
                         } catch (ItemNotFoundException e) {
-                            error=e.getMessage();
+                            error = e.getMessage();
                             break;
                         }
                     }
+                    break;
                 case "spreche":
-                    //TODO Eingabe von keiner Zahl, Keine Fragen
                     if (cmd.size() != 2) {
                         try {
                             throw new CommandSyntaxException(cmd.get(0));
@@ -206,121 +209,53 @@ public class Game {
                         }
                     }
                     if (!World.npcMap.containsKey(cmd.get(1))) {
-                        System.out.printf( "Es gibt hier niemanden mit dem Namen %s\n",firstCap(cmd.get(1)));
+                        System.out.printf("Es gibt hier niemanden mit dem Namen %s\n", firstCap(cmd.get(1)));
                         continue;
                     } else {
                         NPC n = World.npcMap.get(cmd.get(1));
-                        if(!n.getRoom().equals(World.player.getCurrentRoom().getName())){
-                            System.out.printf( "Es gibt hier niemanden mit dem Namen %s\n",firstCap(n.getName()));
+                        if (!n.getRoom().equals(World.player.getCurrentRoom().getName())) {
+                            System.out.printf("Es gibt hier niemanden mit dem Namen %s\n", firstCap(n.getName()));
                             break;
                         }
-                        System.out.print("Wähle eine Frage: \n");
-                        for (int i = 0; i < n.getDialog().getDialog().size(); i++) {
-                            System.out.printf("[%d] ", i + 1);
-                            System.out.println(n.getDialog().getDialog().get(i)[0]);
+                        while(true){
+                        if (n.getDialog().getDialog().size() != 0) {
+                            System.out.print("Wähle eine Frage (-1 zum Abbrechen): \n");
+                            for (int i = 0; i < n.getDialog().getDialog().size(); i++) {
+                                System.out.printf("[%d] ", i + 1);
+                                System.out.println(n.getDialog().getDialog().get(i)[0]);
+                            }
+                            int x;
+                            do {
+                                try {
+                                    x = (int)scanner.nextDouble();
+
+                                }catch(Exception e){
+                                    scanner.next();
+                                    x=-2;
+                                }
+                                if(x==-1){
+                                    break;
+                                }
+                            } while (x <= 0 || x > n.getDialog().getDialog().size());
+                            if(x==-1){
+                                scanner.nextLine();
+                                break;
+                            }
+                            System.out.println(n.getDialog().getDialog().get(x - 1)[1]);
+                            if (n.getDialog().getDialog().get(x - 1)[2] != null) {
+                                Event.execSingleEvent(n.getDialog().getDialog().get(x - 1)[2]);
+                            }
+                            scanner.nextLine();
+                            System.out.println();
+                        } else {
+                            System.out.printf("%s hat zurzeit keine Zeit mit %s zu sprechen\n", firstCap(n.getName()),firstCap(World.player.getName()));
+                            break;
                         }
-                        int x;
-                        do {
-                            x = scanner.nextInt();
-                        } while (x <= 0 || x>  n.getDialog().getDialog().size());
-                        System.out.println(n.getDialog().getDialog().get(x-1)[1]);
-                        if(n.getDialog().getDialog().get(x-1)[2]!=null){
-                            Event.execSingleEvent(n.getDialog().getDialog().get(x-1)[2]);
-                        }scanner.nextLine();
+                    }
                     }
                     break;
                 case "schaue":
-                    if (cmd.size() != 1 && cmd.size() != 2) {
-                        try {
-                            throw new CommandSyntaxException(cmd.get(0));
-                        } catch (CommandSyntaxException e) {
-                            System.out.println(e.getMessage());
-                            continue;
-                        }
-                    }
-                    if (cmd.size() == 1 || cmd.get(1).equals(World.player.getCurrentRoom().getName())) {
-                        if (World.player.getCurrentRoom().getTools().size() != 0 || World.player.getCurrentRoom().getContainers().size() != 0) {
-                            System.out.print("Es befinden sich hier folgende Dinge: ");
-                            for (String t : World.player.getCurrentRoom().getTools())
-                                System.out.print(firstCap(t) + " ");
-                            for (String c : World.player.getCurrentRoom().getContainers())
-                                System.out.print(firstCap(c) + " ");
-                            System.out.println();
-                        }
-
-                        if (World.player.getCurrentRoom().getNpcs().size() != 0) {
-                            System.out.print("Hier befinden sich folgende NPCs: ");
-                            for (String n : World.player.getCurrentRoom().getNpcs())
-                                System.out.print(firstCap(n) + " ");
-                            System.out.println();
-                        }
-
-                        System.out.printf("%s befindet sich an folgendem Ort: %s\n",firstCap(World.player.getName()),firstCap(World.player.getCurrentRoom().getName()));
-                        System.out.print("Der Ort befindet sich in " + firstCap(World.player.getCurrentRoom().getLocation()));
-                        if (World.player.getCurrentRoom().getExits().size() != 0) {
-                            System.out.println();
-                            for (String e : World.player.getCurrentRoom().getExits())
-                                try {
-                                    System.out.println();
-                                    if ((World.exitMap.get(e).getDestination1()).equals(World.player.getCurrentRoom().getName())) {
-                                        System.out.print(firstCap(World.exitMap.get(e).getDescription2()) );
-                                    } else {
-                                        System.out.print(firstCap(World.exitMap.get(e).getDescription1()) );
-                                    }
-                                }catch(Exception f){
-                                    System.out.println("Ausnahme Fehler in Schaue");
-                                }
-                            System.out.println();
-                        } else {
-                            System.out.println("\nEs gibt keinen Ausweg");
-                        }
-
-                    } else {
-                        if (World.containerMap.containsKey(cmd.get(1))) {
-                            Container container;
-                            try {
-                                container = World.player.getCurrentRoom().getContainer(cmd.get(1));
-                            } catch (ItemNotFoundException e) {
-                                System.out.println(e.getMessage());
-                                continue;
-                            }
-                            assert container != null;
-                            if (container.getTools().size() != 0) {
-                                System.out.print("In diesem Container befinden sich folgende Dinge: ");
-                                for (String t : container.getTools())
-                                    System.out.print(firstCap(t) + " ");
-                                System.out.println();
-                            } else
-                                System.out.println("Dieser Container ist leer.");
-                        } else if (cmd.get(1).equals("inventar") || cmd.get(1).equals(World.player.getName()) || cmd.get(1).equals("rucksack")) {
-                            if (World.player.getTools().size() != 0) {
-                                System.out.print("In seinem Rucksack befinden sich folgende Dinge: ");
-                                for (String t : World.player.getTools())
-                                    System.out.print(firstCap(t) + " ");
-                                System.out.println();
-                            } else
-                                System.out.println("Sein Rucksack ist leer.");
-                        } else if (World.player.getCurrentRoom().getExits().contains(cmd.get(1))) {
-                            Exit e = World.exitMap.get(cmd.get(1));
-                            if (e != null) {
-                                if (World.player.getCurrentRoom().getName().equals(e.getDestination1()))
-                                    System.out.println("Dieser Ausgang führt nach: " + firstCap(e.getDestination2()));
-                                else if (World.player.getCurrentRoom().getName().equals(e.getDestination2()))
-                                    System.out.println("Dieser Ausgang führt nach: " + firstCap(e.getDestination1()));
-                            } else {
-                                try {
-                                    throw new ExitNotFoundException(cmd.get(1));
-                                } catch (ExitNotFoundException e1) {
-                                    System.out.println(e1.getMessage());
-                                    continue;
-                                }
-                            }
-
-                        } else if (World.toolMap.containsKey(cmd.get(1))) {
-                            Tool t = World.toolMap.get(cmd.get(1));
-                            System.out.println(firstCap(t.getName()) + ": " + t.getDescription());
-                        } else if (World.npcMap.containsKey(cmd.get(1))) {
-                            //TODO: NPCs
+                        if (cmd.size() != 1 && cmd.size() != 2) {
                             try {
                                 throw new CommandSyntaxException(cmd.get(0));
                             } catch (CommandSyntaxException e) {
@@ -328,6 +263,92 @@ public class Game {
                                 continue;
                             }
                         }
+                        if (cmd.size() == 1 || cmd.get(1).equals(World.player.getCurrentRoom().getName())) {
+                            if (World.player.getCurrentRoom().getTools().size() != 0 || World.player.getCurrentRoom().getContainers().size() != 0) {
+                                System.out.print("Es befinden sich hier folgende Dinge: ");
+                                for (String t : World.player.getCurrentRoom().getTools())
+                                    System.out.print(firstCap(t) + " ");
+                                for (String c : World.player.getCurrentRoom().getContainers())
+                                    System.out.print(firstCap(c) + " ");
+                                System.out.println();
+                            }
+
+                            if (World.player.getCurrentRoom().getNpcs().size() != 0) {
+                                System.out.print("Hier befinden sich folgende NPCs: ");
+                                for (String n : World.player.getCurrentRoom().getNpcs())
+                                    System.out.print(firstCap(n) + " ");
+                                System.out.println();
+                            }
+
+                            System.out.printf("%s befindet sich an folgendem Ort: %s\n", firstCap(World.player.getName()), firstCap(World.player.getCurrentRoom().getName()));
+                            System.out.print("Der Ort befindet sich in " + firstCap(World.player.getCurrentRoom().getLocation()));
+                            if (World.player.getCurrentRoom().getExits().size() != 0) {
+                                System.out.println();
+                                for (String e : World.player.getCurrentRoom().getExits())
+                                    try {
+                                        System.out.println();
+                                        if ((World.exitMap.get(e).getDestination1()).equals(World.player.getCurrentRoom().getName())) {
+                                            System.out.print(firstCap(World.exitMap.get(e).getDescription2()));
+                                        } else {
+                                            System.out.print(firstCap(World.exitMap.get(e).getDescription1()));
+                                        }
+                                    } catch (Exception f) {
+                                        System.out.println("Ausnahme Fehler in Schaue");
+                                    }
+                                System.out.println();
+                            } else {
+                                System.out.println("\nEs gibt keinen Ausweg");
+                            }
+
+                        } else {
+                            if (World.containerMap.containsKey(cmd.get(1))) {
+                                Container container;
+                                try {
+                                    container = World.player.getCurrentRoom().getContainer(cmd.get(1));
+                                } catch (ItemNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                    continue;
+                                }
+                                assert container != null;
+                                if (container.getTools().size() != 0) {
+                                    System.out.print("In diesem Container befinden sich folgende Dinge: ");
+                                    for (String t : container.getTools())
+                                        System.out.print(firstCap(t) + " ");
+                                    System.out.println();
+                                } else
+                                    System.out.println("Dieser Container ist leer.");
+                            } else if (cmd.get(1).equals("inventar") || cmd.get(1).equals(World.player.getName()) || cmd.get(1).equals("rucksack")) {
+                                if (World.player.getTools().size() != 0) {
+                                    System.out.print("In seinem Rucksack befinden sich folgende Dinge: ");
+                                    for (String t : World.player.getTools())
+                                        System.out.print(firstCap(t) + " ");
+                                    System.out.println();
+                                } else
+                                    System.out.println("Sein Rucksack ist leer.");
+                            } else if (World.player.getCurrentRoom().getExits().contains(cmd.get(1))) {
+                                Exit e = World.exitMap.get(cmd.get(1));
+                                if (e != null) {
+                                    if (World.player.getCurrentRoom().getName().equals(e.getDestination1()))
+                                        System.out.println("Dieser Ausgang führt nach: " + firstCap(e.getDestination2()));
+                                    else if (World.player.getCurrentRoom().getName().equals(e.getDestination2()))
+                                        System.out.println("Dieser Ausgang führt nach: " + firstCap(e.getDestination1()));
+                                } else {
+                                    try {
+                                        throw new ExitNotFoundException(cmd.get(1));
+                                    } catch (ExitNotFoundException e1) {
+                                        System.out.println(e1.getMessage());
+                                        continue;
+                                    }
+                                }
+
+                            } else if (World.toolMap.containsKey(cmd.get(1))) {
+                                Tool t = World.toolMap.get(cmd.get(1));
+                                System.out.println(firstCap(t.getName()) + ": " + t.getDescription());
+                            } else if (World.npcMap.containsKey(cmd.get(1))) {
+                                NPC npc=World.npcMap.get(cmd.get(1));
+                                System.out.println(firstCap(npc.getName()) + ": " + npc.getDescription());
+                            }
+
                     }
                     break;
                 case "info":
@@ -386,7 +407,7 @@ public class Game {
                     if (cmd.get(1).equals("start")) {
                         World.musicPlayer.play();
                     } else if (cmd.get(1).equals("stop")) {
-                        World.musicPlayer.stop(false);
+                        World.musicPlayer.stopMusic(false);
                     }
                     break;
                 case "clear":
@@ -404,6 +425,8 @@ public class Game {
                         System.out.println(e.getMessage());
                     }
                     break;
+                case "aktion":
+                    break;
                 default:
                     try {
                         throw new CommandNotFoundException(cmd.get(0));
@@ -412,7 +435,7 @@ public class Game {
                         continue;
                     }
             }
-            if(!Event.execEvent(cmd)  && error!=null){
+            if (!Event.execEvent(cmd) && error != null) {
                 System.out.println(error);
             }
         }

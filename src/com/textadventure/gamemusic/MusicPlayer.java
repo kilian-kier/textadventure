@@ -1,6 +1,7 @@
 package com.textadventure.gamemusic;
 
 import com.textadventure.input.Input;
+import com.textadventure.locations.Room;
 import com.textadventure.story.World;
 
 import javax.sound.sampled.*;
@@ -9,10 +10,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class MusicPlayer {
+public class MusicPlayer extends Thread {
     private Clip clip;
-    private AudioInputStream audioInputStream;
-    private String filePath;
+    private Thread thread;
 
     /**
      * Liest eine Audiodatei ein und gibt die Bytes der Datei zurück
@@ -23,7 +23,7 @@ public class MusicPlayer {
     public static byte[] readFile(String filepath) {
         byte[] ret = null;
         try {
-            ret = Files.readAllBytes(Path.of(World.tempDir+"/"+filepath));
+            ret = Files.readAllBytes(Path.of( filepath));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,28 +36,56 @@ public class MusicPlayer {
      * @param path Dateiname
      * @return Neuer Dateiname mit .wav
      */
-    private static String getWavPath(String path){
+    public static String getWavPath(String path) {
         File file = new File(path);
-        path= Input.getFileType(file.getName(),false);
-        return path+".wav";
+        path = Input.getFileType(file.getName(), false);
+        return path + ".wav";
+    }
+
+    @Override
+    public void run() {
+        try {
+            Room tmp = World.player.getCurrentRoom();
+            Thread.sleep(1000);
+            while (clip.isRunning())
+                Thread.sleep(100);
+            if (World.player.getCurrentRoom() == tmp) {
+                clip.close();
+                clip = null;
+                play();
+            }
+        } catch (InterruptedException e) {
+            //DO NOTHING
+        }
     }
 
     public void play() {
         try {
-            stop(true);
+            if (thread != null) {
+                thread.interrupt();
+                thread = null;
+            }
+            stopMusic(true);
             if (World.player.getCurrentRoom().getMusic() != null) {
-                String filename=getWavPath(World.player.getCurrentRoom().getMusic());
-                filePath = World.tempDir + "/" + filename;
-                audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+                String filename = getWavPath(World.player.getCurrentRoom().getMusic());
+                String filePath = World.tempDir + "/" + filename;
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-                int frame = World.player.getCurrentRoom().getMusicFrame();
-                if (frame != 0)
-                    clip.setFramePosition(frame);
+                if (World.player.getCurrentRoom().isEventMusic()) {
+                    clip.loop(0);
+                    clip.setFramePosition(0);
+                } else {
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    int frame = World.player.getCurrentRoom().getMusicFrame();
+                    if (frame != 0)
+                        clip.setFramePosition(frame);
+                }
                 clip.start();
                 if (World.player.getCurrentRoom().isEventMusic()) {
                     World.player.getCurrentRoom().setMusic(World.player.getCurrentRoom().getPreviousMusic(), false);
+                    thread = new Thread(this);
+                    thread.start();
                 }
             }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
@@ -65,7 +93,7 @@ public class MusicPlayer {
         }
     }
 
-    public void stop(boolean changedRoom) {
+    public void stopMusic(boolean changedRoom) {
         if (this.clip != null) {
             if (changedRoom) {
                 if (World.player.getPreviousRoom() != null)

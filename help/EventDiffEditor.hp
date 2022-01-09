@@ -1,0 +1,30 @@
+
+std=\
+Befehle zum Editieren von EventDiffs: add, rm, adddiff, rmdiff, show, back
+
+add=\
+Befehl fügt Änderung hinzu.\n\
+Benutzung: add [cmd/room/happened/once/rmdiffs/addependent/rmnotdependent/addnotdependent/addinventory/rminventory]\n\
+cmd [|cmd1|] [|cmd2|] ... - Setzt den Befehl, der das Event auslöst\n\
+room [|room|] ... - Setzt den Raum, in dem das Event ausgelöst wird\n\
+happened [true/false] - Setzt die happened Flag auf einen Wert\n\
+once [true/false] - Setzt ob das Event mehrfach ausgeführt wird oder nicht\n\
+rmdiffs [|diff1|] [|diff1|] ... - Setzt die Diffs, die entfernt werden sollen\n\
+adddependent [|event1|] [|event2|] ... Setzt die Events, welche hinzugefügt werden sollen\n\
+rmndependent [|event1|] [|event2|] ... Entfernt Abhängigkeiten\n\
+addnotdependent [|event1|] [|event2|] ... Setztz Events, nach denen dieses nicht ausgeführt wird\n\
+rmnotdependent [|event1|] [|event2|] ... Entfernt Events, nach denen dieses nicht ausgeführt wird\n\
+addinventory [|tool1|] [|tool2|] ... Setzt Tools, die sich im Inventar befinden müssen\n\
+rminventory [|tool1|] [|tool2|] ... Entfernt Tools, die sich im Inventar befinden müssen\n\
+
+
+rm=\
+Befehl entfernt Änderung.\n\
+Benutzung: rm [cmd/room/happened/once/rmdiffs/adddiffs/addependent/rmnotdependent/addnotdependent/addinventory/rminventory]\n\
+Setztz, die jeweilige Änderung auf null.
+
+show=\
+Befehl zeigt die Eigenschaften des LocationDiffs.
+
+back=\
+Befehl zum verlassen des Editors.

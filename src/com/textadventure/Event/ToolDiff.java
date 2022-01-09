@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class ToolDiff extends Diff implements Serializable {
+public class ToolDiff extends ElementDiff implements Serializable {
     private static final long serialVersionUID = 9672883399970462L;
     public ToolDiff(String name){
         super(name);

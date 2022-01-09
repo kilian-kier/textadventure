@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class LocationDiff extends Diff implements Serializable {
+public class LocationDiff extends ElementDiff implements Serializable {
     private static final long serialVersionUID = 9672883399970462L;
     public LocationDiff(String name) {
         super(name);
@@ -141,6 +141,7 @@ public class LocationDiff extends Diff implements Serializable {
                             break;
                         case "addrooms":
                             commands.removeFirst();
+                            commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");
                                 break;
@@ -149,6 +150,7 @@ public class LocationDiff extends Diff implements Serializable {
                             System.out.println("Addrooms hinzugefügt");
                             break;
                         case "rmrooms":
+                            commands.removeFirst();
                             commands.removeFirst();
                             if(commands.isEmpty()){
                                 System.out.println("Zu wenig Parameter");

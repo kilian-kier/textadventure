@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class ExitDiff extends Diff implements Serializable {
+public class ExitDiff extends ElementDiff implements Serializable {
     private static final long serialVersionUID = 9672883399970462L;
     public ExitDiff(String name){
         super(name);
