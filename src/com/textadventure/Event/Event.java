@@ -2,6 +2,8 @@ package com.textadventure.Event;
 
 import com.textadventure.gamemusic.MusicPlayer;
 import com.textadventure.input.Input;
+import com.textadventure.interfaces.Checkable;
+import com.textadventure.interfaces.Loadable;
 import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ElementNotFoundException;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Event implements Serializable {
+public class Event implements Serializable, Loadable, Checkable {
     private static final long serialVersionUID = 2552220530382600393L;
     private String name;
     private Collection<String> cmd;
@@ -243,7 +245,8 @@ public class Event implements Serializable {
         this.info = info;
     }
 
-    public boolean check(){
+    @Override
+    public boolean check(boolean fix){
         boolean ret=true;
         if(dependent!=null) {
             for (String i : dependent) {
@@ -270,7 +273,7 @@ public class Event implements Serializable {
             }
         }
         for (Diff i: differences.values()) {
-            if(!i.check()){
+            if(!i.check(fix)){
                 ret=false;
             }
         }

@@ -2,6 +2,9 @@ package com.textadventure.characters;
 
 import com.textadventure.help.Help;
 import com.textadventure.input.Input;
+import com.textadventure.interfaces.Checkable;
+import com.textadventure.interfaces.Editable;
+import com.textadventure.interfaces.Loadable;
 import com.textadventure.story.World;
 
 import java.io.Serializable;
@@ -10,7 +13,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Dialog implements Serializable {
+/**
+ * Dialog Klasse. In ihr befindet sich eine Liste mit den Dialogen. Die Liste Enthält
+ * Arrays, welche eine größe von drei haben. An Index 0 befindet sich eine Frage, an Index 1
+ * eine Antwort und an Index 2 ein Event oder null
+ */
+public class Dialog implements Serializable, Editable, Loadable, Checkable {
     private static final long serialVersionUID = -7386853779740424554L;
     private ArrayList<String[]> dialog=new ArrayList<>();
 
@@ -25,6 +33,15 @@ public class Dialog implements Serializable {
             this.dialog = dialog;
         }
     }
+
+    /**
+     * Setzt oder überschreibt eine Frage
+     * @param index Index - Wenn null wird an letzter Stelle eine Frage hinzugefügt
+     * @param question Wine Frage - wenn null, wird ignoriert
+     * @param answer Eine Antwort - wenn null, wird ignoriert
+     * @param event Ein Event Name - auch null
+     * @throws IndexOutOfBoundsException Wenn Index größer ist, als die Liste
+     */
     public void setQA(int index, String question,String answer, String event) throws IndexOutOfBoundsException{
         String[]arr=new String[3];
         if(index<dialog.size()){
@@ -62,12 +79,12 @@ public class Dialog implements Serializable {
         return ret;
     }
 
-    public void edit(){
-        boolean exit = false;
+    @Override
+    public boolean edit(){
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
         String input;
-        while(!exit) {
+        while(true) {
             System.out.print("Dialog " + ">> ");
             input = scanner.nextLine();
             commands = Input.splitInput(input);
@@ -124,7 +141,7 @@ public class Dialog implements Serializable {
                     System.out.println(this.toString());
                     break;
                 case "back":
-                    return;
+                    return true;
                 case "help":
                     try{
                         if(commands.size()>1) {

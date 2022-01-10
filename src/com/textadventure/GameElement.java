@@ -1,7 +1,9 @@
 package com.textadventure;
 
+import com.textadventure.interfaces.Checkable;
 import com.textadventure.interfaces.Editable;
 import com.textadventure.interfaces.Interactable;
+import com.textadventure.interfaces.Loadable;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -10,7 +12,7 @@ import java.util.Locale;
 /**
  * Ein GameElement ist ein Element welches eine Beschreibung und einen Namen besitzt. Röume, Orte, Items, Exits und NPCs sind Spiel Elemente
  */
-public class GameElement implements Serializable, Interactable {
+public class GameElement implements Serializable, Interactable, Checkable, Loadable {
     private static final long serialVersionUID = 7977434406346025468L;
     protected String description;
     protected String name;
@@ -64,5 +66,11 @@ public class GameElement implements Serializable, Interactable {
                 this.interactable = Boolean.parseBoolean(map.get("interactable"));
             }catch(Exception ignore){}
         }
+    }
+
+    @Override
+    public boolean check(boolean fix) {
+        System.out.println("Not yet Implemented");
+        return false;
     }
 }

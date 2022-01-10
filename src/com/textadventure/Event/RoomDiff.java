@@ -94,7 +94,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
     }
 
     @Override
-    public boolean check() {
+    public boolean check(boolean fix) {
         String stringTemp;
         Collection<String> collTemp;
         boolean ret=true;
@@ -165,12 +165,12 @@ public class RoomDiff extends ElementDiff implements Serializable {
     }
 
     @Override
-    public void edit() {
+    public boolean edit() {
         boolean exit = false;
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
         String input;
-        while(!exit) {
+        while(true) {
             System.out.print("Raum Diff " + getName()  + ">> ");
             input = scanner.nextLine();
             commands = Input.splitInput(input);
@@ -314,7 +314,7 @@ public class RoomDiff extends ElementDiff implements Serializable {
                     System.out.println(this.toString());
                     break;
                 case "back":
-                    return;
+                    return true;
                 case "help":
                     try{
                         if(commands.size()>1) {

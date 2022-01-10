@@ -13,7 +13,7 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=landstraße
+	room=kneipe
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
@@ -609,6 +609,7 @@ Unterstadt{
 	type=room
 	description=Die Unterstadt von Lusinam
 	location=lusinam
+	music=music/oberstadt.mp3
 }
 
 Kneipe{

@@ -5,6 +5,7 @@ import com.textadventure.exeptions.NoHelpFoundException;
 import com.textadventure.help.Help;
 import com.textadventure.input.Input;
 import com.textadventure.interfaces.Editable;
+import com.textadventure.interfaces.Loadable;
 import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ExitNotFoundException;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class Player extends GameElement implements RoomChangeable, Editable {
+public class Player extends GameElement implements RoomChangeable, Editable, Loadable {
     private static final long serialVersionUID = 524105953116492598L;
     private final Container inventory = new Container("Rucksack", "Das ist dein Rucksack. Hier kannst du alle Dinge finden, die du besitzt.");
     private Room currentRoom;
@@ -138,6 +139,7 @@ public class Player extends GameElement implements RoomChangeable, Editable {
         else string += String.format("Raum: %s", this.currentRoom.getName());
         return string;
     }
+    @Override
     public void loadFromHashMap(HashMap<String, String> map) {
         if(map.containsKey("description")){
             description=map.get("description");

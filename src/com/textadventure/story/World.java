@@ -313,8 +313,8 @@ public class World {
             System.out.println("Exit " + exitname + " existiert bereits");
             return;
         }
-        String description1 = Input.input(String.format("Beschreibung aus Sicht von %s:", room2), false);
-        String description2 = Input.input(String.format("Beschreibung aus Sicht von %s:", room1), false);
+        String description1 = Input.input(String.format("Beschreibung aus Sicht von %s", room2), false);
+        String description2 = Input.input(String.format("Beschreibung aus Sicht von %s", room1), false);
         Exit exit = new Exit(exitname, description1 + "@" + description2);
         exit.setDestination1(room1);
         exit.setDestination2(room2);
