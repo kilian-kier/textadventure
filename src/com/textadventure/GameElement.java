@@ -1,5 +1,6 @@
 package com.textadventure;
 
+import com.textadventure.interfaces.Editable;
 import com.textadventure.interfaces.Interactable;
 
 import java.io.Serializable;
@@ -42,6 +43,7 @@ public class GameElement implements Serializable, Interactable {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     @Override
     public void look() {

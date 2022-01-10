@@ -1,18 +1,23 @@
 package com.textadventure.locations;
 
 import com.textadventure.GameElement;
+import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.help.Help;
+import com.textadventure.input.Input;
+import com.textadventure.interfaces.Editable;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Ein Ausgang enthält zwei Räume (destination1/2) zwischen denen er sich befinded. Es gibt eine Doppelte Beschreibung welche in der Mitte mit einem
  * @ getrennt wird.
  */
-public class Exit extends GameElement implements Serializable {
+public class Exit extends GameElement implements Serializable, Editable {
     private static final long serialVersionUID = -5624726393622315238L;
     private String destination1;
     private String destination2;
@@ -163,6 +168,65 @@ public class Exit extends GameElement implements Serializable {
         }
         if(map.containsKey("description2")){
             setDescription2(map.get("description2"));
+        }
+    }
+
+    /**
+     * Mit dieser Methode kann die Beschreibung eines Exits geändert werden. Zudem können die beiden Rooms des Exits gesetzt werden.
+     *
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
+    @Override
+    public boolean edit() {
+        while (true) {
+            System.out.print("Exit " + this.name + ">>");
+            LinkedList<String> command = Input.getCommand();
+            try {
+                switch (command.get(0)) {
+                    case "help":
+                        try {
+                            if (command.size() > 1) {
+                                System.out.println(Help.help("ExitEditor", command.get(1)));
+                            } else {
+                                System.out.println(Help.help("ExitEditor", null));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case "back":
+                        return true;
+                    case "show":
+                        System.out.println(this);
+                        break;
+                    case "set":
+                        switch (command.get(1)) {
+                            case "destination1" -> {
+                                if (World.roomMap.containsKey(command.get(2))) this.destination1 = command.get(2);
+                                else System.out.println(command.get(2) + " nicht gefunden");
+                            }
+                            case "destination2" -> {
+                                if (World.roomMap.containsKey(command.get(2))) this.destination2 = command.get(2);
+                                else System.out.println(command.get(2) + " nicht gefunden");
+                            }
+                            case "interactable" -> {
+                                this.setInteractable(!this.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
+                            }
+                            case "description" -> this.description = Input.input("description", false);
+                            default -> System.out.println("command not found");
+                        }
+                        break;
+                    default:
+                        System.out.println("command not found");
+                        break;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                try {
+                    Help.help("ExitEditor", command.get(0));
+                } catch (NoHelpFoundException ignored) {
+                }
+            }
         }
     }
 }

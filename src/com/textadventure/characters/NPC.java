@@ -1,6 +1,10 @@
 package com.textadventure.characters;
 
 import com.textadventure.GameElement;
+import com.textadventure.exeptions.NoHelpFoundException;
+import com.textadventure.help.Help;
+import com.textadventure.input.Input;
+import com.textadventure.interfaces.Editable;
 import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.exeptions.ItemNotFoundException;
@@ -8,11 +12,12 @@ import com.textadventure.locations.Room;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  *  Nicht Spieler Charakter im Spiel verfügt über Dialoge (dialog) und befindet sich in einem Raum (room).
  */
-public class NPC extends GameElement implements Serializable {
+public class NPC extends GameElement implements Serializable, Editable {
     private static final long serialVersionUID = 9672883399970462L;
     private Dialog dialog = new Dialog();
     private String room;
@@ -125,6 +130,65 @@ public class NPC extends GameElement implements Serializable {
                 dialog.loadFromHashMap(LoadStoreWorld.createMap(map.get("dialog")));
             }catch(Exception e){
                 System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Mit dieser Methode können Beschreibung und Room eines NPCs geändert werden. Zudem können Dialoge hinzugefügt bzw. gelöscht werden
+     *
+     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
+     */
+    @Override
+    public boolean edit() {
+        while (true) {
+            System.out.print("NPC " + this.name + ">>");
+            LinkedList<String> command = Input.getCommand();
+            try {
+                switch (command.get(0)) {
+                    case "help":
+                        try {
+                            if (command.size() > 1) {
+                                System.out.println(Help.help("NpcEditor", command.get(1)));
+                            } else {
+                                System.out.println(Help.help("NpcEditor", null));
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case "back":
+                        return true;
+                    case "show":
+                        System.out.println(this);
+                        break;
+                    case "add":
+                    case "rm":
+                        this.dialog.edit();
+                        break;
+                    case "set":
+                        switch (command.get(1)) {
+                            case "description" -> this.description =Input.input("description", false);
+                            case "room" -> {
+                                if (World.roomMap.containsKey(command.get(2))) this.room = command.get(2);
+                                else System.out.println(command.get(2) + " nicht gefunden");
+                            }
+                            case "interactable" -> {
+                                this.setInteractable(!this.isInteractable());
+                                System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
+                            }
+                            default -> System.out.println("command not found");
+                        }
+                        break;
+                    default:
+                        System.out.println("command not found");
+                        break;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                try {
+                    Help.help("NpcEditor", command.get(0));
+                } catch (NoHelpFoundException ignored) {
+                }
             }
         }
     }
