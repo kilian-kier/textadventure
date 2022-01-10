@@ -1,6 +1,6 @@
 std=\
 Es gibt folgende Befehle\n\
-nehme, gehe, spreche, schaue, untersuche oder info, gebe oder lege, musik, clear, hilfe, aktion
+nehme, gehe, spreche, schaue, untersuche oder info, gebe oder lege, musik, clear, hilfe, speichern, aktion
 
 
 aktion=\
@@ -63,6 +63,10 @@ Wird kein Behälter angegeben, wird das Ding auf den Boden gelegt.\n\
 musik=\
 Benutzung: musik [start/stop]\n\
 Schaltet die Musik ein oder aus.\n\
+
+speichern=\
+Benutzung: speichern\n\
+Speichert den aktuellen Zustand\n\
 
 clear=\
 Benutzung: clear\n\

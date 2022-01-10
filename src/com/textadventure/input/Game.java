@@ -1,6 +1,7 @@
 package com.textadventure.input;
 
 import com.textadventure.Event.Event;
+import com.textadventure.GameMenu;
 import com.textadventure.characters.NPC;
 import com.textadventure.characters.Player;
 import com.textadventure.exeptions.*;
@@ -427,7 +428,7 @@ public class Game {
                         System.out.println(e.getMessage());
                     }
                     break;
-                case "load":
+                case "laden":
                     try {
                         LoadStoreWorld.close();
                         LoadStoreWorld.load(cmd.get(1));
@@ -437,9 +438,12 @@ public class Game {
                         System.out.println("Keine Datei angegeben");
                     }
                     break;
-                case "store":
+                case "speichern":
                     try {
-                        LoadStoreWorld.store(cmd.get(1));
+                        if (World.explorer)
+                            LoadStoreWorld.store(GameMenu.setPath());
+                        else
+                            LoadStoreWorld.store(cmd.get(1));
                     }catch(Exception e){
                         System.out.println("Keine Datei angegeben");
                     }

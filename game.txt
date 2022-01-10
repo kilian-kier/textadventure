@@ -13,13 +13,12 @@ nulllocation{
 //Spieler Start
 Stefe{
 	type=player
-	room=kneipe
+	room=landstraße
 	description={
 		Manchmal, da frage sich Stefe, wer er denn überhaupt ist.
 		Was ist der Sinn seines Lebens, der Zweck dieses Planeten?
 		Des Universums?
 	}
-	inventory=schweinshaxen
 }
 Start{
 	type=event

@@ -168,7 +168,7 @@ public class World {
                         try {
                             FileDialog fd = new FileDialog(new Frame(), "Weltdatei speichern", FileDialog.SAVE);
                             fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
-                            fd.setFile("world.world");
+                            fd.setFile("*.world");
                             fd.setVisible(true);
                             String filename = fd.getFile();
                             if (filename != null)
