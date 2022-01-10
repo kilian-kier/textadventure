@@ -14,6 +14,7 @@ public class GameMenu {
 
 
     public static void gameMenu() {
+        Scanner scanner = new Scanner(System.in);
         int input;
         String path = null;
         Help.load();
@@ -82,9 +83,6 @@ public class GameMenu {
                     World.worldEditor(path);
                     break;
                 case 4:
-                    showCredits();
-                    break;
-                case 5:
                     return;
                 default:
                     System.out.println("Falsche Eingabe");
@@ -107,15 +105,8 @@ public class GameMenu {
     }
 
 
-    private static void showCredits() {
-        //Todo Credits herschreibm
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Mit Enter zum Menu zurückkehren");
-        if (scanner.hasNextLine()) return;
-    }
-
-
     private static int menu() {
+        Scanner scanner = new Scanner(System.in);
         int retValue;
         System.out.println("\033[2J");
         System.out.println("\033[H");
@@ -123,8 +114,7 @@ public class GameMenu {
         System.out.println("1. Neues Spiel starten");
         System.out.println("2. Savegame laden");
         System.out.println("3. Welt Editor");
-        System.out.println("4. Credits");
-        System.out.println("5. Beenden");
+        System.out.println("4. Beenden");
         System.out.printf("\nEingabe: ");
         do {
             retValue = getInt();
