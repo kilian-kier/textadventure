@@ -50,14 +50,16 @@ public class World {
     static public HashMap<String, NPC> npcMap = new HashMap<>();
     static public HashMap<String, Event> eventMap = new HashMap<>();
     static public HashMap<String, String> eventKeyMap = new HashMap<>();
-    //TODO new Player
     static public Player player;
     static public MusicPlayer musicPlayer = new MusicPlayer();
     static public ArrayList<String> musicList = new ArrayList<>();
     static public String tempDir=".";
 
-    static boolean explorer = false;
+    static public boolean explorer = false;
 
+    public static void setExplorer(boolean explorer) {
+        World.explorer = explorer;
+    }
 
     public static boolean isJar() {
         try {
@@ -311,8 +313,8 @@ public class World {
             System.out.println("Exit " + exitname + " existiert bereits");
             return;
         }
-        String description1 = Input.input(String.format("Beschreibung aus Sicht von %s:", room2), false);
-        String description2 = Input.input(String.format("Beschreibung aus Sicht von %s:", room1), false);
+        String description1 = Input.input(String.format("Beschreibung aus Sicht von %s", room2), false);
+        String description2 = Input.input(String.format("Beschreibung aus Sicht von %s", room1), false);
         Exit exit = new Exit(exitname, description1 + "@" + description2);
         exit.setDestination1(room1);
         exit.setDestination2(room2);
@@ -393,312 +395,6 @@ public class World {
         throw new ElementNotFoundException("Element", name);
     }
 
-    /**
-     * Mit dieser Methode können Beschreibung und Raum eines Tools geändert werden
-     *
-     * @param temp Ist das temporäre Objekt der Klasse Tool welches überarbeitet werden soll
-     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
-     */
-    static private boolean editTool(Tool temp) {
-        while (true) {
-            System.out.print("Tool " + temp.getName() + ">>");
-            LinkedList<String> command = Input.getCommand();
-            try {
-                switch (command.get(0)) {
-                    case "help":
-                        try {
-                            if (command.size() > 1) {
-                                System.out.println(Help.help("ToolEditor", command.get(1)));
-                            } else {
-                                System.out.println(Help.help("ToolEditor", null));
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case "back":
-                        return true;
-                    case "show":
-                        System.out.println(temp);
-                        break;
-                    case "set":
-                        switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description", false));
-                            case "container" -> {
-                                if (containerMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
-                                else System.out.println(command.get(2) + "nicht gefunden");
-                            }
-                            case "interactable" -> {
-                                temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
-                            }
-                            default -> System.out.println("command not found");
-                        }
-                        break;
-                    default:
-                        System.out.println("command not found");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                try {
-                    System.out.println(Help.help("ToolEditor", command.get(0)));
-                } catch (NoHelpFoundException ignored) {
-                }
-            }
-        }
-    }
-
-    /**
-     * Mit dieser Methode können Beschreibung und Raum eines Containers geändert werden. Zudem können Objekte der Klasse Tools zum Container hinzugefügt bzw. entfernt werden
-     *
-     * @param temp Ist das temporäre Objekt der Klasse Container welches überarbeitet werden soll
-     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
-     */
-    static private boolean editContainer(Container temp) {
-        while (true) {
-            System.out.print("Container " + temp.getName() + ">>");
-            LinkedList<String> command = Input.getCommand();
-            try {
-                switch (command.get(0)) {
-                    case "help":
-                        try {
-                            if (command.size() > 1) {
-                                System.out.println(Help.help("ContainerEditor", command.get(1)));
-                            } else {
-                                System.out.println(Help.help("ContainerEditor", null));
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case "back":
-                        return true;
-                    case "show":
-                        System.out.println(temp);
-                        break;
-                    case "add":
-                        command.removeFirst();
-                        for (String x : command) {
-                            if (toolMap.containsKey(x)) temp.addTool(x);
-                            else System.out.println(x + " nicht gefunden");
-                        }
-                        break;
-                    case "rm":
-                        command.removeFirst();
-                        for (String x : command) {
-                            if (!temp.removeTool(x)) System.out.println(x + " nicht gefunden!");
-                        }
-                        break;
-                    case "set":
-                        switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description", false));
-                            case "room" -> {
-                                if (roomMap.containsKey(command.get(2))) temp.setContainer(command.get(2));
-                                else System.out.println(command.get(2) + "nicht gefunden");
-                            }
-                            case "interactable" -> {
-                                temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
-                            }
-                            default -> System.out.println("command not found");
-                        }
-                        break;
-                    default:
-                        System.out.println("command not found");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                try {
-                    Help.help("ContainerEditor", command.get(0));
-                } catch (NoHelpFoundException ignored) {
-                }
-            }
-        }
-    }
-
-    /**
-     * Mit dieser Methode kann die Beschreibung einer Location geändert werden. Zudem können Objekte der Klasse Room zur Location hinzugefügt bzw. entfernt werden
-     *
-     * @param temp Ist das temporäre Objekt der Klasse Location welches überarbeitet werden soll
-     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
-     */
-    static private boolean editLocation(Location temp) {
-        while (true) {
-            System.out.print("Location " + temp.getName() + ">>");
-            LinkedList<String> command = Input.getCommand();
-            try {
-                switch (command.get(0)) {
-                    case "help":
-                        try {
-                            if (command.size() > 1) {
-                                System.out.println(Help.help("LocationEditor", command.get(1)));
-                            } else {
-                                System.out.println(Help.help("LocationEditor", null));
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case "back":
-                        return true;
-                    case "show":
-                        System.out.println(temp);
-                        break;
-                    case "add":
-                        command.removeFirst();
-                        for (String x : command) {
-                            if (roomMap.containsKey(x)) temp.addRoom(x);
-                            else System.out.println(x + " nicht gefunden");
-                        }
-                        break;
-                    case "rm":
-                        command.removeFirst();
-                        for (String x : command) {
-                            if (!temp.removeRoom(x)) System.out.println(x + " nicht gefunden!");
-                        }
-                        break;
-
-                    case "set":
-                        switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description", false));
-                            case "interactable" -> {
-                                temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
-                            }
-                            default -> System.out.println("command not found");
-                        }
-
-                        break;
-                    default:
-                        System.out.println("command not found");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                try {
-                    Help.help("LocationEditor", command.get(0));
-                } catch (NoHelpFoundException ignored) {
-                }
-            }
-        }
-    }
-
-    /**
-     * Mit dieser Methode kann die Beschreibung eines Exits geändert werden. Zudem können die beiden Rooms des Exits gesetzt werden.
-     *
-     * @param temp Ist das temporäre Objekt der Klasse Exit welches überarbeitet werden soll
-     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
-     */
-    private static boolean editExit(Exit temp) {
-        while (true) {
-            System.out.print("Exit " + temp.getName() + ">>");
-            LinkedList<String> command = Input.getCommand();
-            try {
-                switch (command.get(0)) {
-                    case "help":
-                        try {
-                            if (command.size() > 1) {
-                                System.out.println(Help.help("ExitEditor", command.get(1)));
-                            } else {
-                                System.out.println(Help.help("ExitEditor", null));
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case "back":
-                        return true;
-                    case "show":
-                        System.out.println(temp);
-                        break;
-                    case "set":
-                        switch (command.get(1)) {
-                            case "destination1" -> {
-                                if (roomMap.containsKey(command.get(2))) temp.setDestination1(command.get(2));
-                                else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "destination2" -> {
-                                if (roomMap.containsKey(command.get(2))) temp.setDestination2(command.get(2));
-                                else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "interactable" -> {
-                                temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
-                            }
-                            case "description" -> temp.setDescription(Input.input("description", false));
-                            default -> System.out.println("command not found");
-                        }
-                        break;
-                    default:
-                        System.out.println("command not found");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                try {
-                    Help.help("ExitEditor", command.get(0));
-                } catch (NoHelpFoundException ignored) {
-                }
-            }
-        }
-    }
-
-    /**
-     * Mit dieser Methode können Beschreibung und Room eines NPCs geändert werden. Zudem können Dialoge hinzugefügt bzw. gelöscht werden
-     *
-     * @param temp Ist das temporäre Objekt der Klasse NPC welches überarbeitet werden soll
-     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
-     */
-    private static boolean editNpc(NPC temp) {
-        while (true) {
-            System.out.print("NPC " + temp.getName() + ">>");
-            LinkedList<String> command = Input.getCommand();
-            try {
-                switch (command.get(0)) {
-                    case "help":
-                        try {
-                            if (command.size() > 1) {
-                                System.out.println(Help.help("NpcEditor", command.get(1)));
-                            } else {
-                                System.out.println(Help.help("NpcEditor", null));
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case "back":
-                        return true;
-                    case "show":
-                        System.out.println(temp);
-                        break;
-                    case "add":
-                    case "rm":
-                        temp.getDialog().edit();
-                        break;
-                    case "set":
-                        switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description", false));
-                            case "room" -> {
-                                if (roomMap.containsKey(command.get(2))) temp.setRoom(command.get(2));
-                                else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "interactable" -> {
-                                temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
-                            }
-                            default -> System.out.println("command not found");
-                        }
-                        break;
-                    default:
-                        System.out.println("command not found");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                try {
-                    Help.help("NpcEditor", command.get(0));
-                } catch (NoHelpFoundException ignored) {
-                }
-            }
-        }
-    }
 
     /**
      * Fügt Musik zur Welt hinzu
@@ -713,214 +409,6 @@ public class World {
             System.out.println("Datei nicht gefunden");
     }
 
-    /**
-     * Mit dieser Methode können Beschreibung und Location eines Rooms geändert werden. Zudem können Container, Tools, NOCs und Exits ninzugefügt bzw. entfernt werden.
-     *
-     * @param temp Ist das temporäre Objekt der Klasse Room welches überarbeitet werden soll
-     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
-     */
-    private static boolean editRoom(Room temp) {
-        while (true) {
-            System.out.print("Room " + temp.getName() + ">>");
-            LinkedList<String> command = Input.getCommand();
-            try {
-                switch (command.get(0)) {
-                    case "help":
-                        try {
-                            if (command.size() > 1) {
-                                System.out.println(Help.help("RoomEditor", command.get(1)));
-                            } else {
-                                System.out.println(Help.help("RoomEditor", null));
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case "back":
-                        return true;
-                    case "show":
-                        System.out.println(temp);
-                        break;
-                    case "set":
-                        switch (command.get(1)) {
-                            case "description" -> temp.setDescription(Input.input("description", false));
-                            case "location" -> {
-                                if (locationMap.containsKey(command.get(2))) temp.setLocation(command.get(2));
-                                else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "interactable" -> {
-                                temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
-                            }
-                            case "music" -> {
-                                if (command.size() > 2) {
-                                    temp.setMusic(command.get(2), false);
-                                    addMusic(command.get(2));
-                                } else {
-                                    if (explorer) {
-                                        FileDialog fd = new FileDialog(new Frame(), "Musikdatei laden", FileDialog.LOAD);
-                                        fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
-                                        fd.setFile("*.mp3");
-                                        fd.setVisible(true);
-                                        String filename = fd.getFile();
-                                        if (filename != null) {
-                                            temp.setMusic(filename, false);
-                                            addMusic(filename);
-                                        } else
-                                            System.out.println("Keine Datei ausgewählt");
-                                    } else {
-                                        String filename = Input.input("Musikdatei", false);
-                                        if (filename != null) {
-                                            File musicFile = new File(filename);
-                                            if (musicFile.exists()) {
-                                                temp.setMusic(musicFile.getName(), false);
-                                                addMusic(musicFile.getName());
-                                            } else
-                                                System.out.println("Datei nicht gefunden");
-                                        }
-                                    }
-                                }
-                            }
-                            default -> System.out.println("command not found");
-                        }
-                        break;
-                    case "add":
-                        command.removeFirst();
-                        switch (command.get(0)) {
-                            case "exit":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (exitMap.containsKey(x)) temp.addExit(x);
-                                    else System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            case "npc":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (npcMap.containsKey(x)) temp.addNpcs(x);
-                                    else System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            case "tool":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (toolMap.containsKey(x)) temp.addTool(x);
-                                    else System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            case "container":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (containerMap.containsKey(x)) temp.addContainer(x);
-                                    else System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            default:
-                                System.out.println("command not found");
-                                break;
-                        }
-                        break;
-                    case "rm":
-                        command.removeFirst();
-                        switch (command.get(0)) {
-                            case "exit":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (!temp.removeExit(x)) System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            case "npc":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (!temp.removeNpc(x)) System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            case "tool":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (!temp.removeToolsKey(x)) System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            case "container":
-                                command.removeFirst();
-                                for (String x : command) {
-                                    if (!temp.removeContainer(x)) System.out.println(x + " nicht gefunden");
-                                }
-                                break;
-                            default:
-                                System.out.println("command not found");
-                                break;
-                        }
-                        break;
-                    default:
-                        System.out.println("command not found");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException | URISyntaxException e) {
-                try {
-                    Help.help("RoomEditor", command.get(0));
-                } catch (NoHelpFoundException ignored) {
-                }
-            }
-        }
-    }
-
-    /**
-     * Mit dieser Methode kann der Player bearbeitet werden
-     *
-     * @param temp Ist das temporäre Objekt der Klasse Player welches überarbeitet werden soll
-     * @return Gibt true zurück, wenn der command "back" eingegeben wurde
-     */
-    private static boolean editPlayer(Player temp) {
-        while (true) {
-            System.out.print("Player " + temp.getName() + ">>");
-            LinkedList<String> command = Input.getCommand();
-            try {
-                switch (command.get(0)) {
-                    case "help":
-                        try {
-                            if (command.size() > 1) {
-                                System.out.println(Help.help("PlayerEditor", command.get(1)));
-                            } else {
-                                System.out.println(Help.help("PlayerEditor", null));
-                            }
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case "back":
-                        return true;
-                    case "show":
-                        System.out.println(temp);
-                        break;
-                    case "set":
-                        switch (command.get(1)) {
-                            case "room" -> {
-                                if (roomMap.containsKey(command.get(2)))
-                                    temp.setCurrentRoom(roomMap.get(command.get(2)));
-                                else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "interactable" -> {
-                                temp.setInteractable(!temp.isInteractable());
-                                System.out.printf("Interactable wurde auf %b gesetzt\n", temp.isInteractable());
-                            }
-                            case "description" -> temp.setDescription(Input.input("description", false));
-                            default -> System.out.println("command not found");
-                        }
-                        break;
-                    default:
-                        System.out.println("command not found");
-                        break;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                try {
-                    Help.help("PlayerEditor", command.get(0));
-                } catch (NoHelpFoundException ignored) {
-                }
-            }
-        }
-    }
-
 
     /**
      * Methode sucht zu bearbeitendes Element und ruft die zugehörige Methode auf
@@ -931,37 +419,43 @@ public class World {
     static private void editGameElement(LinkedList<String> args) throws ElementNotFoundException {
         //Trys müssen alle einzeln sein, da sonst die anderen Überprüfungen übersprungen werden !!!
         try {
-            if (editTool((Tool) getElement(args.get(1), "tool"))) return;
+            Tool temp = (Tool) getElement(args.get(1),"tool");
+            if(temp.edit()) return;
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
         try {
-            if (editRoom((Room) getElement(args.get(1), "room"))) return; //Muss oben bleiben wegen container
+            Room temp = (Room) getElement(args.get(1),"room");
+            if(temp.edit()) return;  //Muss oben bleiben wegen container
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
         try {
-            if (editContainer((Container) getElement(args.get(1), "container"))) return;
+            Container temp = (Container) getElement(args.get(1),"container");
+            if(temp.edit()) return;
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
         try {
-            if (editExit((Exit) getElement(args.get(1), "exit"))) return;
+            Exit temp = (Exit) getElement(args.get(1),"exit");
+            if(temp.edit()) return;
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
         try {
-            if (editNpc((NPC) getElement(args.get(1), "npc"))) return;
+            NPC temp = (NPC) getElement(args.get(1),"npc");
+            if(temp.edit()) return;
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
         try {
-            if (editLocation((Location) getElement(args.get(1), "location"))) return;
+            Location temp = (Location) getElement(args.get(1),"location");
+            if(temp.edit()) return;
         } catch (ElementNotFoundException e) {
             //Tutto bene
         }
         if (World.player != null && Objects.equals(World.player.getName(), args.get(1)))
-            if (editPlayer(World.player)) return;
+            if (World.player.edit()) return;
         if (eventKeyMap.containsKey(args.get(1))) if (EventEditor.edit(args.get(1))) return;
         throw new ElementNotFoundException(args.get(1), "Game Element");
     }

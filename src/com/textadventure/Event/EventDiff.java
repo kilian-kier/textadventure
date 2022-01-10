@@ -112,7 +112,7 @@ public class EventDiff extends Diff {
     }
 
     @Override
-    public boolean check() {
+    public boolean check(boolean fix) {
         boolean ret = true;
         if (adddependent != null) {
             for (String i : adddependent) {
@@ -140,7 +140,7 @@ public class EventDiff extends Diff {
         }
         if (adddiffs != null) {
             for (Diff i : adddiffs.values()) {
-                if (!i.check()) {
+                if (!i.check(fix)) {
                     ret = false;
                 }
             }
@@ -180,12 +180,11 @@ public class EventDiff extends Diff {
     }
 
     @Override
-    public void edit() {
-        boolean exit = false;
+    public boolean edit() {
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
         String input;
-        while (!exit) {
+        while (true) {
             System.out.print("Event Diff " + getName() + ">> ");
             input = scanner.nextLine();
             commands = Input.splitInput(input);
@@ -345,7 +344,7 @@ public class EventDiff extends Diff {
                         System.out.println(this);
                         break;
                     case "back":
-                        return;
+                        return true;
                     case "help":
                         try {
                             if (commands.size() > 1) {

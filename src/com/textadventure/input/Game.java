@@ -8,10 +8,12 @@ import com.textadventure.help.Help;
 import com.textadventure.locations.Exit;
 import com.textadventure.locations.Location;
 import com.textadventure.locations.Room;
+import com.textadventure.story.LoadStoreWorld;
 import com.textadventure.story.World;
 import com.textadventure.things.Container;
 import com.textadventure.things.Tool;
 
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -423,6 +425,23 @@ public class Game {
                         }
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
+                    }
+                    break;
+                case "load":
+                    try {
+                        LoadStoreWorld.close();
+                        LoadStoreWorld.load(cmd.get(1));
+                    }catch(FileNotFoundException e){
+                        System.out.println(e.getMessage());
+                    }catch(IndexOutOfBoundsException f){
+                        System.out.println("Keine Datei angegeben");
+                    }
+                    break;
+                case "store":
+                    try {
+                        LoadStoreWorld.store(cmd.get(1));
+                    }catch(Exception e){
+                        System.out.println("Keine Datei angegeben");
                     }
                     break;
                 case "aktion":

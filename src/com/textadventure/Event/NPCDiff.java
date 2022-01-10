@@ -48,7 +48,7 @@ public class NPCDiff extends ElementDiff implements Serializable {
     }
 
     @Override
-    public boolean check() {
+    public boolean check(boolean fix) {
         String stringTemp;
         boolean ret=true;
         stringTemp=getRoom();
@@ -108,12 +108,11 @@ public class NPCDiff extends ElementDiff implements Serializable {
     }
 
     @Override
-    public void edit() {
-        boolean exit = false;
+    public boolean edit() {
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> commands;
         String input;
-        while(!exit) {
+        while(true) {
             System.out.print("NPC Diff " + getName()  + ">> ");
             input = scanner.nextLine();
             commands = Input.splitInput(input);
@@ -186,7 +185,7 @@ public class NPCDiff extends ElementDiff implements Serializable {
                     System.out.println(this.toString());
                     break;
                 case "back":
-                    return;
+                    return true;
                 case "help":
                     try{
                         if(commands.size()>1) {

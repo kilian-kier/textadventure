@@ -52,7 +52,7 @@ public class Checker {
             }
         }
         for (Event event: World.eventMap.values() ) {
-            if(!event.check()){
+            if(!event.check(fix)){
                 ret=false;
             }
         }
