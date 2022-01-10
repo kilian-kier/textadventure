@@ -100,9 +100,9 @@ public class LoadStoreWorld {
             ObjectInputStream in;
             if (path == null) {
                 if (World.isJar())
-                    fileIn = LoadStoreWorld.class.getResourceAsStream("/world.world");
+                    fileIn = LoadStoreWorld.class.getResourceAsStream("/game.world");
                 else
-                    fileIn = new FileInputStream("world.world");
+                    fileIn = new FileInputStream("game.world");
             } else
                 fileIn = new FileInputStream(path);
 

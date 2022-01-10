@@ -7,8 +7,11 @@ import com.textadventure.story.World;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.nio.file.Paths;
+import java.security.CodeSource;
 import java.util.Scanner;
+import java.util.zip.ZipInputStream;
 
 public class GameMenu {
 
@@ -32,10 +35,17 @@ public class GameMenu {
                     } while (input > 3 || input < 1);
                     switch(input){
                         case 1:
-                            path = "game.world";
+                            if (World.isJar())
+                                path = null;
+                            else
+                                path = "game.world";
                             break;
                         case 2:
                             path = getPath();
+                            if (path == null) {
+                                System.out.println("Keine Datei ausgewählt");
+                                continue;
+                            }
                             break;
                         case 3:
                             break;
@@ -46,15 +56,21 @@ public class GameMenu {
                         LoadStoreWorld.load(path);
                     }catch (FileNotFoundException e){
                         System.out.println(e.getMessage());
+                        continue;
                     }
                     Game.start();
                     break;
                 case 2:
                     path = getPath();
+                    if (path == null) {
+                        System.out.println("Keine Datei ausgewählt");
+                        continue;
+                    }
                     try {
                         LoadStoreWorld.load(path);
                     } catch (FileNotFoundException e) {
                         System.out.println(e.getMessage());
+                        continue;
                     }
                     Game.start();
                     break;
@@ -70,7 +86,7 @@ public class GameMenu {
                     } while (input > 3 || input < 1);
                     switch (input) {
                         case 1:
-                            //Todo Neue Datei erstellen für Editor (path = )
+                            path = setPath();
                             break;
                         case 2:
                             path = getPath();
@@ -79,6 +95,10 @@ public class GameMenu {
                             break;
                         default:
                             System.out.println("Falsche Eingabe");
+                    }
+                    if (path == null) {
+                        System.out.println("Keine Datei ausgewählt");
+                        continue;
                     }
                     World.worldEditor(path);
                     break;
@@ -101,7 +121,24 @@ public class GameMenu {
         }
         fd.setFile("*.world");
         fd.setVisible(true);
-        return fd.getFile();
+        if (fd.getFile() == null)
+            return null;
+        return fd.getDirectory() + fd.getFile();
+    }
+
+    public static String setPath() {
+        World.setExplorer(true);
+        FileDialog fd = new FileDialog(new Frame(), "Welt speichern", FileDialog.SAVE);
+        try {
+            fd.setDirectory(Paths.get(World.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent().toString());
+        } catch (Exception e) {
+            System.out.println("Pfad nicht gefunden");
+        }
+        fd.setFile("*.world");
+        fd.setVisible(true);
+        if (fd.getFile() == null)
+            return null;
+        return fd.getDirectory() + fd.getFile();
     }
 
 
