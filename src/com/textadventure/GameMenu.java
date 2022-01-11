@@ -15,7 +15,6 @@ import java.util.zip.ZipInputStream;
 
 public class GameMenu {
 
-
     public static void gameMenu() {
         Scanner scanner = new Scanner(System.in);
         int input;
