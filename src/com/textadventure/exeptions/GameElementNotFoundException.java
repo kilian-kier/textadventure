@@ -1,8 +1,8 @@
 package com.textadventure.exeptions;
 
 public class GameElementNotFoundException extends Exception {
-    private String element;
-    private String type;
+    private final String element;
+    private final String type;
     public GameElementNotFoundException(String element,String type) {
         this.element=element;
         this.type=type;

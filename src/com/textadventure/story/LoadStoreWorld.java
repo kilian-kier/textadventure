@@ -418,11 +418,11 @@ public class LoadStoreWorld {
             if (tokey && c == '\n') {
                 key = "";
             } else if (tokey && c != '=') {
-                key = key + String.valueOf(c);
+                key = key + c;
             } else if (c == '=' && tokey) {
                 tokey = false;
             } else if (c != '\n' && c != '{' && i < input.length()-1) { //!tokey
-                value = value + String.valueOf(c);
+                value = value + c;
             } else if (c == '{') {
                 int temp = i;
 
@@ -437,7 +437,7 @@ public class LoadStoreWorld {
                 tokey = true;
             } else {
                 if(i==input.length()-1){
-                    value = value + String.valueOf(c);
+                    value = value + c;
                 }
                 value = cleanString(value);
                 if (!value.equals("")) {

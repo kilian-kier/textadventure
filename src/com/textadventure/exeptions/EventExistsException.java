@@ -1,7 +1,7 @@
 package com.textadventure.exeptions;
 
 public class EventExistsException extends Exception{
-    private String name;
+    private final String name;
     public EventExistsException(String name){
         this.name = name;
     }
