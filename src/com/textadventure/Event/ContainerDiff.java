@@ -174,7 +174,7 @@ public class ContainerDiff extends ElementDiff implements Serializable {
                         }
                         break;
                     case "show":
-                        System.out.println(this.toString());
+                        System.out.println(this);
                         break;
                     case "back":
                         return true;

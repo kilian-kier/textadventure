@@ -138,7 +138,7 @@ public class Dialog implements Serializable, Editable, Loadable, Checkable {
                     }
                     break;
                 case "show":
-                    System.out.println(this.toString());
+                    System.out.println(this);
                     break;
                 case "back":
                     return true;

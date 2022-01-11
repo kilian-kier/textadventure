@@ -1,7 +1,7 @@
 package com.textadventure.exeptions;
 
 public class TypeDoesNotExistException extends Exception{
-        private String type;
+        private final String type;
        public TypeDoesNotExistException(String type) {
             this.type=type;
         }
