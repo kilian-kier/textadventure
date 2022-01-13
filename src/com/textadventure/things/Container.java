@@ -190,16 +190,17 @@ public class Container extends Item implements Serializable, Editable {
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "description" -> this.description = Input.input("description", false);
-                            case "room" -> {
+                            case "description": this.description = Input.input("description", false); break;
+                            case "room": {
                                 if (World.roomMap.containsKey(command.get(2))) this.currentContainer = command.get(2);
                                 else System.out.println(command.get(2) + "nicht gefunden");
-                            }
-                            case "interactable" -> {
+                            }break;
+                       
+                            case "interactable" : {
                                 this.setInteractable(!this.isInteractable());
                                 System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
-                            }
-                            default -> System.out.println("command not found");
+                            }break;
+                            default : System.out.println("command not found");
                         }
                         break;
                     default:

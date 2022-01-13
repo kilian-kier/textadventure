@@ -356,16 +356,16 @@ public class Room extends GameElement implements Serializable, Editable {
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "description" -> this.description = Input.input("description", false);
-                            case "location" -> {
+                            case "description" : this.description = Input.input("description", false); break;
+                            case "location" : {
                                 if (World.locationMap.containsKey(command.get(2))) this.location = command.get(2);
                                 else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "interactable" -> {
+                            }break;
+                            case "interactable" : {
                                 this.setInteractable(!this.isInteractable());
                                 System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
-                            }
-                            case "music" -> {
+                            }break;
+                            case "music" : {
                                 if (command.size() > 2) {
                                     this.setMusic(command.get(2), false);
                                     World.addMusic(command.get(2));
@@ -393,8 +393,8 @@ public class Room extends GameElement implements Serializable, Editable {
                                         }
                                     }
                                 }
-                            }
-                            default -> System.out.println("command not found");
+                            }break;
+                            default : System.out.println("command not found");
                         }
                         break;
                     case "add":

@@ -201,20 +201,20 @@ public class Exit extends GameElement implements Serializable, Editable {
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "destination1" -> {
+                            case "destination1" : {
                                 if (World.roomMap.containsKey(command.get(2))) this.destination1 = command.get(2);
                                 else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "destination2" -> {
+                            }break;
+                            case "destination2" : {
                                 if (World.roomMap.containsKey(command.get(2))) this.destination2 = command.get(2);
                                 else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "interactable" -> {
+                            }break;
+                            case "interactable" : {
                                 this.setInteractable(!this.isInteractable());
                                 System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
-                            }
-                            case "description" -> this.description = Input.input("description", false);
-                            default -> System.out.println("command not found");
+                            }break;
+                            case "description" : this.description = Input.input("description", false); break;
+                            default : System.out.println("command not found");
                         }
                         break;
                     default:
