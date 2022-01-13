@@ -41,7 +41,6 @@ import java.util.zip.ZipInputStream;
  * In der World Klasse findet man Methoden zum Erstellen und bearbeiten der Spielwelt.
  */
 public class World {
-    //TODO Interactable
     static public HashMap<String, Room> roomMap = new HashMap<>();
     static public HashMap<String, Exit> exitMap = new HashMap<>();
     static public HashMap<String, Location> locationMap = new HashMap<>();

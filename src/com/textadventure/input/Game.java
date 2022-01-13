@@ -35,7 +35,7 @@ public class Game {
      */
     public static void start() {
         if (World.player == null)
-            World.player = new Player("Stefe", "der junge Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next())); //TODO: Player wird nicht richtig initialisiert
+            World.player = new Player("Stefe", "der junge Bursch", World.roomMap.get(World.roomMap.keySet().iterator().next()));
         Event.execSingleEvent("start");
         Scanner scanner = new Scanner(System.in);
         LinkedList<String> cmd;
@@ -84,7 +84,6 @@ public class Game {
                                     continue;
                                 }
                             } else {
-                                //TODO: Exception
                                 continue;
                             }
                         } else {

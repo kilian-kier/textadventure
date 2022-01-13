@@ -18,7 +18,6 @@ public class GameElement implements Serializable, Interactable, Checkable, Loada
     protected String name;
     protected boolean interactable=true;
 
-    //TODO Interactable in toString
     public boolean isInteractable() {
         return interactable;
     }
@@ -49,12 +48,12 @@ public class GameElement implements Serializable, Interactable, Checkable, Loada
 
     @Override
     public void look() {
-        //TODO
+
     }
 
     @Override
     public void investigate() {
-        //TODO
+
     }
 
     public void loadFromHashMap(HashMap<String,String> map){

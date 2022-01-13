@@ -18,7 +18,6 @@ public class Checker {
      * @return true, wenn es keine Fehler gibt, ansonsten false
      */
     public static boolean check(boolean fix){
-        //TODO fix
         boolean ret=true;
         for (Room room: World.roomMap.values() ) {
             if(!room.check(fix)){

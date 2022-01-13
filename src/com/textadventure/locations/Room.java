@@ -219,7 +219,6 @@ public class Room extends GameElement implements Serializable, Editable {
     }
 
     public boolean check(boolean fix) {
-        //TODO Musik
         boolean ret = true;
         try {
             if (World.locationMap.get(location) == null) {
