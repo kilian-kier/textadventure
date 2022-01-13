@@ -130,12 +130,12 @@ public class Location extends GameElement implements Serializable, Editable {
 
                     case "set":
                         switch (command.get(1)) {
-                            case "description" -> this.description = Input.input("description", false);
-                            case "interactable" -> {
+                            case "description" : this.description = Input.input("description", false); break;
+                            case "interactable" : {
                                 this.setInteractable(!this.isInteractable());
                                 System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
-                            }
-                            default -> System.out.println("command not found");
+                            }break;
+                            default : System.out.println("command not found");
                         }
 
                         break;

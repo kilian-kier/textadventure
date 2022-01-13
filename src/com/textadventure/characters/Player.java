@@ -184,17 +184,17 @@ public class Player extends GameElement implements RoomChangeable, Editable, Loa
                         break;
                     case "set":
                         switch (command.get(1)) {
-                            case "room" -> {
+                            case "room" :
                                 if (World.roomMap.containsKey(command.get(2)))
                                     this.currentRoom = World.roomMap.get(command.get(2));
                                 else System.out.println(command.get(2) + " nicht gefunden");
-                            }
-                            case "interactable" -> {
+                            break;
+                            case "interactable":
                                 this.setInteractable(!this.isInteractable());
                                 System.out.printf("Interactable wurde auf %b gesetzt\n", this.isInteractable());
-                            }
-                            case "description" -> this.description = Input.input("description", false);
-                            default -> System.out.println("command not found");
+                            break;
+                            case "description": this.description = Input.input("description", false); break;
+                            default: System.out.println("command not found");
                         }
                         break;
                     default:
