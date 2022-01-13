@@ -280,7 +280,6 @@ public class World {
                         break;
                     }
                     Game.start();
-
                     break;
                 case "exit":
                     exit = true;

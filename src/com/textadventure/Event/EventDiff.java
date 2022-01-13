@@ -104,7 +104,11 @@ public class EventDiff extends Diff {
             event.setMusic(music);
         }
         if (info != null) {
-            event.setInfo(info);
+            if(info.equals("null")){
+                event.setInfo(null);
+            }else{
+                event.setInfo(info);
+            }
         }
         if (room != null) {
             event.setRoom(room);
