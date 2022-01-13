@@ -77,6 +77,6 @@ abstract public class Item  extends GameElement implements Serializable {
 
     @Override
     public void investigate() {
-        //TODO: comparen
+
     }
 }

@@ -9,7 +9,6 @@ public class CommandSyntaxException extends Exception {
 
     @Override
     public String getMessage() {
-        //TODO: Syntax des Befehls angeben
         return "Syntax falsch";
     }
 }
