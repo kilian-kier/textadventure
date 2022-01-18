@@ -38,6 +38,13 @@ public class GameMenu {
                                 path = null;
                             else
                                 path = "game.world";
+                            try{
+                                LoadStoreWorld.load(path);
+                            }catch (FileNotFoundException e){
+                                System.out.println(e.getMessage());
+                                continue;
+                            }
+                            Game.start();
                             break;
                         case 2:
                             path = getPath();
@@ -45,19 +52,19 @@ public class GameMenu {
                                 System.out.println("Keine Datei ausgewählt");
                                 continue;
                             }
+                            try{
+                                LoadStoreWorld.load(path);
+                            }catch (FileNotFoundException e){
+                                System.out.println(e.getMessage());
+                                continue;
+                            }
+                            Game.start();
                             break;
                         case 3:
                             break;
                         default:
                             System.out.println("Falsche Eingabe");
                     }
-                    try{
-                        LoadStoreWorld.load(path);
-                    }catch (FileNotFoundException e){
-                        System.out.println(e.getMessage());
-                        continue;
-                    }
-                    Game.start();
                     break;
                 case 2:
                     path = getPath();
